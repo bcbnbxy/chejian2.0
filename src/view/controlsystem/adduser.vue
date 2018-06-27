@@ -13,7 +13,7 @@
 			</p>
 		</div>
 		<div class="adduser-wrap-result">
-			<router-link tag="div" :to="{name:'gerenxinxi',params:{identity:$route.params.identity}}" class="adduser-wrap-result-item">
+			<router-link tag="div" :to="{name:'gerenxinxi'}" class="adduser-wrap-result-item">
 				<p><i class="iconfont icon-shouji"></i><span>手机：123456789</span></p>
 				<p><i class="iconfont icon-yonghu"></i><span>昵称：123456789</span></p>
 			</router-link>

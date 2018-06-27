@@ -81,11 +81,6 @@ export default{
 		       });
 		       this.passwordtrue=false;
 			}else if(regExs.password.test(this.password)){
-				this.$toast({
-		          message: '密码输入正确!',
-		          position: 'bottom',
-				  duration: 1500,
-		       });
 		       this.passwordtrue=true;
 			}
 		},1000),

@@ -3,7 +3,7 @@
 	<div class="Groupmanagement-wrap-head">
 		<span @click="onfilter">取消</span>
 		<span>部门编辑</span>
-		<span>保存</span>
+		<span></span>
 	</div>
 	<dl>
 		<dt @click="addgroup"><i class="iconfont icon-jia"></i><span>添加部门名称</span></dt>

@@ -17,23 +17,64 @@
 		<p><i class="iconfont icon-yonghu"></i><span>123456789</span></p>
 	</div>
 	<div class="gerenxinxi-wrap-footer">
-		<button>{{msg}}</button>
+		<button @click="addconsumer">{{msg}}</button>
+	</div>
+	<div class="masklayer" :class="masklayerflag?'masklayershow':'masklayerhidden'">
+		<div class="masklayer-contaire">
+			<h3>选择所在团队</h3>
+			<div class="masklayer-contaire-top">
+				<div class="beizhu">
+					<label>备注</label>
+					<input type="text" />
+				</div>
+				<div class="select">
+					<p @click="selectshow"><span>{{department}}</span><i class="iconfont icon-arrow-right-copy-copy-copy" :class="selecttrue?'rotate90':''"></i></p>
+					<ul :class="selecttrue?'maxheight':'minheight'">
+						<li  v-on:click="aa(item)" v-for="(item,index) in items">{{item}}</li>
+					</ul>
+				</div>
+			</div>
+			<div class="masklayer-contaire-bottom">
+				<span @click="masklayerflag=!masklayerflag">取消</span>
+				<span>添加</span>
+			</div>
+		</div>
 	</div>
 </div>
 </template>
-
 <script>
 export default{
-	created(){
-		console.log(this.$route.params.identity)
+	data(){
+		return {
+			selecttrue:false,
+			items:['技术部','业务部','销售部','运营部'],
+			department:'请选择',
+			masklayerflag:false,
+		}
 	},
 	computed:{
 		msg:function(){
-			if(this.$route.params.identity==1){
+			if(parseInt(localStorage.getItem('identity'))==1){
 				return '邀请我的客户'
-			}else if(this.$route.params.identity==2){
+			}else if(parseInt(localStorage.getItem('identity'))==2){
 				return '邀请加入团队'
 			}
+		}
+	},
+	methods:{
+		addconsumer:function(){
+			if(parseInt(localStorage.getItem('identity'))==1){
+				console.log('业务员进入了此页面')
+			}else if(parseInt(localStorage.getItem('identity'))==2){
+				this.masklayerflag=!this.masklayerflag;
+			}
+		},
+		selectshow:function(){
+			this.selecttrue=!this.selecttrue;
+		},
+		aa:function(item){
+			this.department=item;
+			this.selecttrue=!this.selecttrue;
 		}
 	}
 }
@@ -47,6 +88,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	position: relative;
 }
 .gerenxinxi-wrap-head{
 	width:100%;
@@ -119,5 +161,134 @@ export default{
 	text-align: center;
 	line-height:1.6rem;
 	border-radius: 3px;
+}
+.masklayer{
+	width:100%;
+	height:100%;
+	position: absolute;
+	left:0;
+	
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	background: rgba(0,0,0,.5);
+	justify-content: center;	
+}
+.masklayershow{
+	top:0;		
+	transition: all 0.3s; 
+}
+.masklayerhidden{
+	top:100%;
+	transition: all 0.3s; 
+}
+.masklayer-contaire{
+	width:10.24rem;
+	height:8.1rem;
+	background: #fff;
+	border-radius: 5px;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+}
+.masklayer-contaire>h3{
+	height:1.6rem;
+	text-align: center;
+	line-height:1.6rem;
+	font-size:0.56rem;
+}
+.masklayer-contaire-top{
+	flex:1;
+	padding: 0 0.5rem;
+}
+.beizhu{
+	height:1.6rem;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	font-size:0.38rem;
+	color:#999;
+	align-items: center;
+	padding-left:0.5rem;
+}
+.beizhu input{
+	height:100%;
+	flex:1;
+	margin-left:0.5rem;
+}
+.select{
+	width:100%;
+	height:1.6rem;
+	border:1px solid #ddd;
+	padding:0 0.5rem;
+	font-size:0.38rem;
+	color:#999;
+	border-radius: 5px;
+	margin-top:0.5rem;
+	position: relative;
+}
+.select ul{
+	position:absolute;
+	left:0;
+	top:1.6rem;
+	background: #fff;
+	width:100%;
+	overflow: auto;
+}
+.select ul li{
+	height:1.6rem;
+	padding:0 0.5rem;
+	font-size:0.38rem;
+	color:#222;
+	line-height:1.6rem;
+	text-align: center;
+}
+.select .minheight{
+	height:0;
+	transition: all 0.3s;
+}
+.select .maxheight{
+	height:4.8rem;
+	transition: all 0.3s;
+}
+
+.select p{
+	width:100%;
+	height:100%;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.select p .icon-arrow-right-copy-copy-copy{
+	transform: rotate(0deg);
+	transition: all 0.3s;
+}
+.select .rotate90{
+	transform: rotate(90deg) !important;
+	transition: all 0.3s;
+}
+.masklayer-contaire-bottom{
+	width:100%;
+	height:1.6rem;
+	border-top:1px solid #ddd;
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
+}
+.masklayer-contaire-bottom span{
+	width:50%;
+	height:100%;
+	display: block;
+	line-height:1.6rem;
+	text-align: center;
+	font-size:0.46rem;
+	color:#999;
+}
+.masklayer-contaire-bottom span:nth-child(2){
+	color:#1989f5;
+	border-left:1px solid #ddd;
 }
 </style>

@@ -12,7 +12,7 @@
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="text" placeholder="请输入短信验证码" v-model="code" @keyup="Code"/>
-				<p @click="getcode"><span v-show="!$store.state.register.yzmtrue">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.login.sendcodetime}} s</span></p>
+				<p @click="getcode"><span v-show="!$store.state.register.yzmtrue" style="color:#1989F5;">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.register.sendcodetime}} s</span></p>
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="password" placeholder="请设置密码" v-model="password" @keyup="Password"/>
@@ -183,11 +183,12 @@ export default{
 				})				
 			}
 			function getTotelNumber() {
+				console.log(1111)
 		       	self.$store.commit('regsendcodedjs');
 	        }
 		},
 		register(){
-			let parm={action:"register",register:'86',mobileno:this.mobileno,password:this.password,checkcode:this.code,nickname:this.nickname};
+			let parm={action:"register",register:'86',mobileno:this.mobileno,password:this.password,checkcode:this.code,nickname:this.nickname,confirmpwd:this.password};
 			var that=this;
 			this.$api('Execute.do',parm).then(function(r){
 				if(r.errorCode=='0'){

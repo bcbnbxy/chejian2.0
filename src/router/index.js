@@ -44,6 +44,8 @@ import Managecustomers from '@/view/controlsystem/managecustomers'
 import Manageupgrade from '@/view/controlsystem/manageupgrade'
 import Submissionupgrades from '@/view/controlsystem/submissionupgrades'
 import Infoaudit from '@/view/controlsystem/infoaudit'
+import Customerinfo from '@/view/controlsystem/customerinfo'
+import Data from '@/view/data/data'
 Vue.use(Router)
 export default new Router({
 	linkActiveClass:'v-link-active',
@@ -185,6 +187,12 @@ export default new Router({
 		name:'infoaudit',
 		path:'/infoaudit',
 		component:Infoaudit
+	},{
+		path:'/customerinfo',
+		component:Customerinfo
+	},{
+		path:'/data',
+		component:Data
 	}
   ]
 })

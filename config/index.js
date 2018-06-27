@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
     	'/customer': {
-	      target: 'http://192.168.31.193:8080',  // 生产环境服务器
+	      target: 'https://m.chehaode.com',  // 生产环境服务器
 	      changeOrigin: true
     	}
     },

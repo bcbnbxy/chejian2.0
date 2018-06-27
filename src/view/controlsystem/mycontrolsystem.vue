@@ -22,7 +22,7 @@
 				<p><img src="../../assets/img/my/guanli.png"/><span>5</span></p>
 				<span>管理</span>
 			</li>
-			<li>
+			<li @click="godata">
 				<p><img src="../../assets/img/my/shuju.png"/><span>5</span></p>
 				<span>数据</span>
 			</li>
@@ -37,9 +37,6 @@
 
 <script>
 export default{
-	created(){
-		console.log(this.identity);
-	},
 	data(){
 		return {
 			//1为业务员，2为老板
@@ -65,9 +62,16 @@ export default{
 		},
 		goadduser(){
 			if(this.identity==1){
-				this.$router.push({name:'adduser',params:{identity:this.identity}})
+				this.$router.push({name:'adduser'})
 			}else if(this.identity==2){
-				this.$router.push({name:'adduser',params:{identity:this.identity}})
+				this.$router.push({name:'adduser'})
+			}
+		},
+		godata(){
+			if(this.identity==1){
+				this.$router.push('/data')
+			}else if(this.identity==2){
+				this.$router.push('/data')
 			}
 		}
 	}

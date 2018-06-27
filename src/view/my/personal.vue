@@ -63,7 +63,7 @@ export default{
 			loginname:'',
 			defaultImg:'this.src="' + require('../../assets/img/faxianimg/avatar.png') + '"' ,
 			sex:'',
-			identity:parseInt(localStorage.getItem('identity')),//用户身份标示，-1表示普通用户，1表示业务员，2表示老板
+			//identity:parseInt(localStorage.getItem('identity')),//用户身份标示，-1表示普通用户，1表示业务员，2表示老板
 		}
 	},
 	methods:{
@@ -77,8 +77,7 @@ export default{
 					that.loginname=r.data.userInfo.loginname;
 					that.sex=r.data.userInfo.gender;
 					localStorage.setItem("loginInfo",JSON.stringify(r.data.userInfo));
-//					that.identity=r.data.agentOrStuff;
-					localStorage.setItem('identity',r.data.agentOrStuff)
+					localStorage.setItem('identity',1)
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -89,12 +88,12 @@ export default{
 			})
 		},
 		gopersonal(){
-			if(this.identity==-1){
-				this.$router.push({name:'manageupgrade',params:{identity:this.identity}});
-			}else if(this.identity==1){
-				this.$router.push({name:'mycontrolsystem',params:{identity:this.identity}});
-			}else if(this.identity==2){
-				this.$router.push({name:'mycontrolsystem',params:{identity:this.identity}});
+			if(parseInt(localStorage.getItem('identity'))==-1){
+				this.$router.push({name:'manageupgrade'});
+			}else if(parseInt(localStorage.getItem('identity'))==1){
+				this.$router.push({name:'mycontrolsystem'});
+			}else if(parseInt(localStorage.getItem('identity'))==2){
+				this.$router.push({name:'mycontrolsystem'});
 			}
 		}
 	}

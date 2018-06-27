@@ -7,7 +7,7 @@
 	</div>
 	<div class="department-wrap-contaire">
 		<div class="department-wrap-contaire-head">
-			<span>部门</span>
+			<span>我的团队</span>
 		</div>
 		<div class="department-wrap-contaire-list">
 		<accordion
@@ -36,14 +36,14 @@ export default{
 		return {
 			dataList:[
 				{
-					name:'技术部',
+					name:'团队1',
 					child:[
 						{name:'婉婉01',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
 						{name:'婉婉02',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
 						{name:'婉婉03',headphoto:require ('../../assets/img/faxianimg/avatar.png')}
 					]
 				},{
-					name:'业务部',
+					name:'团队2',
 					child:[
 						{name:'婉婉04',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
 						{name:'婉婉05',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
@@ -52,7 +52,7 @@ export default{
 						{name:'婉婉08',headphoto:require ('../../assets/img/faxianimg/avatar.png')}
 					]
 				},{
-					name:'推广部',
+					name:'团队3',
 					child:[
 						{name:'婉婉09',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
 						{name:'婉婉10',headphoto:require ('../../assets/img/faxianimg/avatar.png')},

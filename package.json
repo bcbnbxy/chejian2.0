@@ -12,6 +12,7 @@
   "dependencies": {
     "cropperjs": "^1.4.0",
     "es6-promise": "^4.2.4",
+    "highcharts": "^6.1.0",
     "lodash": "^4.17.10",
     "mint-ui": "^2.2.13",
     "vue": "^2.5.16",

@@ -2,14 +2,15 @@
 <div class="managecustomers-wrap">
 	<div class="managecustomers-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-		<span>管理人员</span>
+		<span>管理我的客户</span>
+		<b>搜索</b>
 	</div>
 	<div class="managecustomers-wrap-list">
 		<ul>
-			<li><img src="../../assets/img/faxianimg/avatar.png"/><span>客户01</span></li>
-			<li><img src="../../assets/img/faxianimg/avatar.png"/><span>客户02</span></li>
-			<li><img src="../../assets/img/faxianimg/avatar.png"/><span>客户03</span></li>
-			<li><img src="../../assets/img/faxianimg/avatar.png"/><span>客户04</span></li>
+			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户01</span></router-link>
+			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户02</span></router-link>
+			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户03</span></router-link>
+			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户04</span></router-link>
 		</ul>
 	</div>
 </div>
@@ -39,6 +40,11 @@
 }
 .managecustomers-wrap-head i{
 	float:left;
+}
+.managecustomers-wrap-head b{
+	float:right;
+	font-weight: 400;
+	font-size:0.44rem;
 }
 .managecustomers-wrap-list{
 	flex:1;

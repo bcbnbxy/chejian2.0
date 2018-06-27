@@ -15,10 +15,13 @@
 				</div>
 			</div>
 			<div class="upload-container-remnant"><span>{{remnant}}/120</span></div>
+			<img :src="imgsrc"/>
 		</div>
 	</div>
 </template>
 <script>
+import store from '../../store'
+import {buildSign} from '../../assets/script/until.js'
 export default{
 	data(){
 		return {
@@ -33,13 +36,14 @@ export default{
 		        method : this.getLibrary// 调用methods中的函数  
 		      }],  
 		      // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏  
-		      sheetVisible: false  
+		      sheetVisible: false,
+		      imgsrc:'',
 		}  
 	},
 	methods:{
 		publish:function(){
-			var param={action:'blog.addBlog'}
 			if(this.apiflag==0){
+				var param={action:'blog.addBlog'}
 				if(this.content.trim().length<1){
 					this.$toast({
 			          message: '内容不能为空',
@@ -62,32 +66,34 @@ export default{
 	      this.sheetVisible = true;  
 	   },  
 	    getLibrary: function(){  
-	      console.log("打开相册")  
+	      console.log("打开相册"); 
 	    },
 	    descInput:function(){
 	        var txtVal = this.content.length;
 	        this.remnant = 120 - txtVal;
 	    },
 	    captureImage:function(){ //调用手机摄像头进行拍照
-			var cmr = plus.camera.getCamera();
-			var res = cmr.supportedImageResolutions[0];
-			var fmt = cmr.supportedImageFormats[0];
-			cmr.captureImage(function(path) {
-					savePicture(path);
-					plus.io.resolveLocalFileSystemURL(path, function(entry) {
-						var locaURL = entry.toLocalURL()
-//						createUpload(locaURL,"image")
-					})
-				},
-				function(error) {
-					alert("Capture image failed: " + error.message);
-				}, {
-					resolution: res,
-					format: fmt
-				});	
-		},
-		savePicture :function (path) { //保存图片路径
-			plus.gallery.save(path, function() {});
+			var param = (new Date()).getTime() + '.jpg';
+			param = '{"filename" : "' + param + '"}';
+			param = window.camera.captureImage(param);
+			this.imgsrc=param;
+			alert(this.imgsrc);
+			var formData = new FormData()
+			let publicOPtion=store.state.common.publicOption
+			publicOPtion.path='headphoto';
+			publicOPtion.__sign__=buildSign(publicOPtion,publicOPtion.__uuid__);
+			formData.append(param,param)
+	        formData.append('__uuid__',publicOPtion.__uuid__);      
+	        formData.append('path',publicOPtion.path);
+	        formData.append('__mobileno__',publicOPtion.__mobileno__);
+	        formData.append('__sign__',publicOPtion.__sign__);
+	        formData.append('__timestamp__',publicOPtion.__timestamp__);
+	        formData.append('__platform__',publicOPtion.__platform__);
+	        alert(formData);
+	        var that=this;
+	    	this.$api('uploadImage.do',formData).then(function(r){
+	    	 	alert(JSON.stringify(r));
+	    	})
 		}
 	}
 }

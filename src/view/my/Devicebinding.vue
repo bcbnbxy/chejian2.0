@@ -1,7 +1,7 @@
 <template>
 	<div class="devicebind-wrap">
 		<header>
-			<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
+			<span><i class="iconfont icon-fanhui"  @click="$router.go(-1)"></i></span>
 			<span>设备绑定</span>
 			<span></span>
 		</header>
