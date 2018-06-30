@@ -22,7 +22,7 @@
 			</p>
 		</div>
 		<div class="editbirthday" @click="openPicker"><span>生日</span><input type="text" v-model="birthday" readonly/></div>
-		<div class="editbirthday" @click="showpopupVisible"><span>所在地</span><p>{{address}}{{city1}}</p></div>
+		<div class="editbirthday" @click="showpopupVisible"><span>所在地</span><p>{{city1}}{{address}}</p></div>
 		<mt-field label="签名"  type="textarea" rows="4" v-model="sign"></mt-field>
 	</div>
 	<div class="container" v-show="panel">  
@@ -220,6 +220,7 @@ export default {
         formData.append('__mobileno__',publicOPtion.__mobileno__);
         formData.append('__sign__',publicOPtion.__sign__);
         formData.append('__timestamp__',publicOPtion.__timestamp__);
+        formData.append('__version__',publicOPtion.__version__);
         formData.append('__platform__',publicOPtion.__platform__);
         var that=this;
     	this.$api('uploadImage.do',formData).then(function(r){

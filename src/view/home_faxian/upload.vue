@@ -9,13 +9,17 @@
 				<textarea placeholder="文字不能超过120个" v-model="content" maxlength="120" @input="descInput"></textarea>
 			</div>
 			<div class="upload-container-bottom">
-				<div class="upload-button">
-					<p  @click="actionSheet"></p>
-					<mt-actionsheet :actions="actions"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
+				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data" class="imglist"/>
+				<div class="upload-button imglist" v-if="$route.params.id=='picture'">
+					<p  @click="actionSheetpic"></p>
+					<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
+				</div>
+				<div class="upload-button imglist" v-else-if="$route.params.id=='video'">
+					<p  @click="actionSheetpic"></p>
+					<mt-actionsheet :actions="actionvideo"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
 				</div>
 			</div>
 			<div class="upload-container-remnant"><span>{{remnant}}/120</span></div>
-			<img :src="imgsrc"/>
 		</div>
 	</div>
 </template>
@@ -26,22 +30,31 @@ export default{
 	data(){
 		return {
 			content:'',
-			apiflag:1,
+			apiflag:0,
 			remnant: 120,
-			actions: [{  
+			actionpic: [{  
 		        name: '拍照',  
 		        method : this.captureImage// 调用methods中的函数  
 		      }, {  
 		        name: '从相册中选择',   
 		        method : this.getLibrary// 调用methods中的函数  
-		      }],  
+		      }],
+		    actionvideo: [{
+		        name: '短视频',  
+		        method : this.captureVideo// 调用methods中的函数  
+		    }, {  
+		        name: '选择视频',   
+		        method : this.pickervideo// 调用methods中的函数  
+		    }],  
 		      // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏  
-		      sheetVisible: false,
-		      imgsrc:'',
-		}  
+		    sheetVisible: false,
+		    //data:['https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/20006a1e-7cdb-4f6b-b374-470bafd2859d.jpg','https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/02c4cfc4-a00b-45b2-862d-6a0c67a4bbd1.jpg','https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'],
+			data:[],	
+		}
 	},
 	methods:{
 		publish:function(){
+			var that=this;
 			if(this.apiflag==0){
 				var param={action:'blog.addBlog'}
 				if(this.content.trim().length<1){
@@ -59,14 +72,36 @@ export default{
 				return
 			}
 			this.$api('/Execute.do',param).then(function(r){
-				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					that.$toast({
+			          message: '发表成功',
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+				}
 			})
 		},
-		actionSheet: function(){
+		actionSheetpic: function(){
 	      this.sheetVisible = true;  
 	   },  
-	    getLibrary: function(){  
-	      console.log("打开相册"); 
+	    getLibrary: function(){ //从相册选择视频或图片 
+	      var ret =  window.gallery.pickImage();
+	      if(ret==""||ret==null||ret==undefined){
+	      	that.$toast({
+	          message: "请重新选择图片",
+	          position: 'bottom',
+			  duration: 1500
+	        });
+	      	return ;
+	      }else{
+	      	 this.testUploadAli(ret)
+	      }	     
 	    },
 	    descInput:function(){
 	        var txtVal = this.content.length;
@@ -76,24 +111,43 @@ export default{
 			var param = (new Date()).getTime() + '.jpg';
 			param = '{"filename" : "' + param + '"}';
 			param = window.camera.captureImage(param);
-			this.imgsrc=param;
-			alert(this.imgsrc);
-			var formData = new FormData()
-			let publicOPtion=store.state.common.publicOption
-			publicOPtion.path='headphoto';
-			publicOPtion.__sign__=buildSign(publicOPtion,publicOPtion.__uuid__);
-			formData.append(param,param)
-	        formData.append('__uuid__',publicOPtion.__uuid__);      
-	        formData.append('path',publicOPtion.path);
-	        formData.append('__mobileno__',publicOPtion.__mobileno__);
-	        formData.append('__sign__',publicOPtion.__sign__);
-	        formData.append('__timestamp__',publicOPtion.__timestamp__);
-	        formData.append('__platform__',publicOPtion.__platform__);
-	        alert(formData);
-	        var that=this;
-	    	this.$api('uploadImage.do',formData).then(function(r){
-	    	 	alert(JSON.stringify(r));
-	    	})
+			alert(param+"-----113行");
+			if(param==""||param==null||param==undefined){
+				that.$toast({
+		          message: "请重新拍照",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+	      		return ;
+			}else{
+				this.testUploadAli(param);
+			}
+		},
+		captureVideo:function(){
+			var param = (new Date()).getTime() + '.mp4';
+			param = '{"filename" : "' + param + '"}';
+			param = window.camera.captureVideo(param);
+			alert(param+'------------------------------130行')
+		},
+		pickervideo:function(){
+		    var ret = window.camera.pickVideo();
+		    alert(ret+"-------------------134行")
+		  
+		},
+		testUploadAli(file){
+			var ret = window.action.doUpload(file, '{"path":"blog"}');
+			ret=JSON.parse(ret);
+			if(ret.errorCode=="0"){
+//				ret.data=''+ret.data
+				this.data.push(ret.data)
+			}else{
+				this.$toast({
+		          message: ret.errorMessage,
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}
+			
 		}
 	}
 }
@@ -136,6 +190,16 @@ export default{
 }
 .upload-container-bottom{
 	padding:0 0.5rem 0.5rem 0.5rem;
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap:wrap ;
+}
+.imglist{
+	width:3.48rem;
+	height:3.48rem;
+}
+.imglist:nth-child(3n-1){
+	margin:0 0.46rem;
 }
 .upload-button{
 	width:3.48rem;

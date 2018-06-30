@@ -8,14 +8,14 @@
 		<div class="detail-wrap">
 			<div class="pic-detail">
 				<div class="fourpicture-avatar clear">
-					<div class="fourpicture-avatar-left"><img src="../../assets/img/faxianimg/avatar.png" width="46" height="46" style="border-radius: 50%;"/><p><b>婉婉婉</b><span>5月23日</span></p></div>
+					<div class="fourpicture-avatar-left"><img :src="data.owner.headphoto?data.owner.headphoto:defaultImg" width="46" height="46" style="border-radius: 50%;"/><p><b>{{data.owner.nickname}}</b><span>{{formatDate(data.createtime)}}</span></p></div>
 					<!--<div class="fourpicture-avatar-right"><p v-if="data.attention" style='background: #fff;border:1px solid #ff481d;color:#ff481d;'>已关注</p><p v-else>+关注</p></div>-->
 				</div>
 				<div class="fourpicture-content">
-					<div class="fourpicture-box">
-						<img src="../../assets/img/faxianimg/car1.png"/>
+					<div class="fourpicture-box" v-if="data.images">
+						<img :src="data.images"/>
 					</div>
-					<p>把赛事赛程的子页面补充上文档里面表明子页面是上海团队负责人做的部分客户端不用管。</p>
+					<p>{{data.content}}</p>
 				</div>
 				<router-link to="/praise" tag="div" class="pic-detail-zan">
 					<div class="avatar-list">
@@ -26,7 +26,7 @@
 						<img src="../../assets/img/faxianimg/avatar.png"/>
 					</div>
 					<div class="dianzan-renshu">
-						<p>3955人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+						<p>{{data.praisecount}}人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 					</div>
 				</router-link>
 			</div>
@@ -48,11 +48,39 @@
 <script>
 import Reply from '@/components/faxian/replylist'
 export default{
+	data(){
+		return {
+			data:this.$route.params.datalist,
+			defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
+		}
+	},
 	components:{'Reply-list':Reply},
 	methods:{
 		share:function(){
 			this.$store.commit('changeshare');
 			this.$store.commit('changepopupmean');
+		},
+		formatDate(seconds){//时间转换函数
+			seconds=new Date().getTime()-parseInt(seconds);
+			seconds= seconds / 1000;
+			var day =  Math.floor(seconds / 86400 );
+			seconds = seconds % 86400;
+			var hour =  Math.floor( seconds / 3600);
+			seconds = seconds % 3600;
+			var mintues = Math.floor( seconds / 60);
+			var beforeStr = "";
+			if(day>0){
+				beforeStr += day;
+				return beforeStr+"天前";
+			}else if(hour>0){
+				beforeStr += hour;
+				return beforeStr +"小时前"
+			}else if(mintues>0){
+				beforeStr += mintues;
+				return beforeStr +"分钟前"
+			}else{
+				return "刚刚"
+			}				
 		}
 	}
 }

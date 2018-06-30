@@ -42,7 +42,7 @@ function buildSign (params, key){
 		    str += name;
 		    str += value;
 		    str += "&";
-		  }
+		  }	
 		  str += util.hexMD5(key);
 		  str = util.utf8(str);
 		  str = util.hexMD5(str);

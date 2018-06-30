@@ -52,7 +52,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: BootPage
+      component:BootPage
     },{
       path: '/register',
       component: Register,
@@ -78,7 +78,7 @@ export default new Router({
     	},{
     		path:'/faxian',
     		component:Faxian
-    	},,{
+    	},{
     		path:'/personal',
     		component:Personal
     	},{
@@ -89,6 +89,7 @@ export default new Router({
     		component:Search
     	},{
     		path:'/detailpage',
+    		name:'detailpage',
     		component:Detailpage
     	},{
     		path:'/praise',
@@ -105,6 +106,7 @@ export default new Router({
 		component:Fensi
 	},{
 		path:'/upload',
+		name:"upload",
 		component:Upload
 	},{
 		path:'/devicebinding',

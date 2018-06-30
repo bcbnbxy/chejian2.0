@@ -12,12 +12,15 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
     	'/customer': {
-	      target: 'https://m.chehaode.com',  // 生产环境服务器
-	      changeOrigin: true
+	      target: 'https://m.chehaode.com',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
+	      changeOrigin: true,
+	      pathRewrite: {
+          '^/customer': '/customer'   //需要rewrite重写的,
+        }  
     	}
     },
     // Various Dev Server settings
-    host: '192.168.31.213', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -55,7 +58,7 @@ module.exports = {
 
     productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
-    devtool: '#source-map',
+    devtool: '#cheap-module-eval-source-map',
 
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.

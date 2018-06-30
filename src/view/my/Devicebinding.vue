@@ -16,7 +16,6 @@
 		<div class="submit">
 			<button>确定</button>
 		</div>
-		<div id= "bcid" v-show="bcidflag"></div>
 	</div>
 </template>
 
@@ -25,35 +24,45 @@ var scan=null;
 export default {
 	data (){
 		return {
-			bcidflag:false,
 			devicenum:''
 		}
 	},
 	methods:{
 		startRecognize:function(){
-			this.bcidflag=true;
-			scan = new plus.barcode.Barcode('bcid');
-			scan.start();			
-			scan.onmarked=this.onmarked;
+			var param = window.barcode.scan();
+			alert(param+'------35行')
+			if(param==""||param==null||param==undefined){
+				this.$toast({
+			          message: '扫描失败',
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+			}else{
+				this.devicenum=param;
+			}			
+//			this.bcidflag=true;
+//			scan = new plus.barcode.Barcode('bcid');
+//			scan.start();			
+//			scan.onmarked=this.onmarked;
 		},
-		onmarked:function( type, result){ //扫描二维码成功回调函数
-			var text = '未知: ';
-			switch(type){
-				case plus.barcode.QR:
-				text = 'QR: ';
-				break;
-				case plus.barcode.EAN13:
-				text = 'EAN13: ';
-				break;
-				case plus.barcode.EAN8:
-				text = 'EAN8: ';
-				break;
-			}
-			scan.cancel();
-			scan.close();
-			this.bcidflag=false;
-			this.devicenum=result;
-		}
+//		onmarked:function( type, result){ //扫描二维码成功回调函数
+//			var text = '未知: ';
+//			switch(type){
+//				case plus.barcode.QR:
+//				text = 'QR: ';
+//				break;
+//				case plus.barcode.EAN13:
+//				text = 'EAN13: ';
+//				break;
+//				case plus.barcode.EAN8:
+//				text = 'EAN8: ';
+//				break;
+//			}
+//			scan.cancel();
+//			scan.close();
+//			this.bcidflag=false;
+//			this.devicenum=result;
+//		}
 	}
 }
 </script>

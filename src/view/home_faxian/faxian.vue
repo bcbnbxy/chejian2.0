@@ -5,12 +5,19 @@
 			<p class="tabs-p"><span @click="toggle(index ,tab.view)" v-for="(tab,index) in tabs" :class="{active:active===index}">{{tab.type}} </span></p>
 			<p @click="showpictextvideo"><i class="iconfont icon-zhaoxiangji" v-show="currentView==='dynamicslist'"></i></p>
 			<div class="pic-text-video" v-show="$store.state.faxian.pic_text_video">
-				<router-link to="/upload" tag="p">文图</router-link>
-				<router-link to="/upload" tag="p">视频</router-link>
+				<router-link :to="{name:'upload',params:{id:'picture'}}" tag="p">文图</router-link>
+				<router-link :to="{name:'upload',params:{id:'video'}}" tag="p">视频</router-link>
 			</div>
 		</div>
-	<div class="faxianlist">
-		<component :is="currentView" ></component>
+	<div class="faxianlist" :style="{'-webkit-overflow-scrolling': scrollMode}">
+		<div class="faxian-dynamicslist" v-show="currentView=='dynamicslist'">			
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+		     		<dynamicslist :callbackdata="datalist"></dynamicslist>
+		    </mt-loadmore>
+		</div>
+		<div class="faxian-attention" v-show="currentView=='Attention'">
+			<Attention></Attention>
+		</div>
 	</div>
 </div>
 </template>
@@ -32,7 +39,12 @@ export default{
 		        type: '关注',
 		        view: 'Attention'
 		      }
-    		]
+    		],
+    		datalist:[],
+	        pageNo:0,
+	        pageSize:5,
+            allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+            scrollMode:"auto" ,//移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 		}
 	},
 	methods:{
@@ -43,8 +55,42 @@ export default{
 		showpictextvideo:function(){
 			this.$store.commit('changepopupmean');
 			this.$store.commit('changepictextvideo');
-		}		
-	}
+		},
+		gettrends:function(minvalue,pageSize){//获取动态列表
+			var that=this;
+			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs'}).then(function(r){
+				if(r.errorCode=="0"){
+					that.datalist=that.datalist.concat(r.data.blogs);
+					if(r.data.blogs.length<5){
+						that.allLoaded=true;
+						return;
+					}else{
+						that.allLoaded=false;
+					}
+					that.pageNo=r.data.blogs[r.data.blogs.length-1].blogseq;
+				}else{
+					that.$toast({
+			          message:r.errorMessage,
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+				}
+			})
+		},
+		 loadTop:function() { //组件提供的下拉触发方法
+	        //下拉加载
+	        this.datalist=[];
+	        this.gettrends(0,5);
+	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    loadBottom:function(){
+	    	this.gettrends(this.pageNo,5);
+	    	this.$refs.loadmore.onBottomLoaded();	    	
+	    }
+	},
+	created(){
+		this.gettrends(0,5)
+    }
 }
 </script>
 
@@ -63,19 +109,27 @@ export default{
 	height:1.32rem;
 	background: url(../../assets/img/faxianimg/headbg.png) center repeat;
 	width:100%;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
 	padding:0 0.48rem;
-	align-items: center;
+	line-height:1.32rem;
+	text-align: center;
 	color:#fff;
 	font-size:0.48rem;
 	position: relative;
 }
-.faxianhead p i{
+.faxianhead>p:nth-child(1){
+	position: absolute;
+	left:0.48rem;
+	top:0;
+}
+.faxianhead>p:nth-child(3){
+	position: absolute;
+	right:0.48rem;
+	top:0;
+}
+.faxianhead>p i{
 	font-size:0.66rem;
 }
-.faxianhead p span{
+.faxianhead>p span{
 	padding:0 0.36rem;
 	display: inline-block;
 	height:1.32rem;
@@ -96,6 +150,7 @@ export default{
 .pic-text-video p{
 	border-bottom:1px solid #dcdcdc;
 	color:#666;
+	width:100%;
 	height:1.6rem;
 	line-height:1.6rem;
 	text-align: center;

@@ -14,45 +14,10 @@ var root='/customer'
   主要是，不同的接口的成功标识和失败提示是不一致的。
   另外，不同的项目的处理方法也是不一致的，这里出错就是简单的alert
 */
-//function apiAxios (method, url, params, success, failure) {
-//axios({
-//  method: method,
-//  url: url,
-//  data: method === 'POST' || method === 'PUT' ? params : null,
-//  params: method === 'GET' || method === 'DELETE' ? params : null,
-//  baseURL: root,
-//  withCredentials: false
-//})
-//.then(function (res) {
-//      success(res.data)
-//})
-//.catch(function (err) {
-//	console.log(JSON.stringify(err));
-//  let res = err.response
-//  if (err) {
-//    window.alert('api error, HTTP CODE: ' + res.status)
-//  }
-//})
-//}
-// 返回在vue模板中的调用接口
-//export default {
-//get: function (url, params, success, failure) {
-//  return apiAxios('GET', url, params, success, failure)
-//},
-//post: function (url, params, success, failure) {
-//  return apiAxios('POST', url, params, success, failure)
-//},
-//put: function (url, params, success, failure) {
-//  return apiAxios('PUT', url, params, success, failure)
-//},
-//delete: function (url, params, success, failure) {
-//  return apiAxios('DELETE', url, params, success, failure)
-//}
-//}
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL =root;
 axios.interceptors.request.use(config => {
-			if(config.url.indexOf('/Execute.do') != -1){
+			if(config.url.indexOf('Execute.do') != -1){
 				let publicOPtion=store.state.common.publicOption
 				if(localStorage.getItem("loginInfo")){				
 						publicOPtion.__mobileno__=JSON.parse(localStorage.getItem("loginInfo")).mobileno;
@@ -65,7 +30,7 @@ axios.interceptors.request.use(config => {
 				config.headers = {
 						'Content-Type':'application/x-www-form-urlencoded'
 				}	
-			}				
+			}	
       return config
 }, error => {
     return Promise.reject(error)

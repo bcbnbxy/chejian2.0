@@ -1,19 +1,19 @@
 <template>
-	<div class="fourpicture">
+	<div class="fourpicture" id="fourpicture">
 		<div class="fourpicture-avatar">
-			<div class="fourpicture-avatar-left"><router-link tag="div" to="/homepage"><img :src="data.avatar"/></router-link><p><b>{{data.username}}</b><span>{{data.time}}</span></p></div>
-			<div class="fourpicture-avatar-right"><p v-if="data.attention">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;'>已关注</p></div>
+			<div class="fourpicture-avatar-left"><router-link tag="div" to="/homepage"><img :src="datalist.owner.headphoto?datalist.owner.headphoto:defaultImg"/></router-link><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
+			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!datalist.owner.favorite">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;'>已关注</p></div>
 		</div>
 		<div class="fourpicture-content">
-			<div class="fourpicture-box" v-if="data.mainpic">
-				<img :src="data.mainpic"/>
+			<div class="fourpicture-box" v-if="datalist.images">
+				<img :src="datalist.images"/>
 			</div>
-			<p>{{data.content}}</p>
+			<p>{{datalist.content}}</p>
 		</div>
 		<div class="fourpicture-title">
-			<p><i class="iconfont icon-xin"></i><span>236</span></p>
-			<router-link to="/detailpage" tag="p"><i class="iconfont icon-pinglun"></i><span>365</span></router-link>
-			<p><b style="font-size:30px;position: relative;top:-16px;" @click="more(index)">...</b></p>
+			<p @click="praise(datalist.blogseq)"><i class="iconfont icon-xin" style="vertical-align: baseline;" v-if="!datalist.owner.favorite"></i> <svg class="icon" aria-hidden="true" v-else><use xlink:href="#icon-heart-copy"></use></svg><span>{{datalist.praisecount}}</span></p>
+			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>365</span></router-link>
+			<p @click="more(index)">···</p>
 		</div>
 		<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
 			<li @click="showshare">转发</li>
@@ -24,12 +24,12 @@
 </template>
 <script>
 	export default{
-		props:{
-			data:{
-				type: Object
-			},
-			index:{
-				type:Number
+		props:['data','index'],
+		data(){
+			return {
+				defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
+				userseq:JSON.parse(localStorage.getItem('loginInfo')).userseq,
+				datalist:this.data
 			}
 		},
 		methods:{
@@ -44,6 +44,38 @@
 			showshare:function(){
 				this.$store.commit('changepopupmean_more');
 				this.$store.commit('changeshare');
+			},
+			formatDate(seconds){//时间转换函数
+				seconds=new Date().getTime()-parseInt(seconds);
+				seconds= seconds / 1000;
+				var day =  Math.floor(seconds / 86400 );
+				seconds = seconds % 86400;
+				var hour =  Math.floor( seconds / 3600);
+				seconds = seconds % 3600;
+				var mintues = Math.floor( seconds / 60);
+				var beforeStr = "";
+				if(day>0){
+					beforeStr += day;
+					return beforeStr+"天前";
+				}else if(hour>0){
+					beforeStr += hour;
+					return beforeStr +"小时前"
+				}else if(mintues>0){
+					beforeStr += mintues;
+					return beforeStr +"分钟前"
+				}else{
+					return "刚刚"
+				}				
+			},
+			praise:function(blogseq){
+				console.log(blogseq)
+				console.log(this.datalist.praisecount);
+				
+//				console.log(data.praisecount);
+//				console.log(this.praisecount);
+//				this.$api('/Execute.do',{blogseq:blogseq,action:'blog.praiseBlog'}).then(function(r){
+//					console.log(JSON.stringify(r));
+//				})
 			}
 		}
 	}
@@ -117,17 +149,24 @@
 }
 .fourpicture-title{
 	height:1.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: flex-end;
-	padding-top:0.36rem;
+	line-height:1.3rem;
+	text-align: right;
 }
 .fourpicture-title p{
-	font-size:0.3rem;
+	font-size:0.38rem;
 	color:#666;
 	margin-left:0.6rem;
+	display: inline;
 }
-.fourpicture-title p i{
+.fourpicture-title p:nth-child(3){
+	font-size:1rem;
+	vertical-align: bottom;
+}
+.fourpicture-title p .icon{	
+	font-size:0.6rem;
+	margin-right:0.12rem;
+}
+.fourpicture-title p .iconfont{
 	vertical-align: middle;
 	font-size:0.6rem;
 	margin-right:0.12rem;

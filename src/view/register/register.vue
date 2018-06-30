@@ -168,7 +168,7 @@ export default{
 		getcode(){
 			if(this.$store.state.register.sendcodetrue){
 				var self=this;
-				self.$api('Execute.do',{action:"sendCheckCode4Reset",mobileno:this.mobileno,areacode:'86'}).then(function(r){
+				self.$api('/Execute.do',{action:"sendCheckCode4Reset",mobileno:this.mobileno,areacode:'86'}).then(function(r){
 					if(r.errorCode==0){
 						self.$store.commit('regsendcodetime');
 						self.$store.commit('regchangeyzmtrue');
