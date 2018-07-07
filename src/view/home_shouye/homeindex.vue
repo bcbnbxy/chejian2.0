@@ -1,77 +1,67 @@
 <template>
-	<div class="homeindex-wrap">
-		<div class="homeindex-head">
-			<div class="homeindex-head-left"><img src="../../assets/img/faxianimg/avatar.png"/><span>婉婉</span></div>
-			<div class="homeindex-head-right"><i class="iconfont icon-scan"></i></div>
+<div class="homeindex-wrap">
+	<div class="homeindex-wrap-head">
+		<div class="homeindex-wrap-head-top">
+			<div class="homeindex-wrap-head-top-left">
+				<img src="../../assets/img/faxianimg/lanbo.png"/>
+				<span>兰博基尼</span>
+				<i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+			</div>
+			<i class="iconfont icon-scan"></i>
 		</div>
-		<div class="homeindex-container">
-			<div class="homeindex-fault">
-				<div class="homeindex-fault-title">
-					<div class="homeindex-fault-title-left"><i class="iconfont icon-chart"></i><span>当前排名：15325名</span></div>
-					<div class="homeindex-fault-title-right"><i class="iconfont icon-anquan"></i><span>车辆安全系数:16652</span></div>
-				</div>
-				<div class="fault-container">
-					<div class="fault-container-left"><h3>当前故障</h3><p><span>2</span>/处</p></div>
-					<div class="fault-container-right"><h3>当前警告</h3><p><span>10</span>/处</p></div>
-				</div>
-				<ul class="fault-list">
-					<li>
-						<img src="../../assets/img/faxianimg/lanbo.png"/>
-						<span>兰博基尼</span>
-					</li>
-					<li>
-						<img src="../../assets/img/faxianimg/masha.png"/>
-						<span>玛莎拉蒂</span>
-					</li>
-					<li>
-						<p>+</p>
-						<span>暂无车辆</span>
-					</li>
-					<li>
-						<p>+</p>
-						<span>暂无车辆</span>
-					</li>
-				</ul>
+		<div class="homeindex-wrap-head-bottom">
+			<div class="homeindex-wrap-head-bottom-contaire">
+				<router-link tag="p" to="/friendslist"><b>1356</b><span>/名</span></router-link>
+				<p>当前排名</p>
+				<router-link tag="p" to="/carlovescore">车辆安全系数 ： 12365</router-link>
 			</div>
-			<div class="vehicle-services">
-				<div class="vehicle-services-title">
-					<b></b><span>车辆服务</span>
+			<div class="homeindex-wrap-head-bottom-guzhang">
+				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
+					<router-link tag="div" :to="{name:'breakdown',params:{index:2}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
+						<p>当前警告</p>
+						<p><b>10</b><span>/处</span></p>
+					</router-link>
+					<div class="homeindex-wrap-head-bottom-guzhang-contaire-center"></div>
+					<router-link tag="div" :to="{name:'breakdown',params:{index:1}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
+						<p>当前故障</p>
+						<p><b>5</b><span>/处</span></p>
+					</router-link>
 				</div>
-				<ul>
-					<li><img src="../../assets/img/faxianimg/shangcheng.png"><span>配件商城</span></li>
-					<li><img src="../../assets/img/faxianimg/jiuyuan.png"><span>车辆救援</span></li>
-					<li><img src="../../assets/img/faxianimg/cheyou.png"><span>附近车友</span></li>
-					<li><img src="../../assets/img/faxianimg/dongtai.png"><span>车友动态</span></li>
-				</ul>
-			</div>
-			<div class="homeindex-carfriends">
-				<div class="homeindex-carfriends-title">
-					<p><i></i><b>我的车友</b></p>
-					<p><span>车辆评分</span></p>
-				</div>
-				<ul class="homeindex-carfriends-list">
-					<li>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<span>婉婉婉</span>
-						<p>123456</p>
-					</li>
-					<li>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<span>婉婉婉</span>
-						<p>123456</p>
-					</li><li>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<span>婉婉婉</span>
-						<p>123456</p>
-					</li><li>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<span>婉婉婉</span>
-						<p>123456</p>
-					</li>
-				</ul>
 			</div>
 		</div>
 	</div>
+	<div class="homeindex--wrap-bottom">
+		<div class="homeindex-car-service">
+			<div class="homeindex-car-service-title">
+				<b></b>
+				<span>车辆服务</span>
+			</div>
+			<ul>
+				<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>
+				<li><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
+				<li><img src="../../assets/img/faxianimg/cheyou.png"><span>附近车友</span></li>
+				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
+			</ul>
+		</div>
+		<div class="homeindex-car-friends">
+			<div class="homeindex-car-service-title">
+				<b></b>
+				<span>我的车友</span>
+				<i>车辆评分</i>
+			</div>
+			<ul>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+			</ul>
+		</div>
+	</div>
+</div>
 </template>
 <script>
 </script>
@@ -83,225 +73,209 @@
 	display: -webkit-flex;
 	flex-direction: column;
 }
-.homeindex-head{
+.homeindex-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:6.63rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png);
-	background-size: cover;
-	padding:0.1rem 0.4rem;
+	background-size:cover ;
+}
+.homeindex-wrap-head>.icon-scan{
+	font-size:0.6rem;
+}
+.homeindex-wrap-head-top{
+	height:1.32rem;
+	width:100%;
+	padding:0 0.5rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;
 	align-items: center;
+	color:#fff;
 }
-.homeindex-head-left img{
+.homeindex-wrap-head-top-left{
+	display: flex;
+	display: -webkit-flex;
+	height:100%;
+	align-items: center;
+	font-size:0.5rem;
+}
+.homeindex-wrap-head-top-left>i{
+	font-size:0.5rem;
+	vertical-align: middle;
+	position:relative;
+	top:1px;
+}
+.homeindex-wrap-head-top-left img{
 	width:1.1rem;
 	height:1.1rem;
 	border-radius: 50%;
 	margin-right:0.5rem;
-	vertical-align: middle;
 }
-.homeindex-head-left span{
-	color:#fff;
-	font-size:0.56rem;
-}
-.homeindex-head-right i{
-	font-size:0.56rem;
-	color:#fff;
-}
-.homeindex-container{
-	flex:1;
-	background: #fff;
-	overflow: auto;
-}
-.homeindex-fault{
+.homeindex-wrap-head-bottom{
+	height:5.3rem;
 	width:100%;
-	height:8.8rem;
-	background:#0682ef;	
-	padding:0 0.4rem;
+	position:relative;
 }
-.homeindex-fault-title{
-	height:0.96rem;
+.homeindex-wrap-head-bottom-contaire{
+	height:3.66rem;
+	width:100%;
+}
+.homeindex-wrap-head-bottom-contaire>p:nth-child(1){
+	height:1.6rem;
 	display: flex;
 	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
-	font-size:0.34rem;
+	justify-content: center;
+	align-items: flex-end;
 	color:#fff;
-}
-.homeindex-fault-title i{
-	margin-right:0.44rem;
-}
-.homeindex-fault-title img{
-	margin-right:0.44rem;
-}
-.fault-container{
-	background:#fff;
-	width:100%;
-	height:4.38rem;
-	border-radius: 5px;
-	padding:1.1rem 0 1rem 0;
-	display:flex;
-	display: -webkit-flex;
-}
-.fault-container-left,.fault-container-right{
-	width:50%;
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
-}
-.fault-container h3{
 	font-size:0.38rem;
-	color:#434343;
-	font-weight: normal;
 }
-.fault-container p{
-	font-size:0.34rem;
+.homeindex-wrap-head-bottom-contaire>p:nth-child(1) b{
+	font-size:1.25rem;
+	line-height: 0.8;
+	font-weight: 400;
 }
-.fault-container p span{
-	font-size:1.36rem;
+.homeindex-wrap-head-bottom-contaire>p:nth-child(2){
+	font-size:0.44rem;
+	color:#fff;
+	text-align: center;
+	line-height:0.98rem;
 }
-.fault-container-left{
-	border-right:2px solid #1989f5;
+.homeindex-wrap-head-bottom-contaire>p:nth-child(3){
+	font-size:0.44rem;
+	color:#fff;
+	text-align: center;
+	line-height:0.75rem;
 }
-.fault-container-left p{
-	color:#1989f5;
-}
-.fault-container-right p{
-	color:#fb6942;
-}
-.fault-list{
+.homeindex-wrap-head-bottom-guzhang{
 	width:100%;
-	height:2.74rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	margin-top:0.24rem;
+	height:3rem;
+	position: absolute;
+	left:0;
+	top:3.66rem;
+	padding:0 0.5rem;
 }
-.fault-list li{
-	width:2.52rem;
-	height:2.74rem;
-	background: rgba(255,255,255,.3);
+.homeindex-wrap-head-bottom-guzhang-contaire{
+	width:100%;
+	height:100%;
 	border-radius: 5px;
+	background: #fff;
+	box-shadow: 2px 2px 15px rgba(25,137,245,.1);
 	display: flex;
 	display: -webkit-flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
 }
-.fault-list li img{
-	width:1.21rem;
-	height:1.21rem;
-	border-radius:50%;
+.homeindex-wrap-head-bottom-guzhang-contaire-center{
+	width:1px;
+	height:0.8rem;
+	background: #ddd;
 }
-.fault-list li span{
-	font-size:0.32rem;
-	color:#fff;
+.homeindex-wrap-head-bottom-guzhang-contaire-left,.homeindex-wrap-head-bottom-guzhang-contaire-right{
+	flex:1;
 }
-.fault-list li p{
-	width:1.21rem;
-	height:1.21rem;
-	border-radius:50%;
-	background: rgba(255,255,255,.5);
-	font-size:1rem;
-	color:#fff;
+.homeindex-wrap-head-bottom-guzhang-contaire-left p:nth-child(1){
+	font-size:0.44rem;
+	color:#222;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-left p:nth-child(2) b{
+	font-size:0.7rem;
+	font-weight: 400;
+	color:#ff9c00;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-left p:nth-child(2) span{
+	font-size:0.38rem;
+	color:#ff9c00;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-right p:nth-child(1){
+	font-size:0.44rem;
+	color:#222;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-right p:nth-child(2) b{
+	font-size:0.7rem;
+	font-weight: 400;
+	color:#fb6942;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-right p:nth-child(2) span{
+	font-size:0.38rem;
+	color:#fb6942;
+}
+.homeindex-wrap-head-bottom-guzhang-contaire-left p,.homeindex-wrap-head-bottom-guzhang-contaire-right p{
 	text-align: center;
-	line-height:1.21rem;
 }
-.vehicle-services{
-	margin-top:0.96rem;
+.homeindex--wrap-bottom{
+	flex:1;
+	background: #fff;
+	padding-top:2.2rem;
+	overflow: auto;
+}
+.homeindex-car-service-title{
+	height:1.17rem;
 	padding:0 0.5rem;
-}
-.vehicle-services-title{
-	height:0.5rem;
-	width:100%;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
-	font-size:0.5rem;
-	color:#343434;
 }
-.vehicle-services-title b{
+.homeindex-car-service-title b{
 	width:0.12rem;
 	height:0.5rem;
-	background:#1989f5;
-	margin-right:0.42rem;
+	background: #1989f5;
 }
-.vehicle-services ul{
+.homeindex-car-service-title span{
+	font-size:0.5rem;
+	color:#000;
+	margin-left:0.4rem;
+}
+.homeindex-car-service-title i{
+	flex:1;
+	text-align: right;
+	font-style: normal;
+	font-size:0.5rem;
+	color:#2d3461;
+}
+.homeindex-car-service>ul{
+	padding:0.3rem 0.5rem 0.85rem 0.5rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;
-	padding-top:0.6rem;
 }
-.vehicle-services ul li{
+.homeindex-car-service>ul li{
+	height:1.74rem;
 	display: flex;
-	height: 1.76rem;
 	display: -webkit-flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
-	font-size:0.36rem;
-	color:#2d3461;
 }
-.vehicle-services ul li img {
-	height:0.96rem;
-}
-.homeindex-carfriends{
-	margin-top:1.38rem;
-	padding:0 0.5rem;
-}
-.homeindex-carfriends-title{
-	height:0.5rem;
-}
-.homeindex-carfriends-title p:nth-child(1){
-	float:left;
-}
-.homeindex-carfriends-title p:nth-child(2){
-	float:right;
-}
-.homeindex-carfriends-title i{
-	width:0.12rem;
-	height:0.5rem;
-	background:#1989f5 ;
-	float:left;
-	margin-right:0.42rem;
-	line-height: 0.5rem;	
-}
-.homeindex-carfriends-title b{
-	font-size:0.44rem;
-	color:#000;
-	float:left;
-	line-height: 0.5rem;
-}
-.homeindex-carfriends-title span{
-	color:#2d3461;
-	font-size:0.44rem;
-	line-height: 0.5rem;
+.homeindex-car-service>ul li img{
+	width:0.78rem;
 	display: block;
 }
-.homeindex-carfriends-list li{
-	height:1.64rem;
-	padding-top:0.64rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+.homeindex-car-service>ul li span{
 	font-size:0.4rem;
 	color:#2d3461;
 }
-.homeindex-carfriends-list li img{
+.homeindex-car-friends>ul>li{
+	height:1.6rem;
+	padding:0 0.5rem;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+}
+.homeindex-car-friends>ul>li img{
 	width:1rem;
 	height:1rem;
 	border-radius: 50%;
 	margin-right:0.5rem;
 }
-.homeindex-carfriends-list li p{
-	flex:1;
-	text-align: right;
-}
-.icon-anquan,.icon-chart{
+.homeindex-car-friends>ul>li span{
 	font-size:0.44rem;
+	color:#2d3461;
+}
+.homeindex-car-friends>ul>li i{
+	flex:1;
+	font-size:0.44rem;
+	color:#2d3461;
+	font-style: normal;
+	text-align: right;
 }
 </style>

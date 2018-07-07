@@ -10,7 +10,7 @@
 			</div>
 			<div class="upload-container-bottom">
 				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data" class="imglist"/>
-				<div class="upload-button imglist" v-if="$route.params.id=='picture'">
+				<div class="upload-button imglist" v-if="$route.params.id=='picture'" :class="data.length>9?'upload-button-hidden':''">
 					<p  @click="actionSheetpic"></p>
 					<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
 				</div>
@@ -30,7 +30,7 @@ export default{
 	data(){
 		return {
 			content:'',
-			apiflag:0,
+			apiflag:1,
 			remnant: 120,
 			actionpic: [{  
 		        name: '拍照',  
@@ -48,15 +48,15 @@ export default{
 		    }],  
 		      // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏  
 		    sheetVisible: false,
-		    //data:['https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/20006a1e-7cdb-4f6b-b374-470bafd2859d.jpg','https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/02c4cfc4-a00b-45b2-862d-6a0c67a4bbd1.jpg','https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'],
-			data:[],	
+		    data:['blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'],
+//			data:[],	
 		}
 	},
 	methods:{
 		publish:function(){
 			var that=this;
+			var param={action:'blog.addBlog'}
 			if(this.apiflag==0){
-				var param={action:'blog.addBlog'}
 				if(this.content.trim().length<1){
 					this.$toast({
 			          message: '内容不能为空',
@@ -68,10 +68,17 @@ export default{
 					param.content=this.content;
 					param.mediatype="0"
 				}
-			}else{
-				return
+			}else if(this.apiflag==1){
+				param.content=this.content;
+				param.mediatype="0";
+				var images="";
+				for(let i=0;i<this.data.length;i++){
+					images+=this.data[i];
+				}
+				param.images=images;
 			}
 			this.$api('/Execute.do',param).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					that.$toast({
 			          message: '发表成功',
@@ -138,7 +145,7 @@ export default{
 			var ret = window.action.doUpload(file, '{"path":"blog"}');
 			ret=JSON.parse(ret);
 			if(ret.errorCode=="0"){
-//				ret.data=''+ret.data
+				this.apiflag=1;
 				this.data.push(ret.data)
 			}else{
 				this.$toast({
@@ -176,6 +183,9 @@ export default{
 .upload-container{
 	width:100%;
 	background: #fff;
+}
+.upload-button-hidden{
+	display: none;
 }
 .upload-container-top{
 	height:4rem;

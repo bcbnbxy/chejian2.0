@@ -269,7 +269,7 @@ export default {
 //生日选择
     openPicker() {
         this.$refs.picker.open();
-     },
+    },
      handleConfirm(data){
 		this.birthday=this.formatDate(data);
      },

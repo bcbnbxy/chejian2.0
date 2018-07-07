@@ -6,7 +6,7 @@
 		</div>
 		<div class="fourpicture-content">
 			<div class="fourpicture-box" v-if="datalist.images">
-				<img :src="datalist.images"/>
+				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<p>{{datalist.content}}</p>
 		</div>
@@ -144,7 +144,7 @@
 	padding-bottom:0.24rem;
 }
 .fourpicture-box img{
-	width:100%;
+	width:30%;
 	display: block;
 }
 .fourpicture-title{

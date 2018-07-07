@@ -10,6 +10,18 @@ import Home from '@/view/home/home'
 import Nonetwork from '@/view/home/nonetwork'
 import Nologin from '@/view/home/nologin'
 import Homeindex from '@/view/home_shouye/homeindex'
+import Breakdown from '@/view/home_shouye/breakdown'
+import Violationinquiry from '@/view/home_shouye/Violationinquiry'
+import Chosecar from '@/view/home_shouye/chosecar'
+import Fillinfo from '@/view/home_shouye/fillinfo'
+import Detailsviolation from '@/view/home_shouye/detailsviolation'
+import Friendslist from '@/view/home_shouye/friendslist'
+import Rankings from '@/view/home_shouye/rankings'
+import Personaldata from '@/view/home_shouye/personaldata'
+import Listrankings from '@/view/home_shouye/listrankings'
+import Carlovescore from '@/view/home_shouye/carlovescore'
+import Powersystem from '@/view/home_shouye/powersystem'
+import Idlingsystem from '@/view/home_shouye/idlingsystem'
 import Faxian from '@/view/home_faxian/faxian'
 import Search from '@/components/common/search'
 import Detailpage from '@/view/home_faxian/detailpage'
@@ -195,6 +207,54 @@ export default new Router({
 	},{
 		path:'/data',
 		component:Data
+	},{
+		path:'/breakdown',
+		name:'breakdown',
+		component:Breakdown
+	},{
+		path:'/violationinquiry',
+		name:'violationinquiry',
+		component:Violationinquiry
+	},{
+		path:'/chosecar',
+		name:'chosecar',
+		component:Chosecar
+	},{
+		path:'/fillinfo',
+		name:'fillinfo',
+		component:Fillinfo
+	},{
+		path:'/detailsviolation',
+		name:'detailsviolation',
+		component:Detailsviolation
+	},{
+		path:'/friendslist',
+		name:'friendslist',
+		component:Friendslist
+	},{
+		path:'/personaldata',
+		name:'personaldata',
+		component:Personaldata
+	},{
+		path:'/listrankings',
+		name:'listrankings',
+		component:Listrankings
+	},{
+		path:'/rankings',
+		name:'rankings',
+		component:Rankings
+	},{
+		path:'/carlovescore',
+		name:'carlovescore',
+		component:Carlovescore
+	},{
+		path:'/powersystem',
+		name:'powersystem',
+		component:Powersystem
+	},{
+		path:'/idlingsystem',
+		name:'idlingsystem',
+		component:Idlingsystem
 	}
   ]
 })

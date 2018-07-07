@@ -60,6 +60,7 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs'}).then(function(r){
 				if(r.errorCode=="0"){
+					console.log(JSON.stringify(r));
 					that.datalist=that.datalist.concat(r.data.blogs);
 					if(r.data.blogs.length<5){
 						that.allLoaded=true;
