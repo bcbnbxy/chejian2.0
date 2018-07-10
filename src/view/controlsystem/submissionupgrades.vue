@@ -7,20 +7,19 @@
 	<div class="submissionupgrades-wrap-contaire">
 		<div class="company-name">
 			<label>公司名称</label>
-			<input type="text" placeholder="请输入公司名称"/>
+			<input type="text" placeholder="请输入公司名称"  v-model="companyname"/>
 		</div>
 		<div class="company-name">
 			<label>社会信用代码/注册号</label>
-			<input type="text" placeholder="请输入营业执照号"/>
+			<input type="text" placeholder="请输入营业执照号" v-model="registrmark"/>
 		</div>
 		<div class="uploadimage">
 			<div class="uploadimage-left">
 				<p>上传营业执照</p>
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
-			<div class="uploadimage-right">
-				<p></p>
-				<input type="file"/>
+			<div class="uploadimage-right" @click="actionSheetpic(0)">
+				<img :src="businesslicence"/>
 			</div>
 		</div>
 		<div class="company-name">
@@ -36,9 +35,8 @@
 				<p>上传身份证正面</p>
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
-			<div class="uploadimage-right">
-				<p></p>
-				<input type="file"/>
+			<div class="uploadimage-right" @click="actionSheetpic(1)">
+				<img :src="facadecard"/>
 			</div>
 		</div>
 		<div class="uploadimage">
@@ -46,29 +44,114 @@
 				<p>上传身份证反面</p>
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
-			<div class="uploadimage-right">
-				<p></p>
-				<input type="file"/>
+			<div class="uploadimage-right" @click="actionSheetpic(2)">
+				<img :src="identitycard"/>
 			</div>
 		</div>
 		<div class="submissionupgrades-wrap-contaire-footer">
 			<span>1-3天审核完成，请耐心等待</span>
 			<p>	
-				<input id="checkbox" type="checkbox" value=""/>
+				<input id="checkbox" type="checkbox" v-model="selected"/>
 				<label for="checkbox"></label>
         		<span>平台使用协议</span>
 			</p>
-			<button @click="subaudit">提交审核</button>
+			<!--<button @click="subaudit" disabled>提交审核</button>-->
+			<mt-button type="default" :disabled='isdisabled' @click="subaudit">提交审核</mt-button>
 		</div>
 	</div>
+	<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
 </div>
 </template>
 
 <script>
 export default{
+	computed:{
+		isdisabled:function(){
+			if(this.selected){
+				return false;
+			}else{
+				return true;
+			}
+		}
+	},
+	data(){
+		return{
+			companyname:'',//公司名称
+			registrmark:"",//社会信用代码/注册号
+			judicialname:"",//法人名称
+			idnum:"",//身份证号码
+			sheetVisible:false,
+			actiontype:null,
+			selected:false,
+			businesslicence:require ('../../assets/img/faxianimg/addfile.png'),
+			facadecard:require ('../../assets/img/faxianimg/addfile.png'),//身份证正面照
+			identitycard:require ('../../assets/img/faxianimg/addfile.png'),//身份证反面面照
+			actionpic: [{  
+		        name: '拍照',  
+		        method : this.captureImage// 调用methods中的函数  
+		      }, {  
+		        name: '从相册中选择',   
+		        method : this.getLibrary// 调用methods中的函数  
+		      }],
+		}
+	},
 	methods:{
 		subaudit(){
-			this.$router.push('/infoaudit');
+			console.log(this.selected);
+		},
+		captureImage(){
+			var param = (new Date()).getTime() + '.jpg';
+			param = '{"filename" : "' + param + '"}';
+			param = window.camera.captureImage(param);
+			alert(param+"---------------------------------109行");
+			if(param==""||param==null||param==undefined){
+				this.$toast({
+		          message: "请重新拍照",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+	      		return ;
+			}else{
+				this.testUpload(param);
+			}
+		},
+		getLibrary(){ //从相册选择视频或图片 
+	      var ret =  window.gallery.pickImage();
+	      alert(ret+"---------------------------------109行 ");
+	      if(ret==""||ret==null||ret==undefined){
+	      	this.$toast({
+	          message: "请重新选择图片",
+	          position: 'bottom',
+			  duration: 1500
+	        });
+	      	return ;
+	      }else{
+	      	 this.testUpload(ret)
+	      }	     
+	    },
+	    testUpload(file){
+			var ret = window.action.doUpload(file, '{"path":"blog"}');
+			ret=JSON.parse(ret);
+			alert(JSON.stringify(ret))
+			if(ret.errorCode=="0"){
+				if(this.actiontype==0){
+					this.businesslicence='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+				}else if(this.actiontype==1){
+					this.facadecard='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+				}else if(this.actiontype==2){
+					this.identitycard='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+				}
+			}else{
+				this.$toast({
+		          message: ret.errorMessage,
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}	
+		},
+		actionSheetpic(index){
+			this.sheetVisible = true;
+			this.actiontype=index;
 		}
 	}
 }
@@ -155,19 +238,9 @@ export default{
 	position: relative;
 	overflow: hidden;
 }
-.uploadimage-right p{
+.uploadimage-right img{
 	width:100%;
 	height:100%;
-	background-image:url(../../assets/img/faxianimg/addfile.png) ;
-	background-size:cover ;
-}
-.uploadimage-right input{
-	position: absolute;
-	width:100%;
-	height:100%;
-	top:0;
-	left:0;
-	opacity: 0;
 }
 .submissionupgrades-wrap-contaire-footer{
 	padding:0.48rem 0.55rem 1.35rem 0.55rem;

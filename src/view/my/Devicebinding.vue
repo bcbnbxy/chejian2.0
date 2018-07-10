@@ -14,7 +14,7 @@
 			<p>注：设备识别码及设备二维码在设备底部</p>
 		</div>
 		<div class="submit">
-			<button>确定</button>
+			<button @click="bindDevice">确定</button>
 		</div>
 	</div>
 </template>
@@ -30,7 +30,6 @@ export default {
 	methods:{
 		startRecognize:function(){
 			var param = window.barcode.scan();
-			alert(param+'------35行')
 			if(param==""||param==null||param==undefined){
 				this.$toast({
 			          message: '扫描失败',
@@ -39,30 +38,22 @@ export default {
 			        });
 			}else{
 				this.devicenum=param;
-			}			
-//			this.bcidflag=true;
-//			scan = new plus.barcode.Barcode('bcid');
-//			scan.start();			
-//			scan.onmarked=this.onmarked;
+			}	
 		},
-//		onmarked:function( type, result){ //扫描二维码成功回调函数
-//			var text = '未知: ';
-//			switch(type){
-//				case plus.barcode.QR:
-//				text = 'QR: ';
-//				break;
-//				case plus.barcode.EAN13:
-//				text = 'EAN13: ';
-//				break;
-//				case plus.barcode.EAN8:
-//				text = 'EAN8: ';
-//				break;
-//			}
-//			scan.cancel();
-//			scan.close();
-//			this.bcidflag=false;
-//			this.devicenum=result;
-//		}
+		bindDevice(){
+			if(this.devicenum.trim().length<1){
+				this.$toast({
+		          message: '请输入设备编号',
+		          position: 'bottom',
+  			      duration: 1500
+		      	});
+				return
+			}else{
+				this.$api("/Execute.do",{action:"device.bindDevic",device:this.devicenum}).then(function(r){
+					console.log(JSON.stringify(r));
+				})
+			}
+		}
 	}
 }
 </script>

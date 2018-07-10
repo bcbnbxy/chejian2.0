@@ -17,9 +17,6 @@
 			</dl>
 		</div>
 	</div>
-	<div class="Violationinquiry-wrap-footer">
-		<button>添加车辆</button>
-	</div>
 </div>
 </template>
 
@@ -43,7 +40,7 @@
 	padding:0 0.5rem;
 	font-size:0.56rem;
 	width:100%;
-	background-image:url(../../../dist/static/img/headbg.32103ac.png) ;
+	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover;
 }
 .Violationinquiry-wrap-head .icon-fanhui{
@@ -110,19 +107,5 @@
 .Violationinquiry-carinfo>dl dd p b{
 	font-size:0.48rem;
 	color:#ff0000;
-}
-.Violationinquiry-wrap-footer{
-	padding:0 2.22rem 1rem 2.22rem;
-	background: #f7f7f7;
-}
-.Violationinquiry-wrap-footer button{
-	width:100%;
-	height:1.6rem;
-	font-size:0.44rem;
-	background:#1989f5;
-	color:#fff;
-	text-align: center;
-	line-height:1.6rem;
-	border-radius: 5px;
 }
 </style>

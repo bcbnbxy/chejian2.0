@@ -6,12 +6,10 @@
 	</div>
 	<div class="workshop-wrap-contaire">
 		<div class="workshop-wrap-contaire-nav">
-			<span @click="toggle(0,'Workshop_all')" :class="{active:active===0}">全部(1203)</span>
-			<i></i>
-			<span @click="toggle(1,'Workshop_hitch')" :class="{active:active===1}">故障(325)</span>
+			<b></b><span>全部(1203)</span>
 		</div>
 		<div class="workshop-wrap-contaire-webview">
-			<component :is="currentView" ></component>
+			<Workshop_all></Workshop_all>
 		</div>
 	</div>
 </div>
@@ -19,21 +17,8 @@
 
 <script>
 import Workshop_all from '@/components/controlsystem/workshop_all'
-import Workshop_hitch from '@/components/controlsystem/workshop_hitch'
 export default{
-	components:{Workshop_all,Workshop_hitch},
-	data(){
-		return {
-			active:0,
-			currentView: 'Workshop_all'
-		}
-	},
-	methods:{
-		toggle(i,v){
-			this.active=i;
-			this.currentView=v;
-		}
-	}
+	components:{Workshop_all},
 }
 </script>
 
@@ -77,9 +62,15 @@ export default{
 	color:#222;
 	display: flex;
 	display: -webkit-flex;
-	justify-content: space-around;
 	align-items: center;
-	margin-bottom:0.3rem;
+	text-align: left;
+	padding:0 0.5rem;
+	border-bottom:1px solid #ddd;
+}
+.workshop-wrap-contaire-nav b{
+	width: 0.12rem;
+    height: 0.5rem;
+    background: #1989f5;
 }
 .workshop-wrap-contaire-nav i{
 	display: block;

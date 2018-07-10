@@ -108,7 +108,7 @@ export default{
 	line-height:1.32rem;
 	color:#fff;
 	font-size:0.56rem;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 }
 .fillinfo-wrap-head .icon-fanhui{

@@ -123,7 +123,7 @@ export default{
 	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 	position: relative;
 }

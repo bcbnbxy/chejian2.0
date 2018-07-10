@@ -69,7 +69,7 @@
 	height:1.32rem;
 	line-height:1.32rem;
 	text-align: center;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 	font-size:0.56rem;
 	color:#fff;

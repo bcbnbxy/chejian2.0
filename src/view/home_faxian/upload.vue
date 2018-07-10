@@ -153,8 +153,7 @@ export default{
 		          position: 'bottom',
 				  duration: 1500
 		        });
-			}
-			
+			}			
 		}
 	}
 }

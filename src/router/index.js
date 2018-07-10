@@ -10,6 +10,8 @@ import Home from '@/view/home/home'
 import Nonetwork from '@/view/home/nonetwork'
 import Nologin from '@/view/home/nologin'
 import Homeindex from '@/view/home_shouye/homeindex'
+import Friends from '@/view/friends/friendslist'
+import Chat from '@/view/friends/chat'
 import Breakdown from '@/view/home_shouye/breakdown'
 import Violationinquiry from '@/view/home_shouye/Violationinquiry'
 import Chosecar from '@/view/home_shouye/chosecar'
@@ -43,6 +45,7 @@ import EditProfile from '@/view/my/editprofile'
 import ManageAddress from '@/view/my/manageaddress'
 import Editaddress from '@/view/my/editaddress'
 import Mymessage from '@/view/my/mymessage'
+import Devicelist from '@/view/my/devicelist'
 import Mycontrolsystem from '@/view/controlsystem/mycontrolsystem'
 import controlsystem_My from '@/view/controlsystem/controlsystem_my'
 import Adduser from '@/view/controlsystem/adduser'
@@ -62,8 +65,11 @@ Vue.use(Router)
 export default new Router({
 	linkActiveClass:'v-link-active',
   routes: [
-    {
-      path: '/',
+  	{
+  		path: '/',
+        redirect:'/home' 
+    },{
+      path: '/bootPage',
       component:BootPage
     },{
       path: '/register',
@@ -85,11 +91,17 @@ export default new Router({
     	path:'/home',
     	component:Home,
     	children:[{
-    		path:'/',
+    		path:'/homeindex',
     		component:Homeindex
     	},{
-    		path:'/faxian',
+    		path:'/',
     		component:Faxian
+    	},{
+    		path:'/friends',
+    		component:Friends
+    	},{
+    		path:'/nologin',
+    		component:Nologin
     	},{
     		path:'/personal',
     		component:Personal
@@ -255,6 +267,12 @@ export default new Router({
 		path:'/idlingsystem',
 		name:'idlingsystem',
 		component:Idlingsystem
+	},{
+		path:'/devicelist',
+		component:Devicelist
+	},{
+		path:'/friends/chat',
+		component:Chat
 	}
   ]
 })

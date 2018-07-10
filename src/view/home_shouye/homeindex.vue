@@ -39,7 +39,7 @@
 			<ul>
 				<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>
 				<li><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
-				<li><img src="../../assets/img/faxianimg/cheyou.png"><span>附近车友</span></li>
+				<!--<li><img src="../../assets/img/faxianimg/cheyou.png"><span>附近车友</span></li>-->
 				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
 			</ul>
 		</div>
@@ -50,20 +50,39 @@
 				<i>车辆评分</i>
 			</div>
 			<ul>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../../dist/static/img/avatar.c823af3.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
+				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
 			</ul>
 		</div>
 	</div>
 </div>
 </template>
 <script>
+export default{
+	created(){
+		this.getdevices();
+	},
+	methods:{
+		getdevices(){//我的设备查询
+			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
+				console.log(JSON.stringify(r));
+			})
+		}
+	},
+	beforeRouteEnter(to,from,next){
+		if(!localStorage.getItem('loginInfo')){
+			next({path:'/nologin'});
+		}else{
+			next();
+		}
+	}
+}
 </script>
 <style>
 .homeindex-wrap{
@@ -98,6 +117,7 @@
 	height:100%;
 	align-items: center;
 	font-size:0.5rem;
+	position: relative;
 }
 .homeindex-wrap-head-top-left>i{
 	font-size:0.5rem;
@@ -233,7 +253,7 @@
 	color:#2d3461;
 }
 .homeindex-car-service>ul{
-	padding:0.3rem 0.5rem 0.85rem 0.5rem;
+	padding:0.3rem 1.18rem 0.85rem 1.18rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;

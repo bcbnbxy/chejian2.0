@@ -6,7 +6,7 @@
 	</div>
 	<div class="listrankings-wrap-contaire">
 		<div class="listrankings-wrap-contaire-my">
-			<img src="../../../dist/static/img/avatar.c823af3.png"/>
+			<img src="../../assets/img/faxianimg/avatar.png"/>
 			<div>
 				<span>懒先生</span>
 				<p>
@@ -129,7 +129,7 @@
 	width:100%;
 	font-size:0.56rem;
 	color:#fff;
-	background-image:url(../../../dist/static/img/headbg.32103ac.png) ;
+	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size: cover;
 	position: relative;
 	line-height:1.32rem;

@@ -61,7 +61,7 @@ export default{
 			})
 		},
 		Login:function(){
-			this.$router.push('/')
+			this.$router.push('/bootPage')
 		}
 	}
 }

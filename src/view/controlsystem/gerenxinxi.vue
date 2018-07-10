@@ -89,6 +89,7 @@ export default{
 	display: -webkit-flex;
 	flex-direction: column;
 	position: relative;
+	overflow: hidden;
 }
 .gerenxinxi-wrap-head{
 	width:100%;

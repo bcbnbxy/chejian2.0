@@ -28,7 +28,7 @@
 		data(){
 			return {
 				defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
-				userseq:JSON.parse(localStorage.getItem('loginInfo')).userseq,
+				userseq:localStorage.getItem('loginInfo')==null?'':JSON.parse(localStorage.getItem('loginInfo')).userseq,
 				datalist:this.data
 			}
 		},

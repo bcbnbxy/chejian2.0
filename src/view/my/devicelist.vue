@@ -1,13 +1,13 @@
 <template>
-<div class="chosecar-wrap">
+<div class="devicelist-wrap">
 	<div class="chosecar-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-		<span>选择查询车辆</span>
+		<span>设备列表</span>
 	</div>
 	<div class="chosecar-wrap-contaire">
 		<ul>
-			<router-link tag="li" to="/fillinfo"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
-			<router-link tag="li" to="/fillinfo"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
+			<li><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p></li>
+			<li><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p></li>
 		</ul>
 	</div>
 </div>
@@ -16,7 +16,7 @@
 <script>
 </script>
 <style scoped>
-.chosecar-wrap{
+.devicelist-wrap{
 	width:100%;
 	height:100%;
 	background: #f7f7f7;
@@ -71,9 +71,5 @@
 }
 .chosecar-wrap-contaire ul li p b{
 	font-weight: 400;
-}
-.chosecar-wrap-contaire ul li .icon-arrow-right-copy-copy-copy{
-	font-size:0.6rem;
-	color:#a0a0a0;
 }
 </style>

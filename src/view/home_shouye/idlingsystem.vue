@@ -55,7 +55,7 @@
 	font-size:0.56rem;
 	color:#fff;
 	position: relative;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 }
 .powersystem-wrap-head .icon-fanhui{

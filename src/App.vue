@@ -20,16 +20,14 @@
 export default {
   name: 'App',
   created(){
-	 	this.checklogin();
+//	 	this.checklogin();
 	 	this.getCityInfo();
   },
   methods:{
   	//判断用户的登录状态
   	checklogin:function(){
-  		let loginInfo={};
 //		  localStorage.removeItem('loginInfo');
   		if(localStorage.getItem('loginInfo')){
-  			loginInfo=JSON.parse(localStorage.getItem('loginInfo'));
   				this.$router.push('/home');
   			}else{
   				this.$router.push('/');

@@ -3,11 +3,11 @@
 		<div class="home-main">
 			<router-view></router-view>
 		</div>
-		<footer class="footer" v-show="$route.path.indexOf('/home') > -1||$route.path.indexOf('/faxian') > -1 || $route.path.indexOf('/personal') > -1">
-			<router-link to="/home" tag="div" ><img src="../../assets/img/faxianimg/home.png"/><span>首页</span></router-link>
-			<router-link to="/faxian" tag="div"><img src="../../assets/img/faxianimg/found.png"/><span>发现</span></router-link>
-			<div><img src="../../assets/img/faxianimg/carfrend.png"/><span>车友</span></div>
-			<router-link to="/personal" tag="div"><img src="../../assets/img/faxianimg/my.png"/><span>我的</span></router-link>
+		<footer class="footer">
+			<router-link to="/homeindex" tag="div" ><p class="bghome"></p><span>首页</span></router-link>
+			<router-link to="/home" tag="div"><p class="bgfaxian"></p><span>发现</span></router-link>
+			<router-link to="/friends" tag="div"><p class="bgcheyou"></p><span>车友</span></router-link>
+			<router-link to="/personal" tag="div"><p class="bgmy"></p><span>我的</span></router-link>
 		</footer>
 		<div v-show="$store.state.faxian.popupmean" class="popupmean" @touchmove.prevent @click.self="popupmeanhidden">
 			<dl class="popupmean-report" v-show="$store.state.faxian.report" >
@@ -80,20 +80,46 @@ export default {
 .footer>div{
 	float: left;
 	width:25%;
+	height:100%;
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	height:1.44rem;
-	padding:0.24rem 0 0.12rem 0;
+	padding:0.1rem 0;
+	line-height:1;
 	border-top:1px solid #dcdcdc;
 	position: relative;
 	top:-1px;
 }
-.footer>div>img{
-	max-width:0.6rem;
-	max-height:0.6rem;
+.footer>div>p{
+	width:0.7rem;
+	height:0.7rem;
+	background-size:0.7rem 0.7rem;
+}
+.bghome{	
+	background-image: url(../../assets/img/shouye/home.png);
+}
+.bgfaxian{
+	background-image: url(../../assets/img/shouye/faxian.png);
+}
+.bgcheyou{
+	background-image: url(../../assets/img/shouye/cheyou.png);
+}
+.bgmy{
+	background-image: url(../../assets/img/shouye/my.png);
+}
+.v-link-active .bghome{
+	background-image: url(../../assets/img/shouye/homeactive.png);
+}
+.v-link-active .bgfaxian{
+	background-image: url(../../assets/img/shouye/faxianactive.png);
+}
+.v-link-active .bgcheyou{
+	background-image: url(../../assets/img/shouye/cheyouactive.png);
+}
+.v-link-active .bgmy{
+	background-image: url(../../assets/img/shouye/myactive.png);
 }
 .footer>div>span{
 	font-size:0.24rem;

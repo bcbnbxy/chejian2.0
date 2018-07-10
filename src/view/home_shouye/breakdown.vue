@@ -79,7 +79,7 @@ export default{
 .breakdown-wrap-head{
 	width:1005;
 	height:1.32rem;
-	background-image:url(../../../dist/static/img/headbg.32103ac.png);
+	background-image:url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover;
 	text-align: center;
 	line-height:1.32rem;

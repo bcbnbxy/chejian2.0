@@ -17,8 +17,7 @@
 		<section class="personal-bottom">
 			<nav>
 				<div @click="gopersonal"><p><svg class="icon" aria-hidden="true"><use xlink:href="#icon-guanli"></use></svg></p><span>管理</span></div>
-				<div><p><i class="iconfont icon-wodeshebei" style="color:#1989f5;"></i></p><span>设备</span></div>
-				<div><p style="border-right:none;"><i class="iconfont icon-qianbao" style="color:#e75725;"></i></p><span>账户</span></div>
+				<router-link tag="div" to="/devicelist"><p><i class="iconfont icon-wodeshebei" style="color:#1989f5;"></i></p><span>设备</span></router-link>
 			</nav>
 			<router-link to="/devicebinding" tag="div" class="personal-bottom-shebei">
 				<i class="iconfont icon-bangding"></i><span>设备绑定</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
@@ -52,6 +51,14 @@ export default{
 			}
 		}
 	},
+	beforeRouteEnter(to,from,next){
+		console.log(1111)
+		if(!localStorage.getItem('loginInfo')){
+			next({path:'/nologin'});
+		}else{
+			next();
+		}
+	},
 	created(){
 		this.getUserInfo();
 	},
@@ -77,7 +84,7 @@ export default{
 					that.loginname=r.data.userInfo.loginname;
 					that.sex=r.data.userInfo.gender;
 					localStorage.setItem("loginInfo",JSON.stringify(r.data.userInfo));
-					localStorage.setItem('identity',1)
+					localStorage.setItem('identity',-1)
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -88,7 +95,7 @@ export default{
 			})
 		},
 		gopersonal(){
-			if(parseInt(localStorage.getItem('identity'))==-1){
+			if(-1==-1){
 				this.$router.push({name:'manageupgrade'});
 			}else if(parseInt(localStorage.getItem('identity'))==1){
 				this.$router.push({name:'mycontrolsystem'});
@@ -161,7 +168,7 @@ export default{
 	margin-bottom:0.3rem;
 }
 .personal-bottom>nav>div{
-	width:33.33%;
+	width:50%;
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
@@ -171,6 +178,9 @@ export default{
 	width:100%;
 	text-align: center;
 	border-right:1px solid #dcdcdc;
+}
+.personal-bottom>nav>div:last-child p{
+	border-right:none;
 }
 .personal-bottom>nav>div span{
 	font-size:0.38rem;
