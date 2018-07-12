@@ -6,14 +6,39 @@
 	</div>
 	<div class="chosecar-wrap-contaire">
 		<ul>
-			<li><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p></li>
-			<li><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p></li>
+			<li v-for="(item,index) in data"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：{{item.device}}</span><span><b>{{item.deviceVehicle.brandname}}  {{item.deviceVehicle.manufacturer}} {{item.deviceVehicle.modelname}}</b></span></p></li>
 		</ul>
 	</div>
 </div>
 </template>
 
 <script>
+export default{
+	created(){
+		this.getdevices();
+	},
+	data(){
+		return {
+			data:[],
+		}
+	},
+	methods:{
+		getdevices(){
+			var that=this;
+			this.$api("/Execute.do",{action:"device.devices"}).then(function(r){
+				if(r.errorCode==0){
+					that.data=r.data.devices
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
+			})
+		}
+	}
+}
 </script>
 <style scoped>
 .devicelist-wrap{

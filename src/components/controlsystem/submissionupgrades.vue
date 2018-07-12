@@ -1,7 +1,7 @@
 <template>
 <div class="submissionupgrades-wrap">
 	<div class="submissionupgrades-wrap-head">
-		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+		<i class="iconfont icon-fanhui" @click="submissionupgradeshidden"></i>
 		<span>提交升级资料</span>
 	</div>
 	<div class="submissionupgrades-wrap-contaire">
@@ -19,16 +19,16 @@
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
 			<div class="uploadimage-right" @click="actionSheetpic(0)">
-				<img :src="businesslicence"/>
+				<img :src="businesslicence?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+businesslicence:require ('../../assets/img/faxianimg/addfile.png')"/>
 			</div>
 		</div>
 		<div class="company-name">
 			<label>法人名称</label>
-			<input type="text" placeholder="请输入法人名称"/>
+			<input type="text" placeholder="请输入法人名称" v-model="bossname"/>
 		</div>
 		<div class="company-name">
 			<label>身份证号码</label>
-			<input type="text" placeholder="请输入身份证号码"/>
+			<input type="text" placeholder="请输入身份证号码" v-model="idnum"/>
 		</div>
 		<div class="uploadimage">
 			<div class="uploadimage-left">
@@ -36,7 +36,7 @@
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
 			<div class="uploadimage-right" @click="actionSheetpic(1)">
-				<img :src="facadecard"/>
+				<img :src="facadecard?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+facadecard:require ('../../assets/img/faxianimg/addfile.png')"/>
 			</div>
 		</div>
 		<div class="uploadimage">
@@ -45,7 +45,7 @@
 				<span>提醒：上传后不可更改，请谨慎操作</span>
 			</div>
 			<div class="uploadimage-right" @click="actionSheetpic(2)">
-				<img :src="identitycard"/>
+				<img :src="identitycard?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+identitycard:require ('../../assets/img/faxianimg/addfile.png')"/>
 			</div>
 		</div>
 		<div class="submissionupgrades-wrap-contaire-footer">
@@ -55,7 +55,6 @@
 				<label for="checkbox"></label>
         		<span>平台使用协议</span>
 			</p>
-			<!--<button @click="subaudit" disabled>提交审核</button>-->
 			<mt-button type="default" :disabled='isdisabled' @click="subaudit">提交审核</mt-button>
 		</div>
 	</div>
@@ -65,6 +64,14 @@
 
 <script>
 export default{
+	props:{
+		dataInfo:{
+			type:Object,
+			default(){
+				return {}
+			}
+		}
+	},
 	computed:{
 		isdisabled:function(){
 			if(this.selected){
@@ -76,16 +83,16 @@ export default{
 	},
 	data(){
 		return{
-			companyname:'',//公司名称
-			registrmark:"",//社会信用代码/注册号
-			judicialname:"",//法人名称
-			idnum:"",//身份证号码
+			companyname:this.dataInfo.company?this.dataInfo.company:'',//公司名称
+			registrmark:this.dataInfo.blicence?this.dataInfo.blicence:'',//社会信用代码/注册号
+			bossname:this.dataInfo.bossname?this.dataInfo.bossname:'',//法人名称
+			idnum:this.dataInfo.idno?this.dataInfo.idno:'',//身份证号码
 			sheetVisible:false,
 			actiontype:null,
 			selected:false,
-			businesslicence:require ('../../assets/img/faxianimg/addfile.png'),
-			facadecard:require ('../../assets/img/faxianimg/addfile.png'),//身份证正面照
-			identitycard:require ('../../assets/img/faxianimg/addfile.png'),//身份证反面面照
+			businesslicence:this.dataInfo.licimg?this.dataInfo.licimg:'',//营业执照'blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'
+			facadecard:this.dataInfo.idcoverimg?this.dataInfo.idcoverimg:'',//身份证正面照
+			identitycard:this.dataInfo.idbackimg?this.dataInfo.idbackimg:'',//身份证反面面照
 			actionpic: [{  
 		        name: '拍照',  
 		        method : this.captureImage// 调用methods中的函数  
@@ -97,13 +104,106 @@ export default{
 	},
 	methods:{
 		subaudit(){
-			console.log(this.selected);
+			var that=this;
+			if(this.companyname.trim().length<1){
+				this.$toast({
+		          message: "公司名称不能为空",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(this.registrmark.trim().length<1){
+				this.$toast({
+		          message: "社会信用代码不能为空",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(this.bossname.trim().length<1){
+				this.$toast({
+		          message: "法人名称不能为空",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(this.idnum.trim().length<1){
+				this.$toast({
+		          message: "身份证号码不能为空",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(!this.businesslicence){
+				this.$toast({
+		          message: "请上传营业执照",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(!this.facadecard){
+				this.$toast({
+		          message: "请上传身份证正面照",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else if(!this.identitycard){
+				this.$toast({
+		          message: "请上传身份证反面照",
+		          position: 'bottom',
+				  duration: 1500
+		        });
+			}else{
+				var param={
+					company:this.companyname,
+					blicence:this.registrmark,
+					idno:this.idnum,
+					bossname:this.bossname,
+					licimg:this.businesslicence,
+					idcoverimg:this.facadecard,
+					idbackimg:this.identitycard,
+					province:"abc",
+					district:"qwer",
+					city:'wpoop'
+				}
+				if(this.dataInfo.status){
+					param.action="device.updateAgentInfo";
+					this.$api('/Execute.do',param).then(function(r){
+						if(r.errorCode==0){
+							that.$toast({
+					          message: "资料提交成功",
+					          position: 'bottom',
+							  duration: 1500
+					       });	
+					      that.$router.replace('/infoaudit'); 
+						}else{
+							that.$toast({
+					          message: r.errorMessage,
+					          position: 'bottom',
+							  duration: 1500
+					       });
+						}
+					})
+				}else{
+					param.action="device.applyAgent";
+					this.$api('/Execute.do',param).then(function(r){
+						if(r.errorCode==0){
+							that.$toast({
+					          message: "资料提交成功",
+					          position: 'bottom',
+							  duration: 1500
+					       });	
+					      that.$router.replace('/infoaudit'); 
+						}else{
+							that.$toast({
+					          message: r.errorMessage,
+					          position: 'bottom',
+							  duration: 1500
+					       });
+						}
+					})
+				}
+				
+			}
 		},
 		captureImage(){
 			var param = (new Date()).getTime() + '.jpg';
 			param = '{"filename" : "' + param + '"}';
 			param = window.camera.captureImage(param);
-			alert(param+"---------------------------------109行");
 			if(param==""||param==null||param==undefined){
 				this.$toast({
 		          message: "请重新拍照",
@@ -117,7 +217,6 @@ export default{
 		},
 		getLibrary(){ //从相册选择视频或图片 
 	      var ret =  window.gallery.pickImage();
-	      alert(ret+"---------------------------------109行 ");
 	      if(ret==""||ret==null||ret==undefined){
 	      	this.$toast({
 	          message: "请重新选择图片",
@@ -130,16 +229,15 @@ export default{
 	      }	     
 	    },
 	    testUpload(file){
-			var ret = window.action.doUpload(file, '{"path":"blog"}');
+			var ret = window.action.doUpload(file, '{"path":"carshop"}');
 			ret=JSON.parse(ret);
-			alert(JSON.stringify(ret))
 			if(ret.errorCode=="0"){
 				if(this.actiontype==0){
-					this.businesslicence='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+					this.businesslicence=ret.data;
 				}else if(this.actiontype==1){
-					this.facadecard='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+					this.facadecard=ret.data;
 				}else if(this.actiontype==2){
-					this.identitycard='https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+ret.data;
+					this.identitycard=ret.data;
 				}
 			}else{
 				this.$toast({
@@ -152,6 +250,14 @@ export default{
 		actionSheetpic(index){
 			this.sheetVisible = true;
 			this.actiontype=index;
+		},
+		submissionupgradeshidden(){
+			if(this.dataInfo.status){
+				this.$router.go(-1);
+			}else{
+				this.$emit('listenSubmissionupgrades');
+			}
+			
 		}
 	}
 }
@@ -176,14 +282,20 @@ export default{
 	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
+	position: relative;
 }
 .submissionupgrades-wrap-head .icon-fanhui{
 	font-size:0.6rem;
-	float:left;
+	position: absolute;
+	left:0.5rem;
 }
 .submissionupgrades-wrap-contaire{
 	flex:1;
-	overflow: auto;
+	overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+.submissionupgrades-wrap-contaire::-webkit-scrollbar{
+	display: none;
 }
 .company-name{
 	display: flex;

@@ -4,16 +4,19 @@
 		<div class="homeindex-wrap-head-top">
 			<div class="homeindex-wrap-head-top-left">
 				<img src="../../assets/img/faxianimg/lanbo.png"/>
-				<span>兰博基尼</span>
-				<i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+				<span>{{selected&&selected.deviceVehicle.brandname}}{{selected&&selected.deviceVehicle.modelname}}</span>
+				<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''" @click="devicesshow"></i>
+				<ul class="devices-list" v-show="devicesflag">
+					<li v-for="(item,index) in devices" @click="select(item,index)"><img src="../../assets/img/faxianimg/lanbo.png"/><span>{{item.deviceVehicle.brandname}}{{item.deviceVehicle.modelname}}</span></li>
+				</ul>
 			</div>
 			<i class="iconfont icon-scan"></i>
 		</div>
 		<div class="homeindex-wrap-head-bottom">
 			<div class="homeindex-wrap-head-bottom-contaire">
-				<router-link tag="p" to="/friendslist"><b>1356</b><span>/名</span></router-link>
+				<p><b>1356</b><span>/名</span></p>
 				<p>当前排名</p>
-				<router-link tag="p" to="/carlovescore">车辆安全系数 ： 12365</router-link>
+				<p>车辆安全系数 ： 12365</p>
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
@@ -39,7 +42,6 @@
 			<ul>
 				<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>
 				<li><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
-				<!--<li><img src="../../assets/img/faxianimg/cheyou.png"><span>附近车友</span></li>-->
 				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
 			</ul>
 		</div>
@@ -65,14 +67,39 @@
 </template>
 <script>
 export default{
-	created(){
+	data(){
+		return {
+			devices:[],
+			devicesflag:false,
+			selected:null,
+		}
+	},
+	mounted(){
 		this.getdevices();
 	},
 	methods:{
 		getdevices(){//我的设备查询
+			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
-				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					that.devices=r.data.devices;
+					that.selected=r.data.devices[0];
+					console.log(JSON.stringify(r.data.devices[0]))
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
 			})
+		},
+		devicesshow(){
+			this.devicesflag=!this.devicesflag;
+		},
+		select(item,index){
+			this.devicesflag=!this.devicesflag;
+			this.selected=item;
 		}
 	},
 	beforeRouteEnter(to,from,next){
@@ -118,6 +145,41 @@ export default{
 	align-items: center;
 	font-size:0.5rem;
 	position: relative;
+}
+.iconrotate{
+	transform: rotate(90deg);
+	transition: all 0.3s;
+}
+.devices-list{
+	width:100%;
+	position: absolute;
+	left:0;
+	top:1.32rem;
+	background: #fff;
+	opacity: 1;
+	border-radius: 5px;
+	z-index: 999;
+}
+.devices-list li {
+	height:1.6rem;
+	width:100%;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	border-bottom:1px solid #ddd;
+}
+.devices-list li:last-child{
+	border-bottom:none;
+}
+.devices-list li img{
+	width:1.1rem;
+	height:1.1rem;
+	border-radius: 50%;
+	margin-right:0.5rem;
+}
+.devices-list li span{
+	font-size:0.38rem;
+	color:#222;
 }
 .homeindex-wrap-head-top-left>i{
 	font-size:0.5rem;

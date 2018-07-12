@@ -64,6 +64,9 @@ td,th{padding:0}
 		color:#dedede;
 		font-weight: normal;
 	}
+::-webkit-scrollbar{
+	display: none;
+}
 .v-link-active>span{
 	color:#0061ff;
 }

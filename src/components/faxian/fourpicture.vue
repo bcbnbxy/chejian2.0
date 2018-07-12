@@ -2,7 +2,7 @@
 	<div class="fourpicture" id="fourpicture">
 		<div class="fourpicture-avatar">
 			<div class="fourpicture-avatar-left"><router-link tag="div" to="/homepage"><img :src="datalist.owner.headphoto?datalist.owner.headphoto:defaultImg"/></router-link><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
-			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!datalist.owner.favorite">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;'>已关注</p></div>
+			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!favorite" @click="addMyFavorite(datalist.userseq)">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;' @click="removeMyFavorit(datalist.userseq)">已关注</p></div>
 		</div>
 		<div class="fourpicture-content">
 			<div class="fourpicture-box" v-if="datalist.images">
@@ -11,7 +11,7 @@
 			<p>{{datalist.content}}</p>
 		</div>
 		<div class="fourpicture-title">
-			<p @click="praise(datalist.blogseq)"><i class="iconfont icon-xin" style="vertical-align: baseline;" v-if="!datalist.owner.favorite"></i> <svg class="icon" aria-hidden="true" v-else><use xlink:href="#icon-heart-copy"></use></svg><span>{{datalist.praisecount}}</span></p>
+			<p><i class="iconfont icon-xin" style="vertical-align: baseline;" v-if="!praiseflag" @click="praise(datalist.blogseq,praisecount)"></i> <svg class="icon" aria-hidden="true" v-else @click="cancelPraiseBlog(datalist.blogseq,praisecount)"><use xlink:href="#icon-heart-copy"></use></svg><span>{{praisecount}}</span></p>
 			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>365</span></router-link>
 			<p @click="more(index)">···</p>
 		</div>
@@ -23,13 +23,17 @@
 	</div>
 </template>
 <script>
+	import { MessageBox } from 'mint-ui'
 	export default{
 		props:['data','index'],
 		data(){
 			return {
 				defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
 				userseq:localStorage.getItem('loginInfo')==null?'':JSON.parse(localStorage.getItem('loginInfo')).userseq,
-				datalist:this.data
+				datalist:this.data,
+				favorite:this.data.owner.favorite,
+				praiseflag:false,
+				praisecount:this.data.praisecount
 			}
 		},
 		methods:{
@@ -67,15 +71,138 @@
 					return "刚刚"
 				}				
 			},
-			praise:function(blogseq){
-				console.log(blogseq)
-				console.log(this.datalist.praisecount);
+			praise(blogseq,count){//点赞帖子
+				var that=this;
+				if(localStorage.getItem('loginInfo')){
+					this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
+						if(r.errorCode==0){
+							that.praiseflag=!that.praiseflag;
+							that.praisecount=parseInt(count)+1
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+			},
+			cancelPraiseBlog(blogseq,count){//取消点赞帖子
+				var that=this;
+				if(localStorage.getItem('loginInfo')){
+					this.$api('/Execute.do',{action:'blog.cancelPraiseBlog',blogseq:blogseq}).then(function(r){
+						if(r.errorCode==0){
+							that.praiseflag=!that.praiseflag;
+							that.praisecount=parseInt(count)-1
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+			},
+			addMyFavorite(userseq){//关注
+				var that=this;
+				if(localStorage.getItem('loginInfo')){
+					this.$api('/Execute.do',{action:'addMyFavorite',favorite:userseq}).then(function(r){
+						if(r.errorCode==0){
+							that.favorite=!that.favorite;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
 				
-//				console.log(data.praisecount);
-//				console.log(this.praisecount);
-//				this.$api('/Execute.do',{blogseq:blogseq,action:'blog.praiseBlog'}).then(function(r){
-//					console.log(JSON.stringify(r));
-//				})
+			},
+			removeMyFavorit(userseq){
+				var that=this;
+				if(localStorage.getItem('loginInfo')){					
+					this.$api('/Execute.do',{action:'removeMyFavorite',favorite:userseq}).then(function(r){
+						console.log(JSON.stringify(r));
+						if(r.errorCode==0){
+							that.favorite=!that.favorite;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            	that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+				
 			}
 		}
 	}
@@ -121,7 +248,8 @@
 	padding-top:0.3rem;
 }
 .fourpicture-avatar-right p{
-	padding:0.18rem 0.36rem;
+	line-height: 1;
+	padding:0.23rem 0.36rem;
 	background: #ff481d;
 	color:#fff;
 	font-size:0.3rem;

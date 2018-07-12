@@ -51,7 +51,7 @@ export default{
 	data(){
 		return{
 			carnumflag:false,
-			carnumlist:['粤','湘','豫','鄂','滇','赣','京','津','晋','吉','辽','蒙','藏','川'],
+			carnumlist:['京','津','冀','晋','蒙','辽','吉','黑','沪','苏','浙','皖','闵','赣','鲁','豫','鄂','湘','粤','桂','琼','渝','川','黔','滇','藏','陕','甘','青','宁','新','台','港','澳'],
 			carnumcity:'粤',
 			popupVisible:false,
 			citypickerflag:false,

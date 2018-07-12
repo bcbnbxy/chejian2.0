@@ -1,7 +1,6 @@
 <template>
 <div class="friends-wrap">
 	<div class="friends-wrap-head">
-		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 		<span>好友</span>
 	</div>
 	<div class="friends-cotaire">
@@ -46,12 +45,6 @@
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
-	position: relative;
-}
-.friends-wrap-head .icon-fanhui{
-	position: absolute;
-	left:0.5rem;
-	font-size:0.6rem;
 }
 .friends-cotaire{
 	flex:1;

@@ -2,25 +2,57 @@
 	<div class="replaylist-wrap">
 		<div class="reply-list">
 			<div class="reply-avatar clear">
-				<div class="reply-avatar-left"><img src="../../assets/img/faxianimg/avatar.png"/><p><b>婉婉婉</b><span>25分钟前</span></p></div>
-				<div class="reply-avatar-right"><i class="iconfont icon-xin"></i><span>120</span></div>
+				<div class="reply-avatar-left"><img :src="replyitem.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+replyitem.owner.headphoto:require('../../assets/img/faxianimg/avatar.png')"/><p><b>{{replyitem.owner.nickname}}</b><span>{{formatDate(replyitem.createtime)}}</span></p></div>
+				<div class="reply-avatar-right"><i class="iconfont icon-xin"></i><span>{{replyitem.praisecount}}</span></div>
 			</div>
 			<div class="reply-list-container">
-				回复：<span>@王语嫣</span> 最新评论按照时间顺序最新写的最新被回复的显示在上面。
+				{{replyitem.content}}
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-export default{}
+export default{
+	props:{
+		replyitem:{
+			type:Object,
+			default(){
+				return{}
+			}
+		}
+	},
+	methods:{
+		formatDate(seconds){//时间转换函数
+			seconds=new Date().getTime()-parseInt(seconds);
+			seconds= seconds / 1000;
+			var day =  Math.floor(seconds / 86400 );
+			seconds = seconds % 86400;
+			var hour =  Math.floor( seconds / 3600);
+			seconds = seconds % 3600;
+			var mintues = Math.floor( seconds / 60);
+			var beforeStr = "";
+			if(day>0){
+				beforeStr += day;
+				return beforeStr+"天前";
+			}else if(hour>0){
+				beforeStr += hour;
+				return beforeStr +"小时前"
+			}else if(mintues>0){
+				beforeStr += mintues;
+				return beforeStr +"分钟前"
+			}else{
+				return "刚刚"
+			}				
+		}
+	}
+}
 </script>
 
 <style>
 .reply-list{
 	width:100%;
 	padding:0 0.48rem;
-	border-bottom:1px solid #dcdcdc;
 	padding-top:0.3rem;
 }
 .reply-avatar{

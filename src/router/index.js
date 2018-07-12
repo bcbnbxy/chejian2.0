@@ -27,7 +27,6 @@ import Idlingsystem from '@/view/home_shouye/idlingsystem'
 import Faxian from '@/view/home_faxian/faxian'
 import Search from '@/components/common/search'
 import Detailpage from '@/view/home_faxian/detailpage'
-import Praise from '@/view/home_faxian/praise'
 import Phonebook from '@/view/home_faxian/phonebook'
 import Homepage from '@/view/home/homepage'
 import Fensi from '@/view/home_faxian/fensi'
@@ -57,7 +56,6 @@ import Controlsearch from '@/view/controlsystem/controlsearch'
 import Gerenxinxi from '@/view/controlsystem/gerenxinxi'
 import Managecustomers from '@/view/controlsystem/managecustomers'
 import Manageupgrade from '@/view/controlsystem/manageupgrade'
-import Submissionupgrades from '@/view/controlsystem/submissionupgrades'
 import Infoaudit from '@/view/controlsystem/infoaudit'
 import Customerinfo from '@/view/controlsystem/customerinfo'
 import Data from '@/view/data/data'
@@ -112,13 +110,6 @@ export default new Router({
     		path:'/search',
     		component:Search
     	},{
-    		path:'/detailpage',
-    		name:'detailpage',
-    		component:Detailpage
-    	},{
-    		path:'/praise',
-    		component:Praise
-    	},{
     		path:'/phonebook',
     		component:Phonebook
     	}]
@@ -126,6 +117,10 @@ export default new Router({
 		path:'/homepage',
 		component:Homepage
 	},{
+		path:'/detailpage',
+		name:'detailpage',
+		component:Detailpage
+    },{
 		path:'/fensi',
 		component:Fensi
 	},{
@@ -205,10 +200,6 @@ export default new Router({
 		name:'manageupgrade',
 		path:'/manageupgrade',
 		component:Manageupgrade
-	},{
-		name:'submissionupgrades',
-		path:'/submissionupgrades',
-		component:Submissionupgrades
 	},{
 		name:'infoaudit',
 		path:'/infoaudit',

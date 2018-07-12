@@ -11,7 +11,7 @@
 		</div>
 	<div class="faxianlist" :style="{'-webkit-overflow-scrolling': scrollMode}">
 		<div class="faxian-dynamicslist" v-show="currentView=='dynamicslist'">			
-			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 		     		<dynamicslist :callbackdata="datalist"></dynamicslist>
 		    </mt-loadmore>
 		</div>
@@ -78,7 +78,7 @@ export default{
 			})
 		},
 		 loadTop:function() { //组件提供的下拉触发方法
-	        //下拉加载
+	        //下拉刷新
 	        this.datalist=[];
 	        this.gettrends(0,5);
 	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
@@ -161,5 +161,8 @@ export default{
 }
 .faxianhead .active{
   border-bottom:1px solid #fff;
+}
+.mint-loadmore-text{
+	font-size:0.56rem;
 }
 </style>

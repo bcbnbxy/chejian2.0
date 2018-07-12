@@ -6,12 +6,29 @@
 	</div>
 	<div class="manageupgrade-wrap-contaire">
 		<p>您还没有升级管理系统哦！暂时没有数据。升级管理系统后，更智能的管理您的公司、门店！</p>
-		<router-link tag="button" to="/submissionupgrades">去升级</router-link>
+		<button @click="toggleSubmissionupgrades">去升级</button>
+	</div>
+	<div :class="submissionupgradesflag?'submissionupgrades-contaire-show':'submissionupgrades-contaire-hidden'">
+		<Submissionupgrades v-on:listenSubmissionupgrades="toggleSubmissionupgrades" :dataInfo="$route.params.dataInfo"></Submissionupgrades>
 	</div>
 </div>
 </template>
 
 <script>
+import Submissionupgrades from '@/components/controlsystem/submissionupgrades'
+export default{
+	components:{Submissionupgrades },
+	data(){
+		return{
+			submissionupgradesflag:this.$route.params.dataInfo?true:false,
+		}
+	},
+	methods:{
+		toggleSubmissionupgrades(){
+			this.submissionupgradesflag=!this.submissionupgradesflag;
+		}
+	}
+}
 </script>
 
 <style scoped>
@@ -22,6 +39,7 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	position: relative;
 }
 .manageupgrade-wrap-head{
 	height:1.32rem;
@@ -61,5 +79,23 @@
 	color:#fff;
 	margin-left:2.2rem;
 	margin-top:1.92rem;
+}
+.submissionupgrades-contaire-show{
+	width:100%;
+	height:100%;
+	background: tan;
+	position: absolute;
+	left:0;
+	top:0;
+	transition: all 0.3s;
+}
+.submissionupgrades-contaire-hidden{
+	width:100%;
+	height:100%;
+	background: tan;
+	position: absolute;
+	left:100%;
+	top:0;
+	transition: all 0.3s;
 }
 </style>

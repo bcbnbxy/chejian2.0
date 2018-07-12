@@ -13,50 +13,76 @@
 				</div>
 				<div class="fourpicture-content">
 					<div class="fourpicture-box" v-if="data.images">
-						<img :src="data.images"/>
+						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images"/>
 					</div>
 					<p>{{data.content}}</p>
 				</div>
-				<router-link to="/praise" tag="div" class="pic-detail-zan">
-					<div class="avatar-list">
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-						<img src="../../assets/img/faxianimg/avatar.png"/>
-					</div>
+				<div class="pic-detail-zan" @click="togglepraise">
+					<ul class="avatar-list">
+						<li v-for="(item,index) in data.praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/faxianimg/avatar.png')"/></li>
+					</ul>
 					<div class="dianzan-renshu">
 						<p>{{data.praisecount}}人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 					</div>
-				</router-link>
+				</div>
 			</div>
-			<div class="detail-reply">
-				<Reply-list></Reply-list>
+			<div class="detail-reply" id="scroll" v-if="replylist.length>0">
+				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+		     		<Reply-list v-for="(item,index) in replylist" :replyitem="item" :key="index"></Reply-list>
+		       </mt-loadmore>				
 			</div>
-			<!--<div class="detail-noreply">
+			<div class="detail-noreply" v-else>
 				<p>哎同学，这个沙发你不抢吗~</p>
-			</div>-->
+			</div>
 		</div>
 		<div class="detail-foot">
-			<input type="text" placeholder="发表评论..."/>
-			<p><i class="iconfont icon-xin"></i><span>236</span></p>
-			<p><i class="iconfont icon-pinglun1"></i><span>365</span></p>
+			<div class="detail-footer">
+				<div class="input" @click="toggleInput"><span>发表评论...</span></div>
+				<p><i class="iconfont icon-xin"></i><span>236</span></p>
+				<p @click="goTop"><i class="iconfont icon-pinglun1"></i><span>365</span></p>
+			</div>
+			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
+				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
+			</div>
+		</div>
+		<div class="praise-contaire" :class="praiseflag?'praise-contaire-show':'praise-contaire-hidden'">
+			<Praise v-on:praiseshow="togglepraise" :praisers="data.praisers"></Praise>
 		</div>
 	</div>
 </template>
 
 <script>
 import Reply from '@/components/faxian/replylist'
+import Praise from '@/components/faxian/praise'
+import { MessageBox } from 'mint-ui'
+let stop = false;                                   // 全局变量,坑处
+let timer = null;
 export default{
+	created(){
+		this.getblogReviews(0,5);
+	},	
+	mounted() {
+        this.$nextTick(function () {
+            window.addEventListener('scroll', this.needToTop);  //滚动事件监听
+        });
+   },
 	data(){
 		return {
 			data:this.$route.params.datalist,
 			defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
+			praiseflag:false,
+			detailinput:false,
+			content:'',
+			replylist:[],
+			pageNo:0,
+	        pageSize:5,
+	        allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+	        sendflag:false,
 		}
 	},
-	components:{'Reply-list':Reply},
+	components:{'Reply-list':Reply,'Praise':Praise },
 	methods:{
-		share:function(){
+		share(){
 			this.$store.commit('changeshare');
 			this.$store.commit('changepopupmean');
 		},
@@ -81,7 +107,118 @@ export default{
 			}else{
 				return "刚刚"
 			}				
-		}
+		},
+		togglepraise(){
+			this.praiseflag=!this.praiseflag;
+		},
+		toggleInput(){
+			this.detailinput=true;
+			this.$refs.send.focus();
+		},
+		blurFn(){
+			this.detailinput=false;
+			this.$refs.send.blur();
+		},
+		goTop(){
+			var scroll=document.getElementById('scroll');
+			clearInterval(timer);
+	        timer = setInterval(function() {
+	            let curHeight = scroll.scrollTop
+	            var now = curHeight;
+	            var speed = (0 - now) / 7;					
+	            speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+	            if (curHeight === 0) {		
+	              clearInterval(timer);  		
+	            }
+	            scroll.scrollTop = curHeight + speed;
+	       }, 30);
+		},
+		needToTop() {
+	        if (stop) {			
+	          clearInterval(timer);	
+	        }
+	        stop = true;
+	    },
+	    Send(){
+		    	if(localStorage.getItem('loginInfo')){
+			    	if(this.content.trim().length<1){
+			    		this.$toast({
+			          		message:"评论不能为空!",
+				            position: 'bottom',
+		  				    duration: 1500
+			           });
+			    	}else{
+			    		var that=this;
+			    		var params={action:'blog.addBlogReview',blogseq:this.data.blogseq,content:this.content}
+			    		this.$api('/Execute.do',params).then(function(r){
+			    			if(r.errorCode==0){
+			    				that.content="";
+			    				that.$toast({
+					          		message:"发表评论成功",
+						            position: 'bottom',
+				  				    duration: 1500
+					           });
+//					           that.replylist=[];
+								that.sendflag=true;
+					           that.getblogReviews(0,5)
+			    			}else{
+			    				that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				           });
+			    			}
+			    		})
+			    	}
+	    	}else{
+	    		MessageBox.confirm('', {
+			        message: '您还没有登陆，去登陆',
+			        showConfirmButton:true,
+			        showCancelButton:true,
+			        confirmButtonText:'确定',
+			        cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            this.$router.push('/bootPage')
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		        });
+	    	}
+	    },
+	    getblogReviews(minvalue,pageSize){
+	    	var that=this;
+	    	this.$api('/Execute.do',{action:'blog.blogReviews',blogseq:this.data.blogseq,minvalue:minvalue,pageSize:pageSize}).then(function(r){
+	    		if(r.errorCode==0){
+	    			if(that.sendflag){
+	    				that.replylist.unshift(r.data.blogReviews[0]);
+	    				that.sendflag=false;
+	    				that.pageNo=that.replylist[that.replylist.length-1].reviewseq;
+	    			}else{
+	    				that.replylist=that.replylist.concat(r.data.blogReviews);
+	    				that.pageNo=r.data.blogReviews[r.data.blogReviews.length-1].reviewseq;
+	    			}
+	    			if(r.data.blogReviews.length<5){
+						that.allLoaded=true;
+						return;
+					}else{
+						that.allLoaded=false;
+					}
+	    		}
+	    	})
+	    },
+	    loadTop:function() { //组件提供的下拉触发方法
+	        //下拉刷新
+	        this.replylist=[];
+	        this.getblogReviews(0,5);
+	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    loadBottom:function(){
+	    	this.getblogReviews(this.pageNo,5);
+	    	this.$refs.loadmore.onBottomLoaded();	    	
+	    }
 	}
 }
 </script>
@@ -93,6 +230,24 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	overflow: hidden;
+	background:#f7f7f7;
+	position: relative;
+}
+.praise-contaire{
+	width:100%;
+	height:100%;
+	background: tan;
+	position: absolute;
+	top:0;
+}
+.praise-contaire-show{
+	left:0;
+	transition: all 0.3s;
+}
+.praise-contaire-hidden{
+	left:100%;
+	transition: all 0.3s;
 }
 .detail-head{
 	width:100%;
@@ -111,12 +266,12 @@ export default{
 }
 .detail-wrap{
 	flex:1;
-	background: #f7f7f7;
 	display: flex;
 	display: -webkit-flex;
 	flex-direction:column ;
 }
 .pic-detail{
+	flex:1;
 	background: #fff;
 	padding:0 0.48rem;
 	border-bottom:1px solid #dcdcdc;
@@ -188,7 +343,7 @@ export default{
 	padding-bottom:0.24rem;
 }
 .fourpicture-box img{
-	width:100%;
+	width:30%;
 	display: block;
 }
 .pic-detail-zan{
@@ -201,24 +356,27 @@ export default{
 .avatar-list{
 	position: relative;
 }
-.avatar-list img{
+.avatar-list li{
 	width:0.94rem;
 	position: absolute;
 	top:0.35rem;
 }
-.avatar-list img:nth-child(1){
+.avatar-list li img{
+	width:100%;
+}
+.avatar-list li:nth-child(1){
 	left:0;
 }
-.avatar-list img:nth-child(2){
+.avatar-list li:nth-child(2){
 	left:0.65rem;
 }
-.avatar-list img:nth-child(3){
+.avatar-list li:nth-child(3){
 	left:1.3rem;
 }
-.avatar-list img:nth-child(4){
+.avatar-list li:nth-child(4){
 	left:1.95rem;
 }
-.avatar-list img:nth-child(5){
+.avatar-list li:nth-child(5){
 	left:2.6rem;
 }
 .dianzan-renshu{
@@ -230,21 +388,62 @@ export default{
 }
 .detail-foot{
 	width: 100%;
-	height:1.62rem;
 	background: #fff;
+	border-top:1px solid #ddd;
+	height:1.62rem;
+	position: relative;
+}
+.detail-footer{
+	width: 100%;
+	height:1.62rem;	
 	padding:0.3rem 0.48rem;
 	display:flex ;
 	display: -webkit-flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	font-size:0.42rem;
 	align-items: center;
 }
-.detail-foot input{
-	width:6.4rem;
+.detail-footer>.input{
+	flex:1;
 	background:#eee;
-	height:100%;
+	height:1.02rem;
 	padding-left:0.1rem;
 	border-radius: 5px;
+	line-height: 1.02rem;
+}
+.detail-input{
+	height:1.62rem;
+	width:100%;
+	padding:0 0.5rem;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #fff;
+	font-size:0.44rem;
+	color:#222;
+	position: absolute;
+	left:0;
+	top:0;
+}
+.detail-input-hidden{
+	transform: translateY(-1.6rem) scale(0);
+	transition:all 0.1s;
+}
+.detail-input-show{
+	transform: translateY(0) scale(1);
+	transition:all 0.1s;
+}
+.detail-input input{
+	flex:1;
+	height:1.02rem;
+	background: #eee;
+	border-radius: 5px;
+	margin-right:0.55rem;
+	padding:0 0.3rem;
+}
+.detail-input span{
+	font-size:0.48rem;
 }
 .detail-foot p{
 	margin-left:0.8rem;

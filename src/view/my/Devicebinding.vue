@@ -41,6 +41,7 @@ export default {
 			}	
 		},
 		bindDevice(){
+			var that=this;
 			if(this.devicenum.trim().length<1){
 				this.$toast({
 		          message: '请输入设备编号',
@@ -49,8 +50,21 @@ export default {
 		      	});
 				return
 			}else{
-				this.$api("/Execute.do",{action:"device.bindDevic",device:this.devicenum}).then(function(r){
+				this.$api("/Execute.do",{action:"device.bindDevice",device:this.devicenum}).then(function(r){
 					console.log(JSON.stringify(r));
+					if(r.errorCode==0){
+						that.$toast({
+				          message: '设备绑定成功',
+				          position: 'bottom',
+		  			      duration: 1500
+				      	});
+					}else{
+						that.$toast({
+				          message: r.errorMessage,
+				          position: 'bottom',
+		  			      duration: 1500
+				      	});
+					}
 				})
 			}
 		}

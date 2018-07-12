@@ -52,7 +52,6 @@ export default{
 		}
 	},
 	beforeRouteEnter(to,from,next){
-		console.log(1111)
 		if(!localStorage.getItem('loginInfo')){
 			next({path:'/nologin'});
 		}else{
@@ -77,14 +76,14 @@ export default{
 		getUserInfo:function(){
 			let userInfo=JSON.parse(localStorage.getItem('loginInfo'));
 			let that=this;
-			this.$api('/Execute.do',{action:'userInfo;device.agentOrStuff',userseq:userInfo.userseq}).then(function(r){
+			this.$api('/Execute.do',{action:'userInfo;device.agentOrStaff',userseq:userInfo.userseq}).then(function(r){
 				if(r.errorCode == '0'){
 					that.nickname=r.data.userInfo.nickname;
 					that.mobileno=r.data.userInfo.mobileno;
 					that.loginname=r.data.userInfo.loginname;
 					that.sex=r.data.userInfo.gender;
 					localStorage.setItem("loginInfo",JSON.stringify(r.data.userInfo));
-					localStorage.setItem('identity',-1)
+					localStorage.setItem('identity',r.data.agentOrStaff)//r.data.agentOrStaff
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -95,12 +94,14 @@ export default{
 			})
 		},
 		gopersonal(){
-			if(-1==-1){
-				this.$router.push({name:'manageupgrade'});
+			if(parseInt(localStorage.getItem('identity'))==-1){
+				this.$router.push('/manageupgrade');
 			}else if(parseInt(localStorage.getItem('identity'))==1){
-				this.$router.push({name:'mycontrolsystem'});
+				this.$router.push('/mycontrolsystem');
 			}else if(parseInt(localStorage.getItem('identity'))==2){
-				this.$router.push({name:'mycontrolsystem'});
+				this.$router.push('/mycontrolsystem');
+			}else if(parseInt(localStorage.getItem('identity'))==3){
+				this.$router.push('/infoaudit');
 			}
 		}
 	}
