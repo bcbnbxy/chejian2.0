@@ -26,23 +26,23 @@
 				<dd><span>故障码</span><p><span>汽车电路故障</span><span><b>7/3</b><i>10:30</i></span></p></dd>
 			</dl>
 			<div class="breakdown-wrap-jinggao" v-show="yijiindex==2">
-				<div class="breakdown-wrap-jinggao-title">
-					<div class="breakdown-wrap-jinggao-title-left" @click="erjitab(1)" :class="erjiindex==1?'coloractive':''">警告</div>
-					<div class="breakdown-wrap-jinggao-title-center"></div>
-					<div class="breakdown-wrap-jinggao-title-right" @click="erjitab(2)" :class="erjiindex==2?'coloractive':''">保养</div>
-				</div>
 				<div class="breakdown-wrap-jinggao-contaire">
-					<ul class="breakdown-wrap-jinggao-contaire-jinggao" v-show="erjiindex==1">
-						<li><span>碰撞</span><p><span>7/3</span><b>10:30</b></p></li>
-						<li><span>震动</span><p><span>7/3</span><b>10:30</b></p></li>
+					<ul class="breakdown-wrap-jinggao-contaire-jinggao" >
+						<!--<li><span>碰撞</span><p><span>7/3</span><b>10:30</b></p></li>-->
+						<!--<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">-->
+				     		<li v-for="(item,index) in warns"><span>{{item.warntype | getwarnsInfo}}</span><p><span>{{item.happentime | getdate}}</span><b>{{item.happentime | gettime}}</b></p></li>
+				    	<!--</mt-loadmore>-->
+						<!--<li><span>震动</span><p><span>7/3</span><b>10:30</b></p></li>
 						<li><span>超速</span><p><span>7/3</span><b>10:30</b></p></li>
 						<li><span>电压过低</span><p><span>7/3</span><b>10:30</b></p></li>
 						<li><span>车辆熄火</span><p><span>7/3</span><b>10:30</b></p></li>
 						<li><span>车辆启动</span><p><span>7/3</span><b>10:30</b></p></li>
-					</ul>
-					<ul class="breakdown-wrap-jinggao-contaire-baoyang" v-show="erjiindex==2">
-						<li><span>更换机油滤清器</span><span>2018/7/3</span></li>
-						<li><span>更换刹车盘</span><span>2018/7/3</span></li>
+						<li><span>碰撞</span><p><span>7/3</span><b>10:30</b></p></li>
+						<li><span>震动</span><p><span>7/3</span><b>10:30</b></p></li>
+						<li><span>超速</span><p><span>7/3</span><b>10:30</b></p></li>
+						<li><span>电压过低</span><p><span>7/3</span><b>10:30</b></p></li>
+						<li><span>超速</span><p><span>7/3</span><b>10:30</b></p></li>
+						<li><span>电压过低</span><p><span>7/3</span><b>10:30</b></p></li>-->
 					</ul>
 				</div>
 			</div>
@@ -55,26 +55,93 @@
 export default{
 	data(){
 		return {
-			erjiindex:1,
 			yijiindex:this.$route.params.index,
+			pagesize:5,
+			pagenum:0,
+			warns:[],
 		}
 	},
 	methods:{
-		erjitab:function(index){
-			this.erjiindex=index;
-		},
 		yijitab:function(index){
 			this.yijiindex=index;
+		},
+		getwarns(minvalue,pageSize){//获取警告信息列表
+			var that=this;
+			this.$api('/Execute.do',{action:'device.warns',device:this.$route.params.devicenum,minvalue:minvalue, pageSize:pageSize}).then(function(r){				
+				if(r.errorCode==0){
+					that.warns=r.data.warns
+					console.log(JSON.stringify(that.warns));
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
+			})
 		}
+	},
+	filters:{
+		getdate:function(seconds){			
+			var myDate = new Date(parseInt(seconds));
+			var month=myDate.getMonth()+1;
+			var day=myDate.getDate();
+			return month+'/'+day;
+		},
+		gettime:function(seconds){
+			var myDate = new Date(parseInt(seconds));
+			var hours=myDate.getHours()
+			var minutes=myDate.getMinutes();
+			return hours+':'+minutes;
+		},
+		getwarnsInfo:function(value){
+			switch(value){
+				case '03':
+				return '熄火'
+				break;
+				case '02':
+				return '启动'
+				break;
+				case '04':
+				return '休眠'
+				break;
+				case '07':
+				return '超速'
+				break;
+				case '08':
+				return '电压低'
+				break;
+				case '09':
+				return '碰撞'
+				break;
+				case '11':
+				return '震动'
+				break;
+				case '16':
+				return 'SOS'
+				break;
+				case '18':
+				return '非法授权'
+				break;
+				case '20':
+				return '设备初始化错误'
+				break;
+			}
+		}
+	},
+	created(){
+		this.getwarns(this.pagenum,this.pagesize);
 	}
 }
 </script>
-
 <style scoped>
 .breakdown-wrap{
 	width:100%;
 	height:100%;
 	background: #f7f7f7;
+	display: flex;
+	display:-webkit-flex;
+	flex-direction: column;
 }
 .breakdown-wrap-head{
 	width:1005;
@@ -93,7 +160,11 @@ export default{
 }
 .breakdown-wrap-contaire{
 	width:100%;
-	height:auto;
+	flex:1;
+	overflow: hidden;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
 }
 .breakdown-wrap-contaire-title{
 	height:2.58rem;
@@ -128,6 +199,8 @@ export default{
 }
 .breakdown-wrap-contaire-main{
 	margin-top:0.3rem;
+	flex:1;
+	overflow: auto;
 }
 .breakdown-wrap-contaire-main dl{
 	background: #fff;

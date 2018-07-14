@@ -65,9 +65,17 @@ export default{
 			isdisplay:false
 		}
 	},
+	mounted:function(){
+		this.getdepartments();
+	},
 	methods:{
 		toggle(){
 			this.isdisplay=!this.isdisplay;
+		},
+		getdepartments(){//获取部门列表及部门人员信息
+			this.$api('/Execute.do',{action:'device.departments'}).then(function(r){
+				console.log(JSON.stringify(r));
+			})
 		}
 	}
 }

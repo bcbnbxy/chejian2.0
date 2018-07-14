@@ -45,7 +45,7 @@ function buildSign (params, key){
 		  }	
 		  str += util.hexMD5(key);
 		  str = util.utf8(str);
-		  str = util.hexMD5(str);
+		  str = util.hexMD5(str);		 
 		  return str;
 		}
 export {

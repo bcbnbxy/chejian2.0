@@ -20,12 +20,12 @@
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
-					<router-link tag="div" :to="{name:'breakdown',params:{index:2}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
+					<router-link tag="div" :to="{name:'breakdown',params:{index:2,devicenum:selected&&selected.device}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
 						<p>当前警告</p>
 						<p><b>10</b><span>/处</span></p>
 					</router-link>
 					<div class="homeindex-wrap-head-bottom-guzhang-contaire-center"></div>
-					<router-link tag="div" :to="{name:'breakdown',params:{index:1}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
+					<router-link tag="div" :to="{name:'breakdown',params:{index:1,devicenum:selected&&selected.device}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
 						<p>当前故障</p>
 						<p><b>5</b><span>/处</span></p>
 					</router-link>
@@ -35,10 +35,7 @@
 	</div>
 	<div class="homeindex--wrap-bottom">
 		<div class="homeindex-car-service">
-			<div class="homeindex-car-service-title">
-				<b></b>
-				<span>车辆服务</span>
-			</div>
+			<p class="homeindex-car-service-title">车辆服务</p>			
 			<ul>
 				<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>
 				<li><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
@@ -46,21 +43,12 @@
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
-			<div class="homeindex-car-service-title">
-				<b></b>
-				<span>我的车友</span>
-				<i>车辆评分</i>
+			<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>			
+			<div class="homeindex-car-friends-list">
+				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto"><span>{{item.remark?item.remark:item.userInfo.nickname}}</span><i>12345</i></div>
+		    	</mt-loadmore>
 			</div>
-			<ul>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-				<li><img src="../../assets/img/faxianimg/avatar.png"><span>懒先生</span><i>12345</i></li>
-			</ul>
 		</div>
 	</div>
 </div>
@@ -72,10 +60,15 @@ export default{
 			devices:[],
 			devicesflag:false,
 			selected:null,
+			friends:[],
+			pageNo:0,
+	        pageSize:5,
+            allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
 		}
 	},
 	mounted(){
 		this.getdevices();
+		this.getfriends(0,5);
 	},
 	methods:{
 		getdevices(){//我的设备查询
@@ -84,7 +77,6 @@ export default{
 				if(r.errorCode==0){
 					that.devices=r.data.devices;
 					that.selected=r.data.devices[0];
-					console.log(JSON.stringify(r.data.devices[0]))
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -100,7 +92,39 @@ export default{
 		select(item,index){
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
-		}
+//			console.log(JSON.stringify(this.selected));
+		},
+		getfriends(minvalue,pageSize){//获取车友列表
+			var that=this;
+			this.$api('/Execute.do',{action:"friends",minvalue:minvalue, pageSize:pageSize}).then(function(r){
+				if(r.errorCode==0){
+					that.friends=that.friends.concat(r.data.friends);
+					if(r.data.friends.length<5){
+						that.allLoaded=true;
+						return;
+					}else{
+						that.allLoaded=false;
+					}
+					that.pageNo=r.data.friends[r.data.friends.length-1].userseq;					
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+					  duration: 1500
+			      });
+				}
+			})
+		},
+		loadTop:function() { //组件提供的下拉触发方法
+	        //下拉刷新
+	        this.friends=[];
+	        this.getfriends(0,5);
+	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    loadBottom:function(){
+	    	this.getfriends(this.pageNo,5);
+	    	this.$refs.loadmore.onBottomLoaded();	    	
+	    }
 	},
 	beforeRouteEnter(to,from,next){
 		if(!localStorage.getItem('loginInfo')){
@@ -108,7 +132,7 @@ export default{
 		}else{
 			next();
 		}
-	}
+	},
 }
 </script>
 <style>
@@ -288,31 +312,36 @@ export default{
 	flex:1;
 	background: #fff;
 	padding-top:2.2rem;
-	overflow: auto;
+	overflow: hidden;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
 }
 .homeindex-car-service-title{
 	height:1.17rem;
-	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	align-items: center;
+	padding-right:0.5rem;
+	padding-left:1rem;
+	text-align: left;
+	line-height:1.17rem;
+	font-size:0.5rem;
+	color:#000;
+	position: relative;
 }
-.homeindex-car-service-title b{
+.homeindex-car-service-title::before{
 	width:0.12rem;
 	height:0.5rem;
+	content: "";
+	display: block;
+	position: absolute;
+	left:0.5rem;
+	top:0.33rem;
 	background: #1989f5;
 }
 .homeindex-car-service-title span{
-	font-size:0.5rem;
-	color:#000;
-	margin-left:0.4rem;
-}
-.homeindex-car-service-title i{
-	flex:1;
-	text-align: right;
-	font-style: normal;
-	font-size:0.5rem;
+	font-size:0.44rem;
 	color:#2d3461;
+	position: absolute;
+	right:0.5rem
 }
 .homeindex-car-service>ul{
 	padding:0.3rem 1.18rem 0.85rem 1.18rem;
@@ -336,24 +365,35 @@ export default{
 	font-size:0.4rem;
 	color:#2d3461;
 }
-.homeindex-car-friends>ul>li{
+.homeindex-car-friends{
+	flex:1;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+.homeindex-car-friends-list{
+	flex:1;
+	overflow-y:auto;
+}
+.homeindex-car-friends-item{
 	height:1.6rem;
 	padding:0 0.5rem;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
 }
-.homeindex-car-friends>ul>li img{
+.homeindex-car-friends-item img{
 	width:1rem;
 	height:1rem;
 	border-radius: 50%;
 	margin-right:0.5rem;
 }
-.homeindex-car-friends>ul>li span{
+.homeindex-car-friends-item span{
 	font-size:0.44rem;
 	color:#2d3461;
 }
-.homeindex-car-friends>ul>li i{
+.homeindex-car-friends-item i{
 	flex:1;
 	font-size:0.44rem;
 	color:#2d3461;

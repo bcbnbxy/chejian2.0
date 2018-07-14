@@ -19,11 +19,11 @@
 //	}, false );
 export default {
   name: 'App',
-  created(){
-	 localStorage.removeItem('loginInfo');
+   created(){
+//	 localStorage.removeItem('loginInfo');
 //	 console.log(localStorage.getItem('loginInfo'))
 //	 	this.checklogin();
-	 	this.getCityInfo();
+//	 	this.getCityInfo();
   },
   methods:{
   	//判断用户的登录状态

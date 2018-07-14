@@ -4,7 +4,7 @@
 		<div class="personlInfo-wrap-head">
 			<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 			<span>编辑客户信息</span>
-			<span style="font-size:0.44rem;" @click="deleteuser">删除</span>
+			<!--<span style="font-size:0.44rem;" @click="deleteuser">删除</span>-->
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
 			<img src="../../assets/img/faxianimg/avatar.png"/>
@@ -90,13 +90,14 @@ export default{
 	color:#fff;
 	font-size:0.56rem;
 	width:100%;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	text-align: center;
+	position: relative;
 }
 .personlInfo-wrap-head i{
 	font-size:0.6rem;
+	position: absolute;
+	left:0.5rem;
 }
 .gerenxinxi-wrap-head-bottom{
 	padding:0 0.5rem;

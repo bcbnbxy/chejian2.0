@@ -5,7 +5,7 @@
 			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!favorite" @click="addMyFavorite(datalist.userseq)">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;' @click="removeMyFavorit(datalist.userseq)">已关注</p></div>
 		</div>
 		<div class="fourpicture-content">
-			<div class="fourpicture-box" v-if="datalist.images">
+			<div class="fourpicture-box" v-if="datalist.images" style="background: tan;">
 				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<p>{{datalist.content}}</p>
@@ -170,7 +170,7 @@
 				}
 				
 			},
-			removeMyFavorit(userseq){
+			removeMyFavorit(userseq){//取消关注
 				var that=this;
 				if(localStorage.getItem('loginInfo')){					
 					this.$api('/Execute.do',{action:'removeMyFavorite',favorite:userseq}).then(function(r){

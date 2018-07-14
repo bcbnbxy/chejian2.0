@@ -83,7 +83,7 @@ export default{
 					that.loginname=r.data.userInfo.loginname;
 					that.sex=r.data.userInfo.gender;
 					localStorage.setItem("loginInfo",JSON.stringify(r.data.userInfo));
-					localStorage.setItem('identity',r.data.agentOrStaff)//r.data.agentOrStaff
+					localStorage.setItem('identity',2)//r.data.agentOrStaff
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
