@@ -32,11 +32,12 @@
 		</div>
 		<div class="fillinfo-wrap-contaire-item">
 			<span>车架号</span>
-			<input type="text" placeholder="12345678910111213" readonly="true"/>
+			<input type="text" :value="$route.params.vin" readonly="true"/>
 		</div>
 	</div>
 	<div class="fillinfo-footer">
-		<router-link tag="button" to="/violationinquiry">查询</router-link>
+		<!--<router-link tag="button" to="/violationinquiry">查询</router-link>-->
+		<button @click="inquiry">查询</button>
 	</div>
 	<mt-popup v-model="popupVisible"  position="bottom" style="width:100%;">
  		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" ></mt-picker>
@@ -84,6 +85,9 @@ export default{
 		},
 		listenToMyBoy: function (data){
 		    this.chosecity=data;
+		},
+		inquiry(){
+			this.$router.replace('/violationinquiry')
 		}
 	}
 }

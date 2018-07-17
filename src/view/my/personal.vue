@@ -4,13 +4,13 @@
 			<header>
 				<span></span>
 				<span>我的</span>
-				<router-link to="/mymessage" tag="span"><i class="iconfont icon-youjian"></i></router-link>
+				<router-link to="/mymessage" tag="span"><i class="iconfont icon-youjian"></i><b v-show="showmsg"></b></router-link>
 			</header>
 			<div class="personal-top-main">
-				<div><img src="headphoto" :onerror="defaultImg"/></div>
+				<div><img :src="userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+userInfo.headphoto:require('../../assets/img/faxianimg/avatar.png')"/></div>
 				<div>
-					<p><span>{{nickname ? nickname: loginname}}</span><i class="iconfont"  :class="Sex"></i></p>
-					<router-link tag="p" to="/editprofile"><span>{{mobileno}}</span><i class="iconfont icon-xiugaimima"></i></router-link>
+					<p><span>{{userInfo.nickname? userInfo.nickname: userInfo.loginname}}</span><i class="iconfont"  :class="Sex"></i></p>
+					<router-link tag="p" :to="{name:'editprofile',params:{userInfo}}"><span>{{userInfo.mobileno}}</span><i class="iconfont icon-xiugaimima"></i></router-link>
 				</div>
 			</div>
 		</div>
@@ -39,14 +39,13 @@
 		</section>
 	</div>
 </template>
-
 <script>
 export default{
 	computed:{
-		Sex:function(){
-			if(this.sex==='m'){
+		Sex:function(vaule){
+			if(this.userInfo.gender==='m'){
 				return 'icon-nanxing'
-			}else if(this.sex==='f'){
+			}else if(this.userInfo.gender==='f'){
 				return 'icon-zuihoudinggao-'
 			}
 		}
@@ -63,27 +62,28 @@ export default{
 	},
 	data () {
 		return {
-			nickname:'',
-			mobileno:'',
-			headphoto:'../../assets/img/faxianimg/avatar.png',
-			loginname:'',
-			defaultImg:'this.src="' + require('../../assets/img/faxianimg/avatar.png') + '"' ,
-			sex:'',
+			userInfo:JSON.parse(localStorage.getItem('loginInfo')),
+			showmsg:true,
 			//identity:parseInt(localStorage.getItem('identity')),//用户身份标示，-1表示普通用户，1表示业务员，2表示老板
 		}
 	},
 	methods:{
 		getUserInfo:function(){
-			let userInfo=JSON.parse(localStorage.getItem('loginInfo'));
 			let that=this;
-			this.$api('/Execute.do',{action:'userInfo;device.agentOrStaff',userseq:userInfo.userseq}).then(function(r){
+			this.$api('/Execute.do',{action:'userInfo;device.agentOrStaff;messageCounts',userseq:this.userInfo.userseq}).then(function(r){
 				if(r.errorCode == '0'){
-					that.nickname=r.data.userInfo.nickname;
-					that.mobileno=r.data.userInfo.mobileno;
-					that.loginname=r.data.userInfo.loginname;
-					that.sex=r.data.userInfo.gender;
-					localStorage.setItem("loginInfo",JSON.stringify(r.data.userInfo));
+					that.userInfo=r.data.userInfo;					
 					localStorage.setItem('identity',2)//r.data.agentOrStaff
+					if(r.data.messageCounts==null||r.data.messageCounts==undefined||r.data.messageCounts==''){
+						that.showmsg=false
+					}else{
+						for (var i=0;i<r.data.messageCounts.length;i++){
+							if(r.data.messageCounts[i].count<1){
+								that.showmsg=false
+							}
+							break;
+						}
+					}
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -103,7 +103,7 @@ export default{
 			}else if(parseInt(localStorage.getItem('identity'))==3){
 				this.$router.push('/infoaudit');
 			}
-		}
+		},
 	}
 }
 </script>
@@ -133,6 +133,19 @@ export default{
 .personal-top header i{
 	font-size:0.56rem;
 }
+.personal-top header span:last-child{
+	position: relative;
+}
+.personal-top header span:last-child b{
+	position: absolute;
+	right:-0.03rem;
+	top:-0.03rem;
+	width:0.25rem;
+	height:0.25rem;
+	display: block;
+	background: #ff0000;
+	border-radius: 50%;
+}
 .personal-top-main{
 	height:1.8rem;
 	padding:0 0.5rem;
@@ -141,10 +154,16 @@ export default{
 	display: -webkit-flex;
 	align-items: center;
 }
-.personal-top-main>div:nth-child(1) img{
+.personal-top-main>div:nth-child(1){
 	width:1.8rem;
+	height:1.8rem;
 	border-radius: 50%;
-	margin-right:0.7rem;
+	margin-right:0.7rem;	
+}
+.personal-top-main>div:nth-child(1) img{
+	width:100%;
+	height:100%;
+	border-radius: 50%;
 	display: block;
 }
 .personal-top-main>div:nth-child(2){

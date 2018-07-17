@@ -9,7 +9,7 @@
 				  <input placeholder="请输入手机号" type="tel" v-model="loginname" @keydown="LoginName"/>
 			</div>
 			<div class="restpassword-yzm">
-				<input class="loginpassword" type="text" placeholder="请输入验证码"  v-model="yzm" @keydown="YZM"/>
+				<input class="loginpassword" type="text" placeholder="请输入验证码"  v-model="yzm"/>
 				<div class="getyzm" @click="sendcode"><span v-show="!$store.state.login.yzmtrue">{{$store.state.login.sendmessage}}</span><span v-show="$store.state.login.yzmtrue">{{$store.state.login.sendcodetime}} s</span></div>
 			</div>
 			<mt-button type="default" :disabled="isdisabled" @click="gosetpassword">下一步</mt-button>

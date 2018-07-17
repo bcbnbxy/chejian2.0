@@ -6,14 +6,39 @@
 	</div>
 	<div class="chosecar-wrap-contaire">
 		<ul>
-			<router-link tag="li" to="/fillinfo"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
-			<router-link tag="li" to="/fillinfo"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：123456</span><span><b>保时捷911 2016款</b></span></p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
+			<router-link tag="li" :to="{name:'fillinfo',params:{vin:item.vin}}" v-for="(item,index) in data" :key="index"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：{{item&&item.device}}</span><span><b>{{item&&item.deviceVehicle.brandname}} {{item&&item.deviceVehicle.modelname}}</b></span></p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
 		</ul>
 	</div>
 </div>
 </template>
 
 <script>
+export default{
+	created(){
+		this.getdevices();
+	},
+	data(){
+		return {
+			data:[],
+		}
+	},
+	methods:{
+		getdevices(){
+			var that=this;
+			this.$api("/Execute.do",{action:"device.devices"}).then(function(r){
+				if(r.errorCode==0){
+					that.data=r.data.devices
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
+			})
+		}
+	}
+}
 </script>
 <style scoped>
 .chosecar-wrap{

@@ -7,15 +7,18 @@
 	<div class="adduser-wrap-contaire">
 		<div class="adduser-wrap-search">
 			<p>
-				<i class="iconfont icon-search"></i>
+				<i class="iconfont icon-search" @click="search()"></i>
 				<input type="text" placeholder="手机号/昵称" v-model="value"/>
 				<i class="iconfont icon-clear" v-show="value" @click="value=''"></i>
 			</p>
 		</div>
 		<div class="adduser-wrap-result">
-			<router-link tag="div" :to="{name:'gerenxinxi'}" class="adduser-wrap-result-item">
-				<p><i class="iconfont icon-shouji"></i><span>手机：123456789</span></p>
-				<p><i class="iconfont icon-yonghu"></i><span>昵称：123456789</span></p>
+			<router-link tag="div" :to="{name:'gerenxinxi',params:{personal:item}}" class="adduser-wrap-result-item" v-for="(item,index) in personal" :key='index'>
+				<img :src="item.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.headphoto:require('../../assets/img/faxianimg/avatar.png')" />
+				<p>
+					<span><i class="iconfont icon-shouji"></i><b>手机：{{item.mobileno}}</b></span>
+					<span><i class="iconfont icon-yonghu"></i><span>昵称：{{item.nickname}}</span></span>
+				</p>
 			</router-link>
 		</div>
 	</div>
@@ -27,12 +30,39 @@ export default{
 	data(){
 		return {
 			value:'',
-			identity:this.$route.params.identity
+			identity:this.$route.params.identity,
+			personal:[],
+		}
+	},
+	watch:{
+		'value':function(){
+			if(this.value.trim().length<1){
+				this.personal=[];
+			}else{
+				var that=this;
+				this.$api('/Execute.do',{action:'device.searchUsers',minvalue:0,pageSize:20,keyword:this.value}).then(function(r){
+					if(r.errorCode==0){
+						if(r.data.searchUsers==null||r.data.searchUsers==undefined||r.data.searchUsers==''){
+							that.$toast({
+								message:'没有搜索到该用户',
+								position:'bottom',
+								duration:1500
+							})
+						}
+						that.personal=r.data.searchUsers
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
+				})
+			}
 		}
 	}
 }
 </script>
-
 <style scoped>
 .adduser-wrap{
 	width:100%;
@@ -96,20 +126,45 @@ export default{
 .adduser-wrap-result{
 	flex:1;
 }
-.adduser-wrap-result-item p{
-	height:1.6rem;
-	border-bottom:1px solid #ddd;
+.adduser-wrap-result-item{
+	height: 1.6rem;
+	width:100%;
+	padding:0.2rem 0.5rem;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
-	font-size:0.44rem;
-	color:#222;
 	background: #fff;
-	padding:0 0.85rem;
+	border-bottom:1px solid #ddd;
+}
+.adduser-wrap-result-item:last-child{
+	border-bottom:none;
+}
+.adduser-wrap-result-item img{
+	width:1.1rem;
+	height:1.1rem;
+	border-radius: 50%;
+	margin-right:0.5rem;
+}
+.adduser-wrap-result-item p{
+	flex:1;
+	height:100%;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	justify-content: space-between;
+	font-size:0.38rem;
+	color:#666;
+}
+.adduser-wrap-result-item p b{
+	font-weight: 400;
 }
 .adduser-wrap-result-item p i{
-	font-size:0.6rem;
-	color:#999;
-	margin-right:0.45rem;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right:0.3rem;
+	font-size:0.5rem;
+}
+.adduser-wrap-result-item p span{
+	line-height: 1;
 }
 </style>

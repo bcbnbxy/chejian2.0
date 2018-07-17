@@ -59,7 +59,6 @@ export default{
 		gettrends:function(minvalue,pageSize){//获取动态列表
 			var that=this;
 			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs'}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode=="0"){
 					that.datalist=that.datalist.concat(r.data.blogs);
 					if(r.data.blogs.length<5){
@@ -90,7 +89,7 @@ export default{
 	    }
 	},
 	created(){
-//		this.gettrends(0,5)
+		this.gettrends(0,5)
     }
 }
 </script>

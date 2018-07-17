@@ -15,19 +15,19 @@
 	<div class="mycontrolsystem-wrap-bottom">
 		<ul>
 			<li @click="goworkshop">
-				<p><img src="../../assets/img/my/chejian.png"/><span>5</span></p>
+				<p><img src="../../assets/img/my/chejian.png"/></p>
 				<span>车间</span>
 			</li>			
 			<li @click="goguanli">
-				<p><img src="../../assets/img/my/guanli.png"/><span>5</span></p>
+				<p><img src="../../assets/img/my/guanli.png"/></p>
 				<span>管理</span>
 			</li>
 			<li @click="godata">
-				<p><img src="../../assets/img/my/shuju.png"/><span>5</span></p>
+				<p><img src="../../assets/img/my/shuju.png"/></p>
 				<span>数据</span>
 			</li>
 			<li>
-				<p><img src="../../assets/img/my/qidai.png"/><span>5</span></p>
+				<p><img src="../../assets/img/my/qidai.png"/></p>
 				<span>敬请期待</span>
 			</li>
 		</ul>

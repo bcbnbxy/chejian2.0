@@ -153,6 +153,7 @@ export default new Router({
 		component:SystemMessage
 	},{
 		path:'/editprofile',
+		name:'editprofile',
 		component:EditProfile
 	},{
 		path:'/manageaddress',

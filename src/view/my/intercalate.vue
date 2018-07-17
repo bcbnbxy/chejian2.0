@@ -10,7 +10,7 @@
 			<i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 		</router-link>
 		<ul class="intercalate-list">
-			<router-link to="/newmessage" tag="li"><span>新消息通知</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
+			<!--<router-link to="/newmessage" tag="li"><span>新消息通知</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>-->
 			<li><span>关于我们</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></li>		
 			<li><span>免责声明</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></li>		
 		</ul>

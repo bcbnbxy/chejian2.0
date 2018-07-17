@@ -6,10 +6,12 @@
 	</div>
 	<div class="workshop-wrap-contaire">
 		<div class="workshop-wrap-contaire-nav">
-			<b></b><span>全部(1203)</span>
+			<b></b><span>全部({{customerCount}})</span>
 		</div>
-		<div class="workshop-wrap-contaire-webview">
-			<Workshop_all></Workshop_all>
+		<div class="workshop-wrap-contaire-webview">			
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+	     		<Workshop_all v-for="(item,index) in customers" :customers="item" :key="index" :str="1"></Workshop_all>
+	    	</mt-loadmore>
 		</div>
 	</div>
 </div>
@@ -19,6 +21,45 @@
 import Workshop_all from '@/components/controlsystem/workshop_all'
 export default{
 	components:{Workshop_all},
+	data(){
+		return {
+			customers:[],
+			customerCount:0,
+			pnum:0,
+			psize:12,
+			allLoaded:false,
+		}
+	},
+	mounted(){
+		this.getcustomers(this.pnum,this.psize);
+	},
+	methods:{
+		getcustomers(minvalue,pageSize){//获取客户列表
+			var that=this;
+			this.$api('/Execute.do',{action:'device.customers;device.customerCount',minvalue:minvalue,pageSize:pageSize}).then(function(r){
+				if(r.errorCode==0){
+					that.customerCount=r.data.customerCount;
+					that.customers=that.customers.concat(r.data.customers);
+					if(r.data.customers.length<10){
+						that.allLoaded=true;
+					}else{
+						that.allLoaded=false;
+					}
+					console.log(that.customers);
+					that.pnum=r.data.customers[r.data.customers.length-1].userseq;
+				}
+			})
+		},
+		loadTop(){//下拉刷新
+			this.customers=[];
+			this.getcustomers(0,this.psize);
+			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		},
+		loadBottom(){//上拉加载
+			this.getwarns(this.pnum,this.psize);
+	    	this.$refs.loadmore.onBottomLoaded();	 
+		}
+	}
 }
 </script>
 

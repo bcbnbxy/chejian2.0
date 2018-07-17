@@ -21,6 +21,7 @@ export default {
   name: 'App',
    created(){
 //	 localStorage.removeItem('loginInfo');
+			//localStorage.removeItem('CITY_DATA')
 //	 console.log(localStorage.getItem('loginInfo'))
 //	 	this.checklogin();
 //	 	this.getCityInfo();

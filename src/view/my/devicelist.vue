@@ -6,7 +6,7 @@
 	</div>
 	<div class="chosecar-wrap-contaire">
 		<ul>
-			<li v-for="(item,index) in data"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：{{item.device}}</span><span><b>{{item.deviceVehicle.brandname}}  {{item.deviceVehicle.manufacturer}} {{item.deviceVehicle.modelname}}</b></span></p></li>
+			<li v-for="(item,index) in data"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：{{item.device}}</span><span><b>{{item.deviceVehicle&&item.deviceVehicle.brandname}}  {{item.deviceVehicle&&item.deviceVehicle.manufacturer}} {{item.deviceVehicle&&item.deviceVehicle.modelname}}</b></span></p></li>
 		</ul>
 	</div>
 </div>

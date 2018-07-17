@@ -3,31 +3,31 @@
 	<div class="homeindex-wrap-head">
 		<div class="homeindex-wrap-head-top">
 			<div class="homeindex-wrap-head-top-left">
-				<img src="../../assets/img/faxianimg/lanbo.png"/>
-				<span>{{selected&&selected.deviceVehicle.brandname}}{{selected&&selected.deviceVehicle.modelname}}</span>
+				<img :src="selected.deviceVehicle&&selected.deviceVehicle.logo"/>
+				<span>{{selected.deviceVehicle&&selected.deviceVehicle.brandname}}{{selected.deviceVehicle&&selected.deviceVehicle.modelname}}</span>
 				<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''" @click="devicesshow"></i>
 				<ul class="devices-list" v-show="devicesflag">
-					<li v-for="(item,index) in devices" @click="select(item,index)"><img src="../../assets/img/faxianimg/lanbo.png"/><span>{{item.deviceVehicle.brandname}}{{item.deviceVehicle.modelname}}</span></li>
+					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item.deviceVehicle&&item.deviceVehicle.brandname}}{{item.deviceVehicle&&item.deviceVehicle.modelname}}</span></li>
 				</ul>
 			</div>
 			<i class="iconfont icon-scan"></i>
 		</div>
 		<div class="homeindex-wrap-head-bottom">
 			<div class="homeindex-wrap-head-bottom-contaire">
-				<p><b>1356</b><span>/名</span></p>
+				<p><b>{{selected&&selected.ranking}}</b><span>/名</span></p>
 				<p>当前排名</p>
-				<p>车辆安全系数 ： 12365</p>
+				<p>车辆安全系数 ： {{selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
-					<router-link tag="div" :to="{name:'breakdown',params:{index:2,devicenum:selected&&selected.device}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
+					<router-link tag="div" :to="{name:'breakdown',params:{index:2,devicenum:selected&&selected.device,vin:selected&&selected.vin}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
 						<p>当前警告</p>
-						<p><b>10</b><span>/处</span></p>
+						<p><b>{{selected&&selected.warnCount}}</b><span>/处</span></p>
 					</router-link>
 					<div class="homeindex-wrap-head-bottom-guzhang-contaire-center"></div>
-					<router-link tag="div" :to="{name:'breakdown',params:{index:1,devicenum:selected&&selected.device}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
+					<router-link tag="div" :to="{name:'breakdown',params:{index:1,devicenum:selected&&selected.device,vin:selected&&selected.vin}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
 						<p>当前故障</p>
-						<p><b>5</b><span>/处</span></p>
+						<p><b>{{selected&&selected.faultCount}}</b><span>/处</span></p>
 					</router-link>
 				</div>
 			</div>
@@ -59,7 +59,7 @@ export default{
 		return {
 			devices:[],
 			devicesflag:false,
-			selected:null,
+			selected:[],
 			friends:[],
 			pageNo:0,
 	        pageSize:5,
@@ -75,6 +75,7 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
 				if(r.errorCode==0){
+					console.log(JSON.stringify(r))
 					that.devices=r.data.devices;
 					that.selected=r.data.devices[0];
 				}else{
@@ -92,7 +93,6 @@ export default{
 		select(item,index){
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
-//			console.log(JSON.stringify(this.selected));
 		},
 		getfriends(minvalue,pageSize){//获取车友列表
 			var that=this;
@@ -163,6 +163,7 @@ export default{
 	color:#fff;
 }
 .homeindex-wrap-head-top-left{
+    flex:1;
 	display: flex;
 	display: -webkit-flex;
 	height:100%;

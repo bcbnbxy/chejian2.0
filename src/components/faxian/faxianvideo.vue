@@ -6,7 +6,7 @@
 		</div>
 		<div class="fourpicture-content">
 			<div class="video-box">
-				<video width="1" height="1" style="background: tan;"></video>				
+				<!--<video width="1" height="1" style="background: tan;"></video>		-->		
 				<img src="../../assets/img/faxianimg/playbtn.png" class="playbtn"/>
 				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>

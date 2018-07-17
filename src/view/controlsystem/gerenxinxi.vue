@@ -6,20 +6,20 @@
 			<span>个人信息</span>
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img src="../../assets/img/faxianimg/avatar.png"/>
+			<img :src="$route.params.personal.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.personal.headphoto:require('../../assets/img/faxianimg/avatar.png')"/>
 			<p>
-				<span>客户01</span>
-				<span>24岁   女</span>
+				<span>{{$route.params.personal.nickname}}</span>
+				<span>{{$route.params.personal.gender | sex}}</span>
 			</p>
 		</div>
 	</div>
 	<div class="gerenxinxi-wrap-contaire">
-		<p><i class="iconfont icon-yonghu"></i><span>123456789</span></p>
+		<p><i class="iconfont icon-shouji"></i><span>{{$route.params.personal.mobileno}}</span></p>
 	</div>
 	<div class="gerenxinxi-wrap-footer">
 		<button @click="addconsumer">{{msg}}</button>
 	</div>
-	<div class="masklayer" :class="masklayerflag?'masklayershow':'masklayerhidden'">
+	<!--<div class="masklayer" :class="masklayerflag?'masklayershow':'masklayerhidden'">
 		<div class="masklayer-contaire">
 			<h3>选择所在团队</h3>
 			<div class="masklayer-contaire-top">
@@ -39,17 +39,32 @@
 				<span>添加</span>
 			</div>
 		</div>
-	</div>
+	</div>-->
 </div>
 </template>
 <script>
 export default{
 	data(){
 		return {
-			selecttrue:false,
-			items:['技术部','业务部','销售部','运营部'],
-			department:'请选择',
-			masklayerflag:false,
+//			selecttrue:false,
+//			items:['技术部','业务部','销售部','运营部'],
+//			department:'请选择',
+//			masklayerflag:false,
+		}
+	},
+	filters:{
+		sex(value){
+			switch(value){
+				case 'm':
+				return '男'
+				break;
+				case 'f':
+				return '女'
+				break;
+				default:
+				return '未知'
+				break;
+			}
 		}
 	},
 	computed:{
@@ -63,20 +78,29 @@ export default{
 	},
 	methods:{
 		addconsumer:function(){
+		    var that=this;
 			if(parseInt(localStorage.getItem('identity'))==1){
 				console.log('业务员进入了此页面')
 			}else if(parseInt(localStorage.getItem('identity'))==2){
-				this.masklayerflag=!this.masklayerflag;
+				console.log('老板进入了此页面')
+				this.$api('/Execute.do',{action:'device.sendOfferMessage',customerseq:this.$route.params.personal.userseq}).then(function(r){
+					if(r.errorCode==0){
+						that.$toast({
+							message:'邀请已发送',
+							position:'bottom',
+							duration:1500
+						})
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
+				})
 			}
 		},
-		selectshow:function(){
-			this.selecttrue=!this.selecttrue;
-		},
-		aa:function(item){
-			this.department=item;
-			this.selecttrue=!this.selecttrue;
-		}
-	}
+	},
 }
 </script>
 
