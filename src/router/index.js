@@ -44,6 +44,8 @@ import EditProfile from '@/view/my/editprofile'
 import ManageAddress from '@/view/my/manageaddress'
 import Editaddress from '@/view/my/editaddress'
 import Mymessage from '@/view/my/mymessage'
+import Msgcontaire from '@/view/my/msgcontaire'
+import Sysmsg from '@/view/my/sysmsg'
 import Devicelist from '@/view/my/devicelist'
 import Mycontrolsystem from '@/view/controlsystem/mycontrolsystem'
 import controlsystem_My from '@/view/controlsystem/controlsystem_my'
@@ -165,9 +167,17 @@ export default new Router({
 		path:'/mymessage',
 		component:Mymessage
 	},{
+		path:'/msgcontaire',
+		name:'msgcontaire',
+		component:Msgcontaire
+	},{
 		name:'mycontrolsystem',
 		path:'/mycontrolsystem',
 		component:Mycontrolsystem
+	},{
+		name:'sysmsg',
+		path:'/sysmsg',
+		component:Sysmsg
 	},{
 		path:'/controlsystem_my',
 		component:controlsystem_My

@@ -6,28 +6,72 @@
 	</div>
 	<section class="mymessage-contaire">
 		<ul>
-			<li>
+			<router-link tag="li" :to="{name:'sysmsg',params:{title:'系统消息',kind:0}}">
 				<p><img src="../../assets/img/my/xitong.png"/>系统消息</p>
-				<p><span>3</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-			</li>
-			<li>
+				<p><span v-show="sysmsg">{{sysmsg}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
+			</router-link>
+			<router-link tag="li" :to="{name:'msgcontaire',params:{title:'新的车友',kind:2}}">
 				<p><img src="../../assets/img/my/carmsg.png"/>新的车友</p>
-				<p><span>3</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-			</li>
-			<li>
+				<p><span v-show="friendmsg">{{friendmsg}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
+			</router-link>
+			<router-link tag="li" :to="{name:'msgcontaire',params:{title:'服务消息',kind:3}}">
 				<p><img src="../../assets/img/my/tuisong.png"/>服务消息</p>
-				<p><span>3</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-			</li>			
-			<li>
+				<p><span v-show="agentmsg">{{agentmsg}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
+			</router-link>			
+			<router-link tag="li" :to="{name:'msgcontaire',params:{title:'工作消息',kind:4}}">
 				<p><img src="../../assets/img/my/haoyou.png"/>工作消息</p>
-				<p><span>3</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-			</li>
+				<p><span v-show="staffmsg">{{staffmsg}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
+			</router-link>
 		</ul>
 	</section>
 </div>
 </template>
 
 <script>
+export default{
+	data(){
+		return{
+			sysmsg:null,
+			friendmsg:null,
+			agentmsg:null,
+			staffmsg:null
+		}
+	},
+	mounted(){
+		this.getmessageCounts()
+	},
+	methods:{
+		getmessageCounts(){
+			var that=this;
+			this.$api('/Execute.do',{action:"messageCounts"}).then(function(r){
+				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					if(r.data.messageCounts==null||r.data.messageCounts==undefined||r.data.messageCounts==''){
+						return;
+					}else{
+						for(var i=0;i<r.data.messageCounts.length;i++){
+							if(r.data.messageCounts[i].kind==0){
+								this.sysmsg=r.data.messageCounts[i].count;
+							}else if(r.data.messageCounts[i].kind==2){
+								this.friendmsg=r.data.messageCounts[i].count;
+							}else if(r.data.messageCounts[i].kind==3){
+								this.agentmsg=r.data.messageCounts[i].count;
+							}else if(r.data.messageCounts[i].kind==4){
+								this.staffmsg=r.data.messageCounts[i].count;
+							}
+						}
+					}
+				}else{
+					that.$toast({
+						message:r.errorMessage,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
+		}
+	}
+}
 </script>
 
 <style>
