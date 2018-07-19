@@ -7,9 +7,9 @@
 			<i class="iconfont icon-jiahao" @click='goadduser'></i>
 		</div>
 		<div class="mycontrolsystem-wrap--top-contaire">
-			<img :src="headphoto"/>
-			<h3>{{username}}</h3>
-			<p><span>设备 0</span><span>客户 0</span></p>
+			<img :src="headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+			<h3>{{company}}</h3>
+			<p><span>设备 {{deviceCount}}</span><span>客户 {{staffCount}}</span></p>
 		</div>
 	</div>
 	<div class="mycontrolsystem-wrap-bottom">
@@ -42,7 +42,10 @@ export default{
 			//1为业务员，2为老板
 		 	identity:parseInt(localStorage.getItem('identity')),
 		 	username:parseInt(localStorage.getItem('identity'))==1?'婉婉01':'深圳市*****有限公司',
-		 	headphoto:parseInt(localStorage.getItem('identity'))==1?require ('../../assets/img/faxianimg/avatar.png'):require ('../../assets/img/faxianimg/masha.png')
+		 	headphoto:'',
+		 	company:'',
+		 	deviceCount:0,
+		 	staffCount:0
 		}
 	},
 	methods:{
@@ -73,7 +76,32 @@ export default{
 			}else if(this.identity==2){
 				this.$router.push('/data')
 			}
+		},
+		getuserInfo(){
+			var that=this;
+			if(this.identity==1){
+				console.log("业务员进入了此页面")
+			}else{
+				this.$api('/Execute.do',{action:'device.agentInfo'}).then(function(r){
+					console.log(JSON.stringify(r));
+					if(r.errorCode==0){
+						that.company=r.data.agentInfo.company;
+						that.headphoto=r.data.agentInfo.agent.headphoto;
+						that.deviceCount=r.data.agentInfo.deviceCount;
+						that.staffCount=r.data.agentInfo.staffCount;
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
+				})
+			}
 		}
+	},
+	mounted(){
+		this.getuserInfo();
 	}
 }
 </script>
@@ -114,6 +142,7 @@ export default{
 }
 .mycontrolsystem-wrap--top-contaire img{
 	width:1.8rem;
+	height:1.8rem;
 	border-radius: 50%;
 	display: block;
 }

@@ -5,7 +5,7 @@
 		<span style="font-size:0.44rem;" slot="right" @click="save()">保存</span>
 	</mt-header>
 	<div class="editprofile-list">
-		<div class="editheadphoto"><p>修改头像</p><img :src="headImg?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headImg:require('../../assets/img/faxianimg/addfile.png')" @click="sheetVisible=!sheetVisible"></div>
+		<div class="editheadphoto"><p>修改头像</p><img :src="headImg?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headImg:require('../../assets/img/shouye/defaultavatar.png')" @click="sheetVisible=!sheetVisible"></div>
 		<mt-field label="修改昵称" v-model="nickname"></mt-field>
 		<div class="editsex">
 			<span>性别</span>

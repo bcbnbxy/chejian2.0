@@ -13,7 +13,7 @@
 export default{
 	props:{
 		customers:{
-			type:Array,
+			type:Object,
 			default(){
 				return{}
 			}

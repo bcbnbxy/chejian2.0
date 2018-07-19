@@ -5,18 +5,75 @@
 		<span>系统消息</span>
 	</div>
 	<div class="msgcontent-wrap-contaire">
-		<h3>标题</h3>
+		<h3>{{title}}</h3>
 		<div class="msgcontent-wrap-contaire-content">
-			<p>系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系</p>
-			<p>系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系</p>
-			<p>系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系统内容系</p>
+			<p>{{content}}</p>
 		</div>
-		<div class="msgcontent-wrap-contaire-time">2018-07-17 16:38:26</div>
+		<div class="msgcontent-wrap-contaire-time">{{time | formatDate}}</div>
 	</div>
 </div>
 </template>
 
 <script>
+export default{
+	props:['msgseq'],
+	data(){
+		return {
+			title:'',
+			content:'',
+			time:''
+		}
+	},
+	methods:{
+		getsyscontent(msgseq){//获取系统消息详细信息
+			var that=this;
+			this.$api('/Execute.do',{action:'message',msgseq:msgseq}).then(function(r){
+				if(r.errorCode==0){
+					that.title=r.data.message.title;
+					that.content=r.data.message.content;
+					that.time=r.data.message.createtime;
+				}else{
+					that.$toast({
+						message:r.errorCode,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
+		}
+	},
+	watch:{
+		msgseq(){
+			if(this.msgseq){
+				this.getsyscontent(this.msgseq)
+			}
+		}
+	},
+	filters:{
+		formatDate(seconds){//时间转换函数
+			seconds=new Date().getTime()-parseInt(seconds);
+			seconds= seconds / 1000;
+			var day =  Math.floor(seconds / 86400 );
+			seconds = seconds % 86400;
+			var hour =  Math.floor( seconds / 3600);
+			seconds = seconds % 3600;
+			var mintues = Math.floor( seconds / 60);
+			var beforeStr = "";
+			if(day>0){
+				beforeStr += day;
+				return beforeStr+"天前";
+			}else if(hour>0){
+				beforeStr += hour;
+				return beforeStr +"小时前"
+			}else if(mintues>0){
+				beforeStr += mintues;
+				return beforeStr +"分钟前"
+			}else{
+				return "刚刚"
+			}				
+		}
+	}
+}
 </script>
 
 <style scoped>

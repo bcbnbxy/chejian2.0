@@ -50,14 +50,14 @@ export default{
 						return;
 					}else{
 						for(var i=0;i<r.data.messageCounts.length;i++){
-							if(r.data.messageCounts[i].kind==0){
-								this.sysmsg=r.data.messageCounts[i].count;
-							}else if(r.data.messageCounts[i].kind==2){
-								this.friendmsg=r.data.messageCounts[i].count;
-							}else if(r.data.messageCounts[i].kind==3){
-								this.agentmsg=r.data.messageCounts[i].count;
-							}else if(r.data.messageCounts[i].kind==4){
-								this.staffmsg=r.data.messageCounts[i].count;
+							if(r.data.messageCounts[i].kind==0&&r.data.messageCounts[i].unread!=0){
+								that.sysmsg=r.data.messageCounts[i].unread;
+							}else if(r.data.messageCounts[i].kind==2&&r.data.messageCounts[i].unread!=0){
+								that.friendmsg=r.data.messageCounts[i].unread;
+							}else if(r.data.messageCounts[i].kind==3&&r.data.messageCounts[i].unread!=0){
+								that.agentmsg=r.data.messageCounts[i].unread;
+							}else if(r.data.messageCounts[i].kind==4&&r.data.messageCounts[i].unread!=0){								
+								that.staffmsg=r.data.messageCounts[i].unread;
 							}
 						}
 					}
@@ -92,7 +92,7 @@ export default{
 	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 	position:relative;
 }

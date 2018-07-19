@@ -7,9 +7,9 @@
 	</div>
 	<div class="sysmsg-wrap-contaire">
 		<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">		
-			<div class="sysmsg-wrap-msgitem" v-for="(item,index) in msglist" :key="index" @click="!footshow&&gomsgcontent()">
+			<div class="sysmsg-wrap-msgitem" v-for="(item,index) in msglist" :key="index" @click="!footshow&&gomsgcontent(item.msgseq)">
 				<div class="sysmsg-wrap-msgitem-left" v-show="footshow">
-					<input type="checkbox" :checked="msglistIds.indexOf(index)>=0" @click='checkedOne(index)'/>
+					<input type="checkbox" :checked="msglistIds.indexOf(item.msgseq)>=0" @click='checkedOne(item.msgseq)'/>
 					<label></label>
 				</div>
 				<div class="sysmsg-wrap-msgitem-right">
@@ -33,7 +33,7 @@
 		</div>
 	</div>
 	<div class="msgcontent" :class="msgcontent?'msgcontent-show':'msgcontent-hidden'">
-		<Msgcontent v-on:listenmsgcontent="msgcontent=false"></Msgcontent>
+		<Msgcontent v-on:listenmsgcontent="msgcontent=false" :msgseq="msgseq"></Msgcontent>
 	</div>
 </div>
 </template>
@@ -44,9 +44,8 @@ export default{
 	components:{Msgcontent},
 	data(){
 		return {
-			msglist:[
-				{nickname:'婉婉',msg:'我是婉婉',time:'今天'},
-			],
+			msglist:[],			
+			msgseq:'',
 			msglistIds:[],
 			isCheckedAll: false,
 			footshow:false,
@@ -62,7 +61,7 @@ export default{
       		if (this.isCheckedAll) {// 全选时
         		this.msglistIds = []
        			this.msglist.forEach(function (fruit,index) {
-          			this.msglistIds.push(index)
+          			this.msglistIds.push(fruit.msgseq)
         		}, this)
       		} else {
         		this.msglistIds = []
@@ -77,10 +76,28 @@ export default{
 	        }
 	    },
 	    delate(){
-	    	console.log('删除')
+	    	var that=this;
+	    	that.$api('/Execute.do',{action:'removeMessages',msgseqs:this.msglistIds.join()}).then(function(r){
+	    		if(r.errorCode==0){
+	    			that.$toast({
+	    				message:'删除消息成功',
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    			that.msglist=[];
+	    			that.getmessages(that.pnum,that.psize)
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})
 	    },
-	    gomsgcontent(){
+	    gomsgcontent(msgseq){
 	    	this.msgcontent=true;
+	    	this.msgseq=msgseq;
 	    },
 	    getmessages(minvalue,pageSize){//获取消息列表
 	    	var that=this;

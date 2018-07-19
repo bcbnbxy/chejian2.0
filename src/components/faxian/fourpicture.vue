@@ -28,7 +28,7 @@
 		props:['data','index'],
 		data(){
 			return {
-				defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
+				defaultImg:require('../../assets/img/shouye/defaultavatar.png') ,
 				userseq:localStorage.getItem('loginInfo')==null?'':JSON.parse(localStorage.getItem('loginInfo')).userseq,
 				datalist:this.data,
 				favorite:this.data.owner.favorite,

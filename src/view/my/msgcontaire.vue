@@ -9,11 +9,11 @@
 		<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
      		<div class="addfriend" v-for="(item,index) in msglist" :key="index">
 				<div class="addfriend-left" v-show="footshow">				
-					<input type="checkbox" :checked="msglistIds.indexOf(index)>=0" @click='checkedOne(index)'/>
+					<input type="checkbox" :checked="msglistIds.indexOf(item.msgseq)>=0" @click='checkedOne(item.msgseq)'/>
 					<label ></label>
 				</div>
 				<div class="addfriend-center">
-					<img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require ('../../assets/img/faxianimg/avatar.png')"/>
+					<img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/>
 					<p>
 						<b>{{item.sender.nickname}}</b>
 						<span>{{item.content}}</span>
@@ -22,7 +22,7 @@
 				</div>
 				<div class="addfriend-right">
 					<div class="btn-group" v-show="item.status==0">
-						<span @click="accept(index,item.msgseq)">接受</span><span @click="refuse(index)">拒绝</span>					
+						<span @click="accept(index,item.msgseq)">接受</span><span @click="refuse(index,item.msgseq)">拒绝</span>					
 					</div>
 					<div class="btn-group1" v-show="item.status!=0">
 						<span v-show="item.status==1" style="background:#1aad19;">已接受</span>
@@ -41,7 +41,7 @@
 			<span>全选</span>
 		</div>
 		<div class="msgcontaire-wrap-footer-right">
-			<span>删除</span>
+			<button @click="delate" :disabled="!msglistIds.length>0" :style="!msglistIds.length>0?'color:#ccc':''">删除</button>
 		</div>
 	</div>
 </div>
@@ -69,7 +69,7 @@ export default{
       		if (this.isCheckedAll) {// 全选时
         		this.msglistIds = []
        			this.msglist.forEach(function (fruit,index) {
-          			this.msglistIds.push(index)
+          			this.msglistIds.push(fruit.msgseq)
         		}, this)
       		} else {
         		this.msglistIds = []
@@ -104,12 +104,12 @@ export default{
 	    		}
 	    	})
 	    },
-	    accept(index,msgseq){
+	    accept(index,msgseq){//同意成为业务员
 	    	var that=this;
 	    	if(this.$route.params.kind==3){
 	    		this.$api('/Execute.do',{action:"device.bindAgentStaff",msgseq:msgseq}).then(function(r){
 	    			if(r.errorCode==0){
-	    				this.msglist[index].status=1;
+	    				that.msglist[index].status=1;
 	    			}else{
 	    				that.$toast({
 		    				message:r.errorMessage,
@@ -122,7 +122,7 @@ export default{
 	    	if(this.$route.params.kind==4){
 	    		this.$api('/Execute.do',{action:"device.acceptAgentOffer",msgseq:msgseq}).then(function(r){
 	    			if(r.errorCode==0){
-	    				this.msglist[index].status=1;
+	    				that.msglist[index].status=1;
 	    			}else{
 	    				that.$toast({
 		    				message:r.errorMessage,
@@ -134,8 +134,25 @@ export default{
 	    	}
 	    	
 	    },
-	    refuse(index){
-	    	this.msglist[index].status=2;
+	    refuse(index,msgseq){//拒绝成为业务员
+	    	var that=this;
+	    	this.$api('/Execute.do',{action:'refuseMessage',msgseq:msgseq}).then(function(r){
+	    		if(r.errorCode==0){
+	    			that.$toast({
+	    				message:'已拒绝',
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    			that.msglist[index].status=2;
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})
+	    	
 	    },
 	    loadTop(){//下拉刷新
 	    	this.msglist=[];
@@ -146,6 +163,26 @@ export default{
 	    	this.getmessages(this.pnum,this.psize);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
 	    },
+	    delate(){//删除消息
+	    	var that=this;
+	    	that.$api('/Execute.do',{action:'removeMessages',msgseqs:this.msglistIds.join()}).then(function(r){
+	    		if(r.errorCode==0){
+	    			that.$toast({
+	    				message:'删除消息成功',
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    			that.msglist=[];
+	    			that.getmessages(that.pnum,that.psize)
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})	    	
+	    }
 	},
 	filters:{
 		formatDate(seconds){//时间转换函数
@@ -187,7 +224,7 @@ export default{
 	width:100%;
 	height:1.32rem;
 	padding:0 0.5rem;
-	background-image: url(../../../dist/static/img/headbg.32103ac.png);
+	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 	display: flex;
 	display: -webkit-flex;
@@ -375,9 +412,10 @@ export default{
 	position: relative;
 	right:-0.5rem;
 }
-.msgcontaire-wrap-footer-right span{
+.msgcontaire-wrap-footer-right button{
 	padding:0 1.15rem;
 	display: inline-block;
 	color:#1989F5;
+	background: none;
 }
 </style>

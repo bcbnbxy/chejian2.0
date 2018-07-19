@@ -7,26 +7,26 @@
 			<span style="font-size:0.44rem;" @click="deleteuser">删除</span>
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img src="../../assets/img/faxianimg/avatar.png"/>
+			<img :src="$route.params.myInfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.myInfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 			<p>
-				<span>客户01</span>
-				<span>24岁   女</span>
+				<span>{{$route.params.myInfo.userInfo.nickname}}</span>
+				<!--<span>24岁   女</span>-->
 			</p>
 		</div>
 	</div>
 	<div class="personlInfo-list">
 		<div class="personlInfo-list-item">
 			<p>手机号</p>
-			<p>12345678912</p>
+			<p>{{$route.params.myInfo.userInfo.mobileno}}</p>
 		</div>
 		<div class="personlInfo-list-item" @click="Revisenotes">
 			<p>备注</p>
 			<p><span>{{remark}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
-		<div class="personlInfo-list-item" @click="changesalary">
+		<!--<div class="personlInfo-list-item" @click="changesalary">
 			<p>工薪</p>
 			<p><span>{{salary}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-		</div>
+		</div>-->
 		<div class="personlInfo-list-item" @click="popupVisible=!popupVisible">
 			<p>所属团队</p>
 			<p><span>{{group}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
@@ -36,9 +36,9 @@
 			<p><span></span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
 	</div>
-	<div class="personlInfo-wrap-save"><button>保存</button></div>
+	<div class="personlInfo-wrap-save"><button @click="save" :style="(remark!=this.$route.params.myInfo.staffname||group!=this.$route.params.departmentname)?'':'background:#ccc;'">保存</button></div>
 	<mt-popup v-model="popupVisible"  position="bottom"  style="width:100%;"> 	  	 
-		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3"></mt-picker>
+		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" valueKey="departname"></mt-picker>
 	</mt-popup>
 </div>
 </template>
@@ -48,33 +48,43 @@ import { MessageBox } from 'mint-ui';
 export default{
 	data(){
 		return {
-			remark:'李四',
-			salary:'5000',
+			remark:this.$route.params.myInfo.staffname?this.$route.params.myInfo.staffname:'',
 			popupVisible:false,
-			group:'团队1',
+			flag:0,
+			departseq:this.$route.params.departseq,
+			group:'',
 			slots:[
 				{
 		          flex: 1,
-		          values: ['团队1', '团队2', '团队3', '团队4'],
+		          values:this.getdepartment(),
 		          className: 'slot1',
-		          textAlign: 'center'
+		          textAlign: 'center',
 		        }
 			]
 		}
 	},
 	methods:{
 		onValuesChange(picker, values){
-			this.group=values[0];
+			if(this.flag==0){
+				this.flag=1;
+				this.group=this.$route.params.departmentname;
+				return;
+			}
+			this.group=values[0].departname;
+			this.departseq=values[0].departseq;
 		},
-		deleteuser(){
+		deleteuser(){//删除业务员
+			var that=this;
 			MessageBox.confirm('确定删除此成员吗？').then(action => {
-	          if (action == 'confirm') {
-	            console.log('abc');
-	          }
+	            if (action == 'confirm') {
+	            	that.$api('/Execute.do',{action:'device.fireAgentStaff',staffseq:this.$route.params.myInfo.staffseq}).then(function(r){
+	            		console.log(JSON.stringify(r));
+	            	})
+	            }
 	        }).catch(err => {
-	          if (err == 'cancel') {
-	            console.log('123');
-	          }
+	            if (err == 'cancel') {
+	                console.log('123');
+	            }
 	        });
 		},
 		Revisenotes(){
@@ -97,25 +107,22 @@ export default{
 	          }
 	        });
 		},
-		changesalary(){
-			var that=this;
-			MessageBox.prompt('',{
-				message:'请填写工薪',
-				showConfirmButton:true,
-          		showCancelButton:true,
-          		confirmButtonText:'确定',
-          		cancelButtonText:'取消'
-			}).then(({ value, action }) => {
-				if (action == 'confirm') {
-	            	if(value.trim().length>1){
-	            		that.salary=value;
-	            	}
-	          	}
-			}).catch(err => {
-	          if (err == 'cancel') {
-	            console.log('123');
-	          }
-	        });
+		getdepartment(){
+			var departmentlist=[];
+			for(var i=0;i<this.$route.params.department.length;i++){
+				let obj={};
+				obj.departname=this.$route.params.department[i].departname;
+				obj.departseq=this.$route.params.department[i].departseq;
+				departmentlist.push(obj)
+			}
+			return departmentlist;
+		},
+		save(){
+			if(this.remark!=this.$route.params.myInfo.staffname||this.group!=this.$route.params.departmentname){
+				this.$api('/Execute.do',{action:'device.updateAgentStaff',staffname:this.remark,departseq:this.departseq,staffseq:this.$route.params.myInfo.staffseq}).then(function(r){
+					console.log(JSON.stringify(r));
+				})
+			}
 		}
 	}
 }

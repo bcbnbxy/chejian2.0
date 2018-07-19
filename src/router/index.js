@@ -196,6 +196,7 @@ export default new Router({
 		component:Department
 	},{
 		path:'/personlInfo',
+		name:'personlInfo',
 		component:PersonlInfo
 	},{
 		path:'/controlsearch',

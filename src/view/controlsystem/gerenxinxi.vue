@@ -6,7 +6,7 @@
 			<span>个人信息</span>
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img :src="$route.params.personal.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.personal.headphoto:require('../../assets/img/faxianimg/avatar.png')"/>
+			<img :src="$route.params.personal.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.personal.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 			<p>
 				<span>{{$route.params.personal.nickname}}</span>
 				<span>{{$route.params.personal.gender | sex}}</span>
@@ -82,7 +82,6 @@ export default{
 			if(parseInt(localStorage.getItem('identity'))==1){
 				console.log('业务员进入了此页面')
 			}else if(parseInt(localStorage.getItem('identity'))==2){
-				console.log('老板进入了此页面')
 				this.$api('/Execute.do',{action:'device.sendOfferMessage',customerseq:this.$route.params.personal.userseq}).then(function(r){
 					if(r.errorCode==0){
 						that.$toast({

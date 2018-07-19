@@ -7,15 +7,15 @@
 	</div>
 	<dl>
 		<dt @click="addgroup"><i class="iconfont icon-jia"></i><span>添加部门名称</span></dt>
-		<dd @click="deletegroup"><i class="iconfont icon-jian"></i><span>业务部</span></dd>
-		<dd @click="deletegroup"><i class="iconfont icon-jian"></i><span>推广部</span></dd>
+		<dd @click="deletegroup(item.departseq,item.departname)" v-for="(item,index) in departmentlist"><i class="iconfont icon-jian"></i><span>{{item.departname}}</span></dd>
+		<!--<dd @click="deletegroup"><i class="iconfont icon-jian"></i><span>推广部</span></dd>-->
 	</dl>
 	<div class="messagebox-prompt" v-if="isprompt">
 		<div class="prompt-proup">
 			<h1>添加部门</h1>
-			<input type="text" placeholder="部门名称"/>
+			<input type="text" placeholder="部门名称" v-model="department"/>
 			<textarea placeholder="部门说明"></textarea>
-			<p><span @click="isprompt=false">取消</span><span @click="isprompt=false">确定</span></p>
+			<p><button @click="isprompt=false">取消</button><button @click="adddepartment" :disabled="!department" :style="!department?'color:#ccc':''">确定</button></p>
 		</div>
 	</div>
 </div>
@@ -23,34 +23,88 @@
 <script>
 import { MessageBox } from 'mint-ui'
 export default{
+	props:{
+		departmentInfo:{
+			type:Array,
+			default(){
+				return[]
+			}
+		}
+	},
+	watch: {
+            departmentInfo() {
+                this.departmentlist=this.departmentInfo;
+            }
+       },
 	data(){
 		return {
 			isprompt:false,
+			department:'',
+			departmentlist:[],
 		}
 	},
 	methods:{
-		 onfilter(){
-          this.$emit("listenTochildEvent");
-      },
-      deletegroup(){
-      	MessageBox.confirm('', {
-          message: '确定删除此部门吗？这项操作会删除该部门下的所有人员，请谨慎操作！',
-          showConfirmButton:true,
-          showCancelButton:true,
-          confirmButtonText:'确定',
-          cancelButtonText:'取消'
-        }).then(action => {
-          if (action == 'confirm') {
-            console.log('abc');
-          }
-        }).catch(err => {
-          if (err == 'cancel') {
-            console.log('123');
-          }
-        });
-      },
-      addgroup(){
-      	this.isprompt=true;
+		onfilter(){
+            this.$emit("listenTochildEvent");
+            this.$emit("agingetdepartments");
+        },
+        deletegroup(departseq,departname){
+        	var that=this;
+      	    MessageBox.confirm('', {
+                message: '确定删除此部门吗？这项操作会删除该部门下的所有人员，请谨慎操作！',
+                showConfirmButton:true,
+                showCancelButton:true,
+                confirmButtonText:'确定',
+                cancelButtonText:'取消'
+           }).then(action => {
+                if (action == 'confirm') {
+                    that.$api('/Execute.do',{action:'device.updateDepartment;device.departments',departseq:departseq,departname:departname,status:2}).then(function(r){
+                    	console.log(JSON.stringify(r));
+                    	if(r.errorCode==0){
+                    		that.departmentlist=r.data.departments;
+                    		that.$toast({
+								message:'部门删除成功',
+								position:'bottom',
+								duration:1500
+							})
+                    	}else{
+                    		that.$toast({
+								message:r.errorMessage,
+								position:'bottom',
+								duration:1500
+							})
+                    	}
+                    })
+                }
+            }).catch(err => {
+                if (err == 'cancel') {
+                    console.log('123');
+                }
+            });
+        },
+        addgroup(){
+      		this.isprompt=true;
+		},
+		adddepartment(){
+			var that=this;
+			this.isprompt=false;
+			this.$api('/Execute.do',{action:'device.addDepartment;device.departments',departname:this.department}).then(function(r){
+				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					that.departmentlist=r.data.departments;
+					that.$toast({
+						message:'部门添加成功',
+						position:'bottom',
+						duration:1500
+					})
+				}else{
+					that.$toast({
+						message:r.errorMessage,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
 		}
     }
 }
@@ -164,15 +218,17 @@ export default{
 	font-size:0.56rem;
 	color:#999;
 	margin-left:-0.5rem;
+	overflow: hidden;
 }
-.prompt-proup p span{
+.prompt-proup p button{
 	display: inline-block;
 	width:50%;
 	height:1.6rem;
 	line-height: 1.6rem;
 	text-align: center;
+	background: none;
 }
-.prompt-proup p span:last-child{
+.prompt-proup p button:last-child{
 	border-left:1px solid #ddd;
 	color:#1989f5;
 }

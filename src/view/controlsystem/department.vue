@@ -3,23 +3,24 @@
 	<div class="department-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 		<span>管理系统</span>
-		<span @click="toggle">编辑</span>
+		<span @click="isdisplay=!isdisplay">编辑</span>
 	</div>
 	<div class="department-wrap-contaire">
 		<div class="department-wrap-contaire-head">
 			<span>我的团队</span>
 		</div>
 		<div class="department-wrap-contaire-list">
-		<accordion
-	      v-for="(item,index) in dataList"
-	      :key='item.id'
-	      :title="item"	      
-	      :list="item.child">
-	    </accordion>
+			<accordion
+		      v-for="(item,index) in dataList"
+		      :key='item.departseq'
+		      :title="item"	      
+		      :list="item.staffs"
+		      :department='dataList'>
+		    </accordion>
 		</div>
 	</div>
 	<div class="Groupmanagement" :class="isdisplay?'Groupmanagement-block':'Groupmanagement-none'">
-		<Groupmanagement  v-on:listenTochildEvent="toggle"></Groupmanagement>
+		<Groupmanagement  v-on:listenTochildEvent="toggle" :departmentInfo="dataList"></Groupmanagement>
 	</div>
 </div>
 </template>
@@ -34,34 +35,7 @@ export default{
     },
 	data(){
 		return {
-			dataList:[
-				{
-					name:'团队1',
-					child:[
-						{name:'婉婉01',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉02',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉03',headphoto:require ('../../assets/img/faxianimg/avatar.png')}
-					]
-				},{
-					name:'团队2',
-					child:[
-						{name:'婉婉04',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉05',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉06',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉07',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉08',headphoto:require ('../../assets/img/faxianimg/avatar.png')}
-					]
-				},{
-					name:'团队3',
-					child:[
-						{name:'婉婉09',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉10',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉11',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉12',headphoto:require ('../../assets/img/faxianimg/avatar.png')},
-						{name:'婉婉13',headphoto:require ('../../assets/img/faxianimg/avatar.png')}
-					]
-				}
-			],
+			dataList:[],			
 			isdisplay:false
 		}
 	},
@@ -71,10 +45,21 @@ export default{
 	methods:{
 		toggle(){
 			this.isdisplay=!this.isdisplay;
+			this.getdepartments();
 		},
 		getdepartments(){//获取部门列表及部门人员信息
+			var that=this;
 			this.$api('/Execute.do',{action:'device.departments'}).then(function(r){
 				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					that.dataList=r.data.departments;
+				}else{
+					that.$toast({
+						message:r.errorMessage,
+						position:'bottom',
+						duration:1500
+					})
+				}
 			})
 		}
 	}

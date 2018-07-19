@@ -69,7 +69,7 @@ export default{
 	data(){
 		return {
 			data:this.$route.params.datalist,
-			defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
+			defaultImg:require('../../assets/img/shouye/defaultavatar.png') ,
 			praiseflag:false,
 			detailinput:false,
 			content:'',
@@ -358,11 +358,14 @@ export default{
 }
 .avatar-list li{
 	width:0.94rem;
+	height:0.94rem;
 	position: absolute;
 	top:0.35rem;
 }
 .avatar-list li img{
 	width:100%;
+	height:100%;
+	border-radius: 50%;
 }
 .avatar-list li:nth-child(1){
 	left:0;

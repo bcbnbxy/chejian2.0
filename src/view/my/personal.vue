@@ -7,7 +7,7 @@
 				<router-link to="/mymessage" tag="span"><i class="iconfont icon-youjian"></i><b v-show="showmsg"></b></router-link>
 			</header>
 			<div class="personal-top-main">
-				<div><img :src="userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+userInfo.headphoto:require('../../assets/img/faxianimg/avatar.png')"/></div>
+				<div><img :src="userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></div>
 				<div>
 					<p><span>{{userInfo.nickname? userInfo.nickname: userInfo.loginname}}</span><i class="iconfont"  :class="Sex"></i></p>
 					<router-link tag="p" :to="{name:'editprofile',params:{userInfo}}"><span>{{userInfo.mobileno}}</span><i class="iconfont icon-xiugaimima"></i></router-link>
@@ -71,6 +71,7 @@ export default{
 		getUserInfo:function(){
 			let that=this;
 			this.$api('/Execute.do',{action:'userInfo;device.agentOrStaff;messageCounts',userseq:this.userInfo.userseq}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode == '0'){
 					that.userInfo=r.data.userInfo;					
 					localStorage.setItem('identity',2)//r.data.agentOrStaff
@@ -78,7 +79,7 @@ export default{
 						that.showmsg=false
 					}else{
 						for (var i=0;i<r.data.messageCounts.length;i++){
-							if(r.data.messageCounts[i].count<1){
+							if(r.data.messageCounts[i].unread<1){
 								that.showmsg=false
 							}
 							break;
