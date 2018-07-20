@@ -22,7 +22,7 @@
 				<p><img src="../../assets/img/my/guanli.png"/></p>
 				<span>管理</span>
 			</li>
-			<li @click="godata">
+			<li>
 				<p><img src="../../assets/img/my/shuju.png"/></p>
 				<span>数据</span>
 			</li>
@@ -41,7 +41,6 @@ export default{
 		return {
 			//1为业务员，2为老板
 		 	identity:parseInt(localStorage.getItem('identity')),
-		 	username:parseInt(localStorage.getItem('identity'))==1?'婉婉01':'深圳市*****有限公司',
 		 	headphoto:'',
 		 	company:'',
 		 	deviceCount:0,
@@ -51,7 +50,7 @@ export default{
 	methods:{
 		goworkshop(){			
 			if(this.identity===1){
-				this.$router.push('/controlsystem_my')
+				this.$router.push({name:'controlsystem_my',params:{headphoto:this.headphoto,company:this.company,deviceCount:this.deviceCount,staffCount:this.staffCount}})
 			}else if(this.identity===2){
 				this.$router.push('/workshop')
 			}
@@ -70,34 +69,36 @@ export default{
 				this.$router.push({name:'adduser'})
 			}
 		},
-		godata(){
-			if(this.identity==1){
-				this.$router.push('/data')
-			}else if(this.identity==2){
-				this.$router.push('/data')
-			}
-		},
+//		godata(){
+//			if(this.identity==1){
+//				this.$router.push('/data')
+//			}else if(this.identity==2){
+//				this.$router.push('/data')
+//			}
+//		},
 		getuserInfo(){
 			var that=this;
-			if(this.identity==1){
-				console.log("业务员进入了此页面")
-			}else{
-				this.$api('/Execute.do',{action:'device.agentInfo'}).then(function(r){
-					console.log(JSON.stringify(r));
-					if(r.errorCode==0){
-						that.company=r.data.agentInfo.company;
-						that.headphoto=r.data.agentInfo.agent.headphoto;
-						that.deviceCount=r.data.agentInfo.deviceCount;
-						that.staffCount=r.data.agentInfo.staffCount;
-					}else{
-						that.$toast({
-							message:r.errorMessage,
-							position:'bottom',
-							duration:1500
-						})
-					}
-				})
-			}
+			this.$api('/Execute.do',{action:'device.carshopInfo'}).then(function(r){
+				if(r.errorCode==0){
+					if(that.identity==1){
+						that.headphoto=r.data.carshopInfo.userInfo.headphoto;
+						that.company=r.data.carshopInfo.userInfo.nickname;
+						that.deviceCount=r.data.carshopInfo.deviceCount;
+						that.staffCount=r.data.carshopInfo.customerCount;
+					}else if(that.identity==2){
+						that.company=r.data.carshopInfo.agent.company;
+						that.headphoto=r.data.carshopInfo.userInfo.headphoto;
+						that.deviceCount=r.data.carshopInfo.deviceCount;
+						that.staffCount=r.data.carshopInfo.customerCount;
+					}					
+				}else{
+					that.$toast({
+						message:r.errorMessage,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
 		}
 	},
 	mounted(){

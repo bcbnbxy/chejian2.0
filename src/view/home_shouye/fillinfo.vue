@@ -42,7 +42,7 @@
 	<mt-popup v-model="popupVisible"  position="bottom" style="width:100%;">
  		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" ></mt-picker>
    </mt-popup>
-   <Citypicker :id="'citypicker'" :flag="citypickerflag" v-on:listenTochildEvent="citypicker" v-on:child-say="listenToMyBoy"></Citypicker>
+   <Citypicker :id="'citypicker'" :flag="citypickerflag" v-on:listenTochildEvent="citypicker" v-on:child-say="listenToMyBoy" :cityInfo="citylist"></Citypicker>
 </div>
 </template>
 <script>
@@ -63,7 +63,8 @@ export default{
 				className:'slots1',
 				values:['小型汽车(蓝底白字牌)','大型汽车(黄底黑子牌)'],
 				textAlign: 'center',
-			}]
+			}],
+			citylist:[],
 		}
 	},
 	methods:{
@@ -88,7 +89,26 @@ export default{
 		},
 		inquiry(){
 			this.$router.replace('/violationinquiry')
+		},
+		getcity(){//获取省份信息
+			var that=this;
+			this.$api('/Execute.do',{action:'orderProvinces'}).then(function(r){
+//				console.log(JSON.stringify(r));
+				if(r.errorCode==0){
+					
+					that.citylist=r.data.orderProvinces;
+				}else{
+					that.$toast({
+						message:r.errorMessage,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
 		}
+	},
+	mounted(){
+		this.getcity();
 	}
 }
 </script>

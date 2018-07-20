@@ -6,25 +6,64 @@
 			<span>我的</span>
 		</div>
 		<div class="mycontrolsystem-wrap--top-contaire">
-			<img src="../../assets/img/faxianimg/avatar.png"/>
-			<h3>婉婉01</h3>
-			<p><span>设备 0</span><span>客户 0</span></p>
+			<img :src="$route.params.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+			<h3>{{$route.params.company}}</h3>
+			<p><span>设备 {{$route.params.deviceCount}}</span><span>客户 {{$route.params.staffCount}}</span></p>
 		</div>
 	</div>
 	<div class="controlsystem_my-wrap-bottom">
-		<ul>
-			<router-link tag="li" to="/consumer"><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户01</span></p><p><img src="../../assets/img/my/tishi.png"/></p></router-link>
-			<li><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户02</span></p><p><img src="../../assets/img/my/tishi.png"/></p></li>
-			<li><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户03</span></p><p><img src="../../assets/img/my/tishi1.png"/></p></li>
-			<li><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户04</span></p><p><img src="../../assets/img/my/tishi1.png"/></p></li>
-			<li><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户05</span></p><p><img src="../../assets/img/my/tishi1.png"/></p></li>
-			<li><p><img src="../../assets/img/faxianimg/avatar.png"/><span>客户06</span></p><p><img src="../../assets/img/my/tishi1.png"/></p></li>
+		<ul>			
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+	     		<router-link tag="li" :to="{name:'consumer',params:{consumer:item}}" v-for="(item,index) in customerlist" :key="index"><p><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></p><p><!--<img src="../../assets/img/my/tishi.png"/>--></p></router-link>
+	   		</mt-loadmore>			
 		</ul>
 	</div>
 </div>
 </template>
 
 <script>
+export default {
+	data(){
+		return {
+			psize:10,
+			pnum:0,
+			customerlist:[],
+			allLoaded:false
+		}
+	},
+	methods:{
+		getcustomers(minvalue,pageSize){//获取客户列表
+			var that=this;
+			this.$api('/Execute.do',{action:'device.customers',minvalue:minvalue,pageSize:pageSize}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.customers==null||r.data.customers==undefined||r.data.customers==""){
+						return;
+					}else{
+						that.customerlist=that.customerlist.concat(r.data.customers);
+						if(r.data.customers.length<10){
+							that.allLoaded=true;
+						}else{
+							that.allLoaded=false;
+							that.pnum=r.data.customers[r.data.customers.length-1].userseq;
+						}
+					}					
+				}
+			})
+		},
+		loadTop(){//下拉刷新
+			this.customerlist=[];
+			this.getcustomers(0,this.psize);
+			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		},
+		loadBottom(){//上拉加载
+			this.getcustomers(this.pnum,this.psize);
+	    	this.$refs.loadmore.onBottomLoaded();	 
+		}
+	},
+	mounted(){
+		this.getcustomers(this.pnum,this.psize);
+	}
+}
 </script>
 <style scoped>
 .controlsystem_my-wrap{

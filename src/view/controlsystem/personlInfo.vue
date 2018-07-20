@@ -36,7 +36,7 @@
 			<p><span></span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
 	</div>
-	<div class="personlInfo-wrap-save"><button @click="save" :style="(remark!=this.$route.params.myInfo.staffname||group!=this.$route.params.departmentname)?'':'background:#ccc;'">保存</button></div>
+	<div class="personlInfo-wrap-save"><button @click="save" :style="(remark!=$route.params.myInfo.staffname||group!=$route.params.departmentname)?'':'background:#ccc;'">保存</button></div>
 	<mt-popup v-model="popupVisible"  position="bottom"  style="width:100%;"> 	  	 
 		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" valueKey="departname"></mt-picker>
 	</mt-popup>
@@ -118,9 +118,22 @@ export default{
 			return departmentlist;
 		},
 		save(){
+			var that=this;
 			if(this.remark!=this.$route.params.myInfo.staffname||this.group!=this.$route.params.departmentname){
 				this.$api('/Execute.do',{action:'device.updateAgentStaff',staffname:this.remark,departseq:this.departseq,staffseq:this.$route.params.myInfo.staffseq}).then(function(r){
-					console.log(JSON.stringify(r));
+					if(r.errorCode==0){
+						that.$toast({
+							message:'修改资料成功',
+							position:'bottom',
+							duration:1500
+						})
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
 				})
 			}
 		}

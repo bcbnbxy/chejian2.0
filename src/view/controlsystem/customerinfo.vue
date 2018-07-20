@@ -4,22 +4,21 @@
 		<div class="personlInfo-wrap-head">
 			<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 			<span>编辑客户信息</span>
-			<!--<span style="font-size:0.44rem;" @click="deleteuser">删除</span>-->
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img src="../../assets/img/faxianimg/avatar.png"/>
+			<img :src="$route.params.customerinfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.customerinfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 			<p>
-				<span>客户01</span>
-				<span>24岁   女</span>
+				<span>{{$route.params.customerinfo.userInfo.nickname}}</span>
+				<span>{{$route.params.customerinfo.userInfo.gender | sex}}</span>
 			</p>
 		</div>
 	</div>
 	<ul class="customerinfo-wrap-list">
-		<li><span>手机号码</span><p>12345678912</p></li>
+		<li><span>手机号码</span><p>{{$route.params.customerinfo.userInfo.mobileno}}</p></li>
 		<li @click="Revisenotes"><span>备注</span><p>{{remark}}<i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
 		<li><span>他的主页</span><p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
 	</ul>
-	<div class="customerinfo-wrap-footer"><button>保存</button></div>
+	<div class="customerinfo-wrap-footer"><button @click="save" :style="remark!=$route.params.customerinfo.remark?'':'background:#ccc'">保存</button></div>
 </div>
 </template>
 
@@ -28,21 +27,10 @@ import { MessageBox } from 'mint-ui';
 export default{
 	data(){
 		return {
-			remark:'李四'
+			remark:this.$route.params.customerinfo.remark,
 		}
 	},
 	methods:{
-		deleteuser(){
-			MessageBox.confirm('确定删除此成员吗？').then(action => {
-	          if (action == 'confirm') {
-	            console.log('abc');
-	          }
-	        }).catch(err => {
-	          if (err == 'cancel') {
-	            console.log('123');
-	          }
-	        });
-		},
 		Revisenotes(){
 			var that=this;
 			MessageBox.prompt('',{
@@ -62,7 +50,45 @@ export default{
 	            console.log('123');
 	          }
 	        });
+		},
+		save(){//修改备注
+			var that=this;
+			if(this.remark!=this.$route.params.customerinfo.remark){			
+				this.$api('/Execute.do',{action:'device.updateCustomerInfo',remark:this.remark,userseq:this.$route.params.customerinfo.userseq}).then(function(r){
+					if(r.errorCode==0){
+						that.$toast({
+							message:'修改资料成功',
+							position:'bottom',
+							duration:1500
+						})
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
+				})
+			}
 		}
+	},
+	filters:{
+		sex(value){
+			switch (value){
+				case 'm':
+				return '男'
+				break;
+				case 'f':
+				return '女'
+				break;
+				default :
+				return '未知'
+				break ;
+			}
+		}
+	},
+	created(){
+		
 	}
 }
 </script>

@@ -104,9 +104,9 @@ export default{
 	    		}
 	    	})
 	    },
-	    accept(index,msgseq){//同意成为业务员
+	    accept(index,msgseq){
 	    	var that=this;
-	    	if(this.$route.params.kind==3){
+	    	if(this.$route.params.kind==3){//成为业务员的客户
 	    		this.$api('/Execute.do',{action:"device.bindAgentStaff",msgseq:msgseq}).then(function(r){
 	    			if(r.errorCode==0){
 	    				that.msglist[index].status=1;
@@ -119,7 +119,7 @@ export default{
 	    			}
 	    		})
 	    	};
-	    	if(this.$route.params.kind==4){
+	    	if(this.$route.params.kind==4){//成为老板的业务员
 	    		this.$api('/Execute.do',{action:"device.acceptAgentOffer",msgseq:msgseq}).then(function(r){
 	    			if(r.errorCode==0){
 	    				that.msglist[index].status=1;

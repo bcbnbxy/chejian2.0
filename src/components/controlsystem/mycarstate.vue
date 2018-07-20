@@ -1,18 +1,20 @@
 <template>
 <div class="mycarstate-wrap">
 	<ul>
-		<li><span>碰撞</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
-		<li><span>保养</span><p><span>滤清器</span><img src="../../assets/img/my/tishi.png"/></p></li>
-		<li><span>超速</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
-		<li><span>震动</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
-		<li><span>电压过低</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
-		<li><span>车辆熄火</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
-		<li><span>车辆启动</span><p><span></span><img src="../../assets/img/my/tishi1.png"/></p></li>
+		<li v-for="(item,index) in warnCounts" :key="index"><span>{{item&&item.warntype}}</span><p><span :style="item&&item.count>0?'color:#ff0000':'color:#1aad19'">{{item&&item.count}}次</span></p></li>
 	</ul>
 </div>
 </template>
 
 <script>
+export default{
+	props:['warnCounts'],
+	watch:{
+		warnCounts(){
+			console.log(this.warnCounts);
+		}
+	}
+}
 </script>
 
 <style scoped>

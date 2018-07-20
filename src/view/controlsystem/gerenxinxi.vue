@@ -80,7 +80,21 @@ export default{
 		addconsumer:function(){
 		    var that=this;
 			if(parseInt(localStorage.getItem('identity'))==1){
-				console.log('业务员进入了此页面')
+				this.$api('/Execute.do',{action:'device.sendAgentMessage',customerseq:this.$route.params.personal.userseq}).then(function(r){
+					if(r.errorCode==0){
+						that.$toast({
+							message:'邀请已发送',
+							position:'bottom',
+							duration:1500
+						})
+					}else{
+						that.$toast({
+							message:r.errorMessage,
+							position:'bottom',
+							duration:1500
+						})
+					}
+				})
 			}else if(parseInt(localStorage.getItem('identity'))==2){
 				this.$api('/Execute.do',{action:'device.sendOfferMessage',customerseq:this.$route.params.personal.userseq}).then(function(r){
 					if(r.errorCode==0){

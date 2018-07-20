@@ -9,14 +9,14 @@
 		<div class="citypicker-contaire-title"><span v-show="provice">{{provice}}</span><span v-show="city">{{city}}</span><span v-show="!city">请选择</span></div>
 		<div class="citypicker-provice">
 			<mt-index-list>
-			    <mt-index-section :index="item.name" v-for="(item,Index) in datalist" :key="item.name">
-			        <div @click="getprovice(item.name,index,Index)"  v-for="(item,index) in item.item" class="cell-content"  :key="item.name">
-			    	    <span :style="index==colorindex&&Index==currentindex?'color:#1989f5':''">{{item.name}}</span>
+			    <mt-index-section :index="item.initial" v-for="(item,Index) in datalist" :key="Index">
+			        <div @click="getprovice(item.pname,index,Index)"  v-for="(item,index) in item.provinces" class="cell-content"  :key="item.pname">
+			    	    <span :style="index==colorindex&&Index==currentindex?'color:#1989f5':''">{{item.pname}}</span>
 			        </div>
 			    </mt-index-section>
 			</mt-index-list>
 			<ul class="citypicker-city" :class="cityactive?'citypicker-city-active':''">
-				<li v-for="(item,index) in infolist" @click="getcity(item.name,index)" :style="index==cityindex?'color:#1989f5':''">{{item.name}}</li>
+				<li v-for="(item,index) in infolist" @click="getcity(item.cname,index)" :style="index==cityindex?'color:#1989f5':''">{{item.cname}}</li>
 			</ul>
 		</div>
 	</div>
@@ -25,20 +25,7 @@
 
 <script>
 export default{
-	props:{
-		id:{
-			type:String,
-			default(){
-				return {}
-			}
-		},
-		flag:{
-			type:Boolean,
-			default(){
-				return {}
-			}
-		}
-	},
+	props:['id','flag','cityInfo'],				
 	data(){
 		return {
 			cityactive:false,
@@ -48,78 +35,16 @@ export default{
 			infolist:[],
 			provice:'',
 			city:'',
-			datalist:[{
-				name:'A',
-				item:[{
-					name:'Aaron',
-					info:[{name:'Aaron1'},{name:'Aaron2'},{name:'Aaron3'}]
-				},{
-					name:'Alden',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Austin',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				}]
-			},{
-				name:'B',
-				item:[{
-					name:'Baldwin',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Braden',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				}]
-			},{
-				name:'C',
-				item:[{
-					name:'Carl',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Chandler',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Clyde',
-					info:[{name:'Aldensd'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Car',
-					info:[{name:'Aldends'},{name:'Alden2'},{name:'Alden3'}]
-				}]
-			},{
-				name:'D',
-				item:[{
-					name:'David',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Dad',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Document',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Double',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				}]
-			},{
-				name:'E',
-				item:[{
-					name:'Edgar',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Elton',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Element',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				},{
-					name:'Eight',
-					info:[{name:'Alden'},{name:'Alden2'},{name:'Alden3'}]
-				}]
-			}]
+			datalist:[]
+		}
+	},
+	watch : {
+		cityInfo(){
+			this.datalist=this.cityInfo;
 		}
 	},
 	methods:{
 		onfilter(){
-//		console.log(111);
 			this.$emit("listenTochildEvent");
 		},
 		getprovice:function(value,index,index1){
@@ -128,9 +53,9 @@ export default{
 			this.currentindex=index1;
 			this.provice=value;
 			for (var i=0;i<this.datalist.length;i++){
-				for(var j=0;j<this.datalist[i].item.length;j++){
-					if(value==this.datalist[i].item[j].name){
-						this.infolist=this.datalist[i].item[j].info;
+				for(var j=0;j<this.datalist[i].provinces.length;j++){
+					if(value==this.datalist[i].provinces[j].pname){
+						this.infolist=this.datalist[i].provinces[j].cities;
 					}
 				}
 			}

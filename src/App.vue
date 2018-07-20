@@ -18,32 +18,21 @@
 //			}		
 //	}, false );
 export default {
-  name: 'App',
-   created(){
+    name: 'App',
+        created(){
 //	 localStorage.removeItem('loginInfo');
-			//localStorage.removeItem('CITY_DATA')
-//	 console.log(localStorage.getItem('loginInfo'))
 //	 	this.checklogin();
-//	 	this.getCityInfo();
-  },
-  methods:{
-  	//判断用户的登录状态
-  	checklogin:function(){
-//		  localStorage.removeItem('loginInfo');
-  		if(localStorage.getItem('loginInfo')){
-  				this.$router.push('/home');
-  			}else{
-  				this.$router.push('/');
-  			}  		
-  	},
-  	getCityInfo:function(){
-   	this.$api('/Execute.do',{action:"provinces"}).then(function(r){
-	   		if(r.errorCode=='0'){
-	   			 localStorage.setItem('CITY_DATA',JSON.stringify(r.data.provinces))
-	   		}
-	   	})
+    },
+	  methods:{
+	  	//判断用户的登录状态
+	  checklogin:function(){
+		    if(localStorage.getItem('loginInfo')){
+				    this.$router.push('/home');
+			  }else{
+				    this.$router.push('/');
+	  			  }  		
+	  	  },
 	  }
-  }
 }
 </script>
 

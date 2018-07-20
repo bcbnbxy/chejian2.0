@@ -71,10 +71,9 @@ export default{
 		getUserInfo:function(){
 			let that=this;
 			this.$api('/Execute.do',{action:'userInfo;device.agentOrStaff;messageCounts',userseq:this.userInfo.userseq}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode == '0'){
 					that.userInfo=r.data.userInfo;					
-					localStorage.setItem('identity',2)//r.data.agentOrStaff
+					localStorage.setItem('identity',r.data.agentOrStaff)//r.data.agentOrStaff
 					if(r.data.messageCounts==null||r.data.messageCounts==undefined||r.data.messageCounts==''){
 						that.showmsg=false
 					}else{

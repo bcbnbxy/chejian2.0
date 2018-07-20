@@ -23,7 +23,7 @@ export default{
 	components:{Workshop_all},
 	data(){
 		return {
-			customers:[{userInfo:{headphoto:'headphoto/90931ee5-55a4-49f1-84c6-368be4f23524.png',nickname:'懒先生'},staff:{staffname:'石磊'}},{userInfo:{headphoto:'headphoto/90931ee5-55a4-49f1-84c6-368be4f23524.png',nickname:'懒先生'},staff:{staffname:'石磊'}}],
+			customers:[],
 			customerCount:0,
 			pnum:0,
 			psize:12,
@@ -44,8 +44,8 @@ export default{
 						that.allLoaded=true;
 					}else{
 						that.allLoaded=false;
+						that.pnum=r.data.customers[r.data.customers.length-1].userseq;
 					}
-					that.pnum=r.data.customers[r.data.customers.length-1].userseq;
 				}
 			})
 		},

@@ -3,22 +3,62 @@
 	<div class="managecustomers-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 		<span>管理我的客户</span>
-		<b>搜索</b>
 	</div>
 	<div class="managecustomers-wrap-list">
 		<ul>
-			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户01</span></router-link>
-			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户02</span></router-link>
-			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户03</span></router-link>
-			<router-link tag="li" to="/customerinfo"><img src="../../assets/img/faxianimg/avatar.png"/><span>客户04</span></router-link>
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+				<router-link tag="li" :to="{name:'customerinfo',params:{customerinfo:item}}" v-for="(item,index) in customerlist" :key="index"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></router-link>						
+	   	    </mt-loadmore>	
 		</ul>
 	</div>
 </div>
 </template>
 
 <script>
-</script>
+export default{
+	data(){
+		return{
+			psize:13,
+			pnum:0,
+			allLoaded:false,
+			customerlist:[],
+		}
+	},
+	methods:{
+		getcustomers(minvalue,pageSize){//获取客户列表
+			var that=this;
+			this.$api('/Execute.do',{action:'device.customers',minvalue:minvalue,pageSize:pageSize}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.customers==null||r.data.customers==undefined||r.data.customers==""){
+						return;
+					}else{
+						that.customerlist=that.customerlist.concat(r.data.customers);
+						if(r.data.customers.length<13){
+							that.allLoaded=true;
+						}else{
+							that.allLoaded=false;
+							that.pnum=r.data.customers[r.data.customers.length-1].userseq;
+						}
+					}					
+				}
+			})
+		},
+		loadTop(){//下拉刷新
+			this.customerlist=[];
+			this.getcustomers(0,this.psize);
+			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		},
+		loadBottom(){//上拉加载
+			this.getcustomers(this.pnum,this.psize);
+	    	this.$refs.loadmore.onBottomLoaded();	 
+		}
 
+	},
+	mounted(){
+		this.getcustomers(this.pnum,this.psize);
+	}
+}
+</script>
 <style scoped>
 .managecustomers-wrap{
 	width:100%;
@@ -37,14 +77,12 @@
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover;
+	position: relative;
 }
 .managecustomers-wrap-head i{
-	float:left;
-}
-.managecustomers-wrap-head b{
-	float:right;
-	font-weight: 400;
-	font-size:0.44rem;
+	position:absolute;
+	left:0.5rem;
+	font-size:0.6rem;
 }
 .managecustomers-wrap-list{
 	flex:1;

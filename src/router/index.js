@@ -180,6 +180,7 @@ export default new Router({
 		component:Sysmsg
 	},{
 		path:'/controlsystem_my',
+		name:'controlsystem_my',
 		component:controlsystem_My
 	},{	
 		name:'adduser',
@@ -187,6 +188,7 @@ export default new Router({
 		component:Adduser
 	},{
 		path:'/consumer',
+		name:'consumer',
 		component:Consumer
 	},{
 		path:'/workshop',
@@ -218,6 +220,7 @@ export default new Router({
 		component:Infoaudit
 	},{
 		path:'/customerinfo',
+		name:'customerinfo',
 		component:Customerinfo
 	},{
 		path:'/data',
