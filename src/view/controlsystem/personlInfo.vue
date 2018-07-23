@@ -23,10 +23,6 @@
 			<p>备注</p>
 			<p><span>{{remark}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
-		<!--<div class="personlInfo-list-item" @click="changesalary">
-			<p>工薪</p>
-			<p><span>{{salary}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
-		</div>-->
 		<div class="personlInfo-list-item" @click="popupVisible=!popupVisible">
 			<p>所属团队</p>
 			<p><span>{{group}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>

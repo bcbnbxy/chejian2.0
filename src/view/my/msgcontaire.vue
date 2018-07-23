@@ -131,8 +131,20 @@ export default{
 		    			})
 	    			}
 	    		})
+	    	};
+	    	if(this.$route.params.kind==2){//同意成为车友
+	    		this.$api('/Execute.do',{action:"addMyFriend",msgseq:msgseq}).then(function(r){
+	    			if(r.errorCode==0){
+	    				that.msglist[index].status=1;
+	    			}else{
+	    				that.$toast({
+		    				message:r.errorMessage,
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+	    			}
+	    		})
 	    	}
-	    	
 	    },
 	    refuse(index,msgseq){//拒绝成为业务员
 	    	var that=this;

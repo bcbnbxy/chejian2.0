@@ -2,59 +2,31 @@
 <div class="chat-wrap">
 	<div class="chat-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-		<span>哒哒</span>
+		<span>{{this.$route.params.nickname}}</span>
 	</div>
 	<div class="chat-wrap-chatlist">
-		<ul>
-			<li>
-			   	<span class='twoimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='twox'></span>
-			   	<span class='chattwo'>是啊，好久不见了，明天会展中心举办车展，我这里有几张票，一起去看一下，意下如何？？哈哈。</span>
-		    </li>
-		    <li>
-			   	<span class='oneimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='onex'></span>
-			   	<span class='chatone'>哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?454646541313131sd</span>
-		    </li>
-		    <li>
-			   	<span class='twoimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='twox'></span>
-			   	<span class='chattwo'>是啊，好久不见了，明天会展中心举办车展，我这里有几张票，一起去看一下，意下如何？？哈哈。</span>
-		    </li>
-		    <li>
-			   	<span class='oneimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='onex'></span>
-			   	<span class='chatone'>哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?454646541313131sd</span>
-		    </li>
-		    <li>
-			   	<span class='twoimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='twox'></span>
-			   	<span class='chattwo'>是啊，好久不见了，明天会展中心举办车展，我这里有几张票，一起去看一下，意下如何？？哈哈。</span>
-		    </li>
-		    <li>
-			   	<span class='oneimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='onex'></span>
-			   	<span class='chatone'>哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?454646541313131sd</span>
-		    </li>
-		    <li>
-			   	<span class='twoimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='twox'></span>
-			   	<span class='chattwo'>是啊，好久不见了，明天会展中心举办车展，我这里有几张票，一起去看一下，意下如何？？哈哈。</span>
-		    </li>
-		    <li>
-			   	<span class='oneimg'><img src="../../assets/img/faxianimg/avatar.png"/></span>
-			   	<span class='onex'></span>
-			   	<span class='chatone'>哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?哈喽,在吗?454646541313131sd</span>
-		    </li>
-		</ul>
+		<div class="chat-wrap-chatlist-contaire">
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+				<ul v-for="(item,index) in chats" :key="index">
+					<li v-if="userseq!=item.senderseq">
+					   	<span class='twoimg'><img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
+					   	<span class='twox'></span>
+					   	<span class='chattwo'>{{item.content}}</span>
+				   </li>
+				   <li v-else>
+					   	<span class='oneimg'><img :src="item.touser.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.touser.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
+					   	<span class='onex'></span>
+					   	<span class='chatone'>{{item.content}}</span>
+				    </li>
+			   </ul>
+		   </mt-loadmore>
+		</div>
 	</div>
-	<div class="chat-wrap-footer" :class="footSboxshow?'footSboxshow':''">
+	<div class="chat-wrap-footer">
 		<div class="boxinput">
-	    	<i class="iconfont icon-jiahao1" @click="toggleNone" :style="footSboxshow?'color:#1989f5':''"></i><input type="text"/><span>发送</span>
-	    </div>
-	    <div class="footSbox">
-	    	<p><img src="../../assets/img/friends/picture.png"/><span>图片</span></p><p><img src="../../assets/img/friends/canmer.png"/><span>相机</span></p>	    	
-	    </div>
+	    	<input type="text" v-model="content"/>
+	    	<button :style="content?'':'color:#ccc;'" @click="content&&send()">发送</button>
+	   </div>
 	</div>
 </div>
 </template>
@@ -63,13 +35,73 @@
 export default{
 	data(){
 		return {
-			footSboxshow:false
+			userseq:JSON.parse(localStorage.getItem('loginInfo')).userseq,
+			chats:[],
+			psize:15,
+			pnum:0,
+			allLoaded:false,
+			content:'',
 		}
 	},
 	methods:{
-		toggleNone(){
-			this.footSboxshow=!this.footSboxshow;
+		getchats(minvalue,psize){//获取聊天明细列表
+			var that=this;
+			this.$api('/Execute.do',{action:'chating.chats',chatgroup:this.$route.params.chatgroup,minvalue:minvalue,pageSize:psize,touserseq:this.$route.params.userseq}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.chats==null||r.data.chats==undefined||r.data.chats==''){
+						return ;
+					}else{
+						that.chats=r.data.chats;
+						if(r.data.chats.length<10){
+							that.allLoaded=true;
+						}else{
+							that.allLoaded=false;
+							that.num=r.data.chats[r.data.chats.length-1].chatseq
+						}
+					}
+				}
+				
+			})			
+		},
+		loadTop(){//下拉刷新
+			this.chats=[],
+			this.getchats(0,this.psize);
+			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		},
+		loadBottom(){//上拉加载
+			this.getchats(this.pnum,this.psize);
+	    	this.$refs.loadmore.onBottomLoaded();
+		},
+		send(){//发送消息
+			var that=this;
+			this.$api('/Execute.do',{action:'chating.addChat',content:this.content,touserseq:this.$route.params.chatgroup}).then(function(r){
+				if(r.errorCode==0){
+					that.$toast({
+						message:'已发送',
+						position:'bottom',
+						duration:1500
+					})
+					let obj={};
+					obj.touser={};
+					obj.senderseq=that.userseq;
+					obj.content=that.content;
+					obj.createtime=new Date().getTime();
+					obj.touser.headphoto=JSON.parse(localStorage.getItem('loginInfo')).headphoto;
+					obj.touser.nickname=JSON.parse(localStorage.getItem('loginInfo')).nickname;
+					that.chats.push(obj);
+					that.content="";
+				}else{
+					that.$toast({
+						message:r.errorCode,
+						position:'bottom',
+						duration:1500
+					})
+				}
+			})
 		}
+	},
+	created(){
+		this.getchats(this.pnum,this.psize);
 	}
 }
 </script>
@@ -109,10 +141,10 @@ export default{
 	padding-top:0.3rem;
 	padding-bottom:1.6rem;
 }
-.chat-wrap-chatlist>ul{
+.chat-wrap-chatlist-contaire{
 	padding:0 0.5rem;
 }
-.chat-wrap-chatlist>ul li{ 
+.chat-wrap-chatlist-contaire li{ 
 	display:block; 
 	position:relative; 
 	overflow:hidden; 
@@ -127,6 +159,7 @@ export default{
 .oneimg img{
 	width:1.2rem;
 	height:1.2rem;
+	border-radius: 50%;
 }
 .onex{
 	display:block;
@@ -159,6 +192,7 @@ export default{
 .twoimg img{
 	width:1.2rem;
 	height:1.2rem;
+	border-radius: 50%;
 }
 .twox{
 	display:block;
@@ -188,12 +222,7 @@ export default{
 	overflow:hidden;
 	position: absolute;
 	left:0;
-	bottom:-4rem;
-	transition: all 0.3s;
-}
-.footSboxshow{
-	bottom:0 !important;
-	transition: all 0.3s !important;
+	bottom:0;
 }
 .boxinput{
 	overflow:hidden;
@@ -205,44 +234,18 @@ export default{
 	align-items: center;
 	padding:0 0.5rem;
 }
-.boxinput .icon-jiahao1{
-	font-size:1rem;
-	color:#999;
-}
 .boxinput input{
 	flex:1;
 	height:1rem;
 	border:1px solid #ddd;
 	border-radius: 5px;
 	background: #fff;
-	margin:0 0.5rem;
+	margin-right:0.5rem;
 	font-size:0.38rem;
 }
-.boxinput span{
-	font-size:0.38rem;
-	color:#1989f5;
-}
-.footSbox{
-	height:4rem;
-	padding-left:1.3rem;
-	padding-top:0.5rem;	
-}
-.footSbox p{
-	display: inline-block;
-	width:1.6rem;
-	line-height: 1;
-	margin-right:1.15rem;
-}
-.footSbox p img{
-	width:1.6rem;
-	height:1.6rem;
-	margin-bottom:0.3rem;
-	display: block;
-}
-.footSbox p span{
-	font-size:0.38rem;
-	color:#222;
-	display: block;
-	text-align: center;
+.boxinput button{
+	font-size:0.44rem;
+	background: none;
+	color:#1989F5;
 }
 </style>

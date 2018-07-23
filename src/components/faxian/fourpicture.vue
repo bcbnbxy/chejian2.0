@@ -2,7 +2,7 @@
 	<div class="fourpicture" id="fourpicture">
 		<div class="fourpicture-avatar">
 			<div class="fourpicture-avatar-left"><router-link tag="div" to="/homepage"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg"/></router-link><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
-			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!favorite" @click="addMyFavorite(datalist.userseq)">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;' @click="removeMyFavorit(datalist.userseq)">已关注</p></div>
+			<div class="fourpicture-avatar-right" v-show="userseq!=datalist.userseq&&!datalist.owner.friend"><p @click="addfriend(datalist.userseq)">加好友</p></div>
 		</div>
 		<div class="fourpicture-content">
 			<div class="fourpicture-box" v-if="datalist.images">
@@ -18,7 +18,6 @@
 		<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
 			<li @click="showshare">转发</li>
 			<li @click="popupmeanreport">举报</li>
-			<li>减少推荐此类内容</li>
 		</ul>
 	</div>
 </template>
@@ -137,12 +136,16 @@
 			        });
 				}
 			},
-			addMyFavorite(userseq){//关注
+			addfriend(userseq){//添加好友
 				var that=this;
 				if(localStorage.getItem('loginInfo')){
-					this.$api('/Execute.do',{action:'addMyFavorite',favorite:userseq}).then(function(r){
+					this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
 						if(r.errorCode==0){
-							that.favorite=!that.favorite;
+							that.$toast({
+				          		message:'消息已发送',
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
 						}else{
 							that.$toast({
 				          		message:r.errorMessage,
@@ -168,41 +171,6 @@
 			          }
 			        });
 				}
-				
-			},
-			removeMyFavorit(userseq){//取消关注
-				var that=this;
-				if(localStorage.getItem('loginInfo')){					
-					this.$api('/Execute.do',{action:'removeMyFavorite',favorite:userseq}).then(function(r){
-						console.log(JSON.stringify(r));
-						if(r.errorCode==0){
-							that.favorite=!that.favorite;
-						}else{
-							that.$toast({
-				          		message:r.errorMessage,
-					            position: 'bottom',
-			  				    duration: 1500
-				            });
-						}
-					})
-				}else{
-					MessageBox.confirm('', {
-				        message: '您还没有登陆，去登陆',
-				        showConfirmButton:true,
-				        showCancelButton:true,
-				        confirmButtonText:'确定',
-				        cancelButtonText:'取消'
-			        }).then(action => {
-			          if (action == 'confirm') {
-			            	that.$router.push('/bootPage')
-			          }
-			        }).catch(err => {
-			          if (err == 'cancel') {
-			            console.log('123');
-			          }
-			        });
-				}
-				
 			}
 		}
 	}

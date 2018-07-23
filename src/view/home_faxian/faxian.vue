@@ -1,45 +1,29 @@
 <template>
 <div class="faxian-wrap">
-		<div class="faxianhead">
-			<router-link tag="p" to="/search"><i class="iconfont icon-sousuo"></i></router-link>
-			<p class="tabs-p"><span @click="toggle(index ,tab.view)" v-for="(tab,index) in tabs" :class="{active:active===index}">{{tab.type}} </span></p>
-			<p @click="showpictextvideo"><i class="iconfont icon-zhaoxiangji" v-show="currentView==='dynamicslist'"></i></p>
-			<div class="pic-text-video" v-show="$store.state.faxian.pic_text_video">
-				<router-link :to="{name:'upload',params:{id:'picture'}}" tag="p">文图</router-link>
-				<router-link :to="{name:'upload',params:{id:'video'}}" tag="p">视频</router-link>
-			</div>
+	<div class="faxianhead">
+		<span>动态</span>
+		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>
+		<div class="pic-text-video" v-show="$store.state.faxian.pic_text_video">
+			<router-link :to="{name:'upload',params:{id:'picture'}}" tag="p">文图</router-link>
+			<router-link :to="{name:'upload',params:{id:'video'}}" tag="p">视频</router-link>
 		</div>
+	</div>
 	<div class="faxianlist" :style="{'-webkit-overflow-scrolling': scrollMode}">
-		<div class="faxian-dynamicslist" v-show="currentView=='dynamicslist'">			
+		<div class="faxian-dynamicslist">			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 		     		<dynamicslist :callbackdata="datalist"></dynamicslist>
 		    </mt-loadmore>
-		</div>
-		<div class="faxian-attention" v-show="currentView=='Attention'">
-			<Attention></Attention>
 		</div>
 	</div>
 </div>
 </template>
 <script>
 import Dynamicslist from '@/components/search/dynamics'
-import Attention from '@/components/faxian/attention'
+
 export default{
-	components:{Dynamicslist,Attention},
+	components:{Dynamicslist},
 	data(){
 		return {
-			currentView: 'dynamicslist',
-			active: 0,
-			index:0,
-			tabs: [
-		        {
-		        type: '最新',
-		        view: 'dynamicslist'
-		      },{
-		        type: '关注',
-		        view: 'Attention'
-		      }
-    		],
     		datalist:[],                
 	        pageNo:0,
 	        pageSize:5,
@@ -48,10 +32,6 @@ export default{
 		}
 	},
 	methods:{
-		toggle(i,v) {
-	      this.active = i
-	      this.currentView = v
-	   },
 		showpictextvideo:function(){
 			this.$store.commit('changepopupmean');
 			this.$store.commit('changepictextvideo');
@@ -60,14 +40,24 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs'}).then(function(r){
 				if(r.errorCode=="0"){
-					that.datalist=that.datalist.concat(r.data.blogs);
-					if(r.data.blogs.length<5){
-						that.allLoaded=true;
-						return;
+					if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
+						that.$toast({
+				            message:'暂无数据',
+				            position: 'bottom',
+		  				    duration: 1500
+				        });
+				        that.allLoaded=true;
+						return ;
 					}else{
-						that.allLoaded=false;
-					}
-					that.pageNo=r.data.blogs[r.data.blogs.length-1].blogseq;
+						that.datalist=that.datalist.concat(r.data.blogs);
+						if(r.data.blogs.length<5){
+							that.allLoaded=true;
+							return;
+						}else{
+							that.allLoaded=false;
+							that.pageNo=r.data.blogs[r.data.blogs.length-1].blogseq;
+						}						
+					}					
 				}else{
 					that.$toast({
 			          message:r.errorMessage,
@@ -77,7 +67,7 @@ export default{
 				}
 			})
 		},
-		 loadTop:function() { //组件提供的下拉触发方法
+		loadTop:function() { //组件提供的下拉触发方法
 	        //下拉刷新
 	        this.datalist=[];
 	        this.gettrends(0,5);
@@ -100,6 +90,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 .faxianlist{
 	flex:1;
@@ -107,36 +98,20 @@ export default{
 }
 .faxianhead{
 	height:1.32rem;
-	background: url(../../assets/img/faxianimg/headbg.png) center repeat;
-	width:100%;
-	padding:0 0.48rem;
-	line-height:1.32rem;
-	text-align: center;
+	font-size:0.56rem;
 	color:#fff;
-	font-size:0.48rem;
+	width:100%;
+	padding:0 0.5rem;
+	text-align: center;
+	line-height:1.32rem;
+	background-image:url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover;
 	position: relative;
 }
-.faxianhead>p:nth-child(1){
+.faxianhead .icon-zhaoxiangji{
 	position: absolute;
-	left:0.48rem;
-	top:0;
-}
-.faxianhead>p:nth-child(3){
-	position: absolute;
-	right:0.48rem;
-	top:0;
-}
-.faxianhead>p i{
-	font-size:0.66rem;
-}
-.faxianhead>p span{
-	padding:0 0.36rem;
-	display: inline-block;
-	height:1.32rem;
-	line-height:1.32rem;	
-}
-.faxianhead .tabs-p span:nth-child(1){
-	margin-right:0.48rem;
+	right:0.5rem;
+	font-size:0.7rem;
 }
 .pic-text-video{
 	width:6rem;

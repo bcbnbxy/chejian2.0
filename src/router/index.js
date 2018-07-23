@@ -117,6 +117,7 @@ export default new Router({
     	}]
     },{
 		path:'/homepage',
+		name:'homepage',
 		component:Homepage
 	},{
 		path:'/detailpage',
@@ -278,6 +279,7 @@ export default new Router({
 		component:Devicelist
 	},{
 		path:'/friends/chat',
+		name:'chat',
 		component:Chat
 	}
   ]

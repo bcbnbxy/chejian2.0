@@ -134,8 +134,8 @@ export default{
 	position: relative;
 }
 .mint-indexlist{
-flex:1;
-overflow: auto;
+	flex:1;
+	overflow: auto;
 }
 .mint-indexlist-nav{
 	background: none;
