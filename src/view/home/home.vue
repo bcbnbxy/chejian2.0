@@ -1,7 +1,9 @@
 <template>
 	<div class="home-wrap">
 		<div class="home-main">
+			<keep-alive>
 			<router-view></router-view>
+			</keep-alive>
 		</div>
 		<footer class="footer">
 			<router-link to="/homeindex" tag="div" ><p class="bghome"></p><span>首页</span></router-link>

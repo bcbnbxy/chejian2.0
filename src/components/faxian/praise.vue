@@ -7,7 +7,11 @@
 		</div>
 		<div class="praise-list">
 			<ul>
-				<li v-for="(item,index) in praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/faxianimg/avatar.png')"/><span>{{item.user.nickname}}</span><p v-show="!(userseq==item.userseq)"><span v-if="item.user.favorite" class="yiguanzhu">已关注</span><span v-else class="jiaguanzhu" @click="addMyFavorite()">+关注</span></p></li>
+				<li v-for="(item,index) in praisers">
+					<img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/>
+					<span>{{item.user.nickname}}</span>
+					<p v-show="userseq!=item.userseq&&!item.user.friend" @click="addfriend(item.userseq)">加好友</p>					
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -19,7 +23,7 @@ export default {
 		praisers:{
 			type:Array,
 			default(){
-				return {}
+				return []
 			}
 		}
 	},
@@ -32,32 +36,68 @@ export default {
 	methods:{
 		praisehidden(){
 			this.$emit('praiseshow')
-		}
+		},
+		addfriend(userseq){//添加好友
+				var that=this;
+				if(localStorage.getItem('loginInfo')){
+					this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
+						if(r.errorCode==0){
+							that.$toast({
+				          		message:'消息已发送',
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+			}
 	}
 }
 </script>
 
 <style>
-	.praise-wrap{
-		background:#f7f7f7;
-		width:100%;
-		height:100%;
-		display: flex;
-		display: -webkit-flex;
-		flex-direction: column;
-	}
-	.praise-head{
-		width: 100%;
-		height:1.32rem;
-		background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
-		padding:0.21rem 0.5rem;
-		font-size:0.42rem;
-		color:#fff;
-		display: flex;
-		display: -webkit-flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+.praise-wrap{
+	background:#f7f7f7;
+	width:100%;
+	height:100%;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+}
+.praise-head{
+	width: 100%;
+	height:1.32rem;
+	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
+	padding:0.21rem 0.5rem;
+	font-size:0.42rem;
+	color:#fff;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	align-items: center;
+}
 .praise-head span:nth-child(2){
 	font-size:0.56rem;
 }
@@ -85,6 +125,7 @@ export default {
 .praise-list>ul li img{
 	width:1rem;
 	height:1rem;
+	border-radius: 50%;
 	margin-right:0.52rem;
 }
 .praise-list>ul li>span{
@@ -93,20 +134,10 @@ export default {
 	flex:1;
 }
 .praise-list>ul li>p{
-	font-size:0.34rem;
-}
-.praise-list>ul li>p .yiguanzhu{
-	padding:0.15rem 0.33rem;
-	border:1px solid #ff481d;
-	color:#ff481d;
-	border-radius: 15px;
-	display: block;
-}
-.praise-list>ul li>p .jiaguanzhu{
-	padding:0.2rem 0.46rem;
-	display: block;
-	background:#ff481d ;
+	padding:0.23rem 0.36rem;
+	background: #ff481d;
 	color:#fff;
+	font-size:0.4rem;
 	border-radius: 15px;
 }
 </style>

@@ -96,6 +96,10 @@ export default{
 			       that.$store.commit('getloginInfo',r.data.login)
 			       that.$router.push('/home');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));
+			       that.$store.commit('setblog_userseq');
+			       that.$store.commit('setblog_touserseq',null);
+			       that.$store.commit('setblog_friend',null);
+			       that.$store.commit('setblog_remark',null);			       
 				}else{
 					that.$toast({
 			          message: r.errorMessage,

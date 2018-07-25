@@ -4,7 +4,13 @@ export default {
 		popupmean_more:-1,
 		report:false,
 		pic_text_video:false,
-		share:false
+		share:false,
+		blogs:{
+			userseq:null,//用户自己的seq
+			remark:null,//
+			touserseq:null,
+			friend:null//是否是好友
+		}
 	},
 	mutations: {
 		changepopupmean(state){
@@ -21,6 +27,18 @@ export default {
 		},
 		changeshare(state){
 			state.share=!state.share;
+		},
+		setblog_remark(state,remark){
+			state.blogs.remark=remark
+		},
+		setblog_touserseq(state,touserseq){
+			state.blogs.touserseq=touserseq
+		},
+		setblog_friend(state,friend){
+			state.blogs.friend=friend
+		},
+		setblog_userseq(state){
+			state.blogs.userseq=JSON.parse(localStorage.getItem('loginInfo'))?JSON.parse(localStorage.getItem('loginInfo')).userseq:null
 		}
 	}
 }

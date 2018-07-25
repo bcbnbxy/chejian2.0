@@ -14,7 +14,7 @@
 					   	<span class='chattwo'>{{item.content}}</span>
 				   </li>
 				   <li v-else>
-					   	<span class='oneimg'><img :src="item.touser.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.touser.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
+					   	<span class='oneimg'><img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
 					   	<span class='onex'></span>
 					   	<span class='chatone'>{{item.content}}</span>
 				    </li>
@@ -47,7 +47,9 @@ export default{
 		getchats(minvalue,psize){//获取聊天明细列表
 			var that=this;
 			this.$api('/Execute.do',{action:'chating.chats',chatgroup:this.$route.params.chatgroup,minvalue:minvalue,pageSize:psize,touserseq:this.$route.params.userseq}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
+					console.log(JSON.stringify(r));
 					if(r.data.chats==null||r.data.chats==undefined||r.data.chats==''){
 						return ;
 					}else{
@@ -74,7 +76,7 @@ export default{
 		},
 		send(){//发送消息
 			var that=this;
-			this.$api('/Execute.do',{action:'chating.addChat',content:this.content,touserseq:this.$route.params.chatgroup}).then(function(r){
+			this.$api('/Execute.do',{action:'chating.addChat',content:this.content,touserseq:this.$route.params.userseq,chattype:0,chatgroup:0,}).then(function(r){
 				if(r.errorCode==0){
 					that.$toast({
 						message:'已发送',
@@ -82,12 +84,12 @@ export default{
 						duration:1500
 					})
 					let obj={};
-					obj.touser={};
+					obj.sender={};
 					obj.senderseq=that.userseq;
 					obj.content=that.content;
 					obj.createtime=new Date().getTime();
-					obj.touser.headphoto=JSON.parse(localStorage.getItem('loginInfo')).headphoto;
-					obj.touser.nickname=JSON.parse(localStorage.getItem('loginInfo')).nickname;
+					obj.sender.headphoto=JSON.parse(localStorage.getItem('loginInfo')).headphoto;
+					obj.sender.nickname=JSON.parse(localStorage.getItem('loginInfo')).nickname;
 					that.chats.push(obj);
 					that.content="";
 				}else{

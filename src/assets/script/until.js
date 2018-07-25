@@ -39,6 +39,12 @@ function buildSign (params, key){
 		  for(var i = 0; i < names.length; i++){
 		    var name = names[i];
 		    var value = params[name];
+		    if(value==undefined){
+		    	continue;
+		    }
+		    if(name=='__sign__'){
+		    	continue;
+		    }
 		    str += name;
 		    str += value;
 		    str += "&";

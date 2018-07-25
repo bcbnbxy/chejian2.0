@@ -4,16 +4,16 @@
 			<div class="homepage-wrap-headtop">
 				<span @click="$router.go(-1)">返回</span>
 				<span>主页</span>
-				<span @click="gochat" v-show="$route.params.friends">私信</span>
+				<span @click="gochat" v-show="friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq">私信</span>
 			</div>
 			<div class="homepage-wrap-headbottom">
 				<img :src="headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 				<div class="homepage-wrap-headbottom-info">
 					<p>{{nickname}}</p>
 					<p>{{descript}}</p>
-					<p @click="addmarker" v-show="$route.params.friends"><span>{{remarker}}</span><i class="iconfont icon-bianji"></i></p>
+					<p @click="addmarker" v-show="friend&&$store.state.faxian.blogs.userseq"><span>{{remarker}}</span><i class="iconfont icon-bianji"></i></p>
 				</div>
-				<p class="addfriend" v-show="!$route.params.friends">加好友</p>
+				<p class="addfriend" v-show="!friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq">加好友</p>
 			</div>
 		</div>
 		<div class="homepage-container">
@@ -22,10 +22,12 @@
 				<b></b>
 			</div>
 			<div class="homepage-container-bottom">
-				<div class="picture">
-					<picture></picture>
+				<div class="picture" v-show="currentView=='picture'">
+					<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">					
+						<Picture  :data="item" :index="index" v-for="(item,index) in picturelist" :key="index"></Picture>
+					</mt-loadmore>
 				</div>
-				<div class="video">
+				<div class="video" v-show="currentView=='video'">
 					<video></video>
 				</div>
 			</div>
@@ -33,17 +35,24 @@
 	</div>
 </template>
 <script>
-import picture from '@/components/faxian/fourpicture'
-import video from '@/components/faxian/faxianvideo'
+import Video from '@/components/faxian/faxianvideo'
+import Picture from '@/components/faxian/picture'
 import { MessageBox } from 'mint-ui';
 export default{
+	components:{Video,Picture},
 	data () {
 		return {
 			currentView:'picture',
-			remarker:this.$route.params.remark?this.$route.params.remark:'添加备注',
+			ownerseq:this.$store.state.faxian.blogs.touserseq,//点击的那个用户的唯一标示
 			headphoto:null,
+			friend:this.$store.state.faxian.blogs.friend,
+			remarker:this.$store.state.faxian.blogs.remark?this.$store.state.faxian.blogs.remark:'请添加备注',
 			nickname:null,
 			descript:null,
+			picturelist:[],
+			allLoaded:false,
+			pnum:0,
+			psize:5,
 			active: 0,
 			index:0,
 			lists:[
@@ -53,7 +62,7 @@ export default{
 				},
 				{
 					type:"视频",
-					view:'video'
+					view:'video',
 				}
 			]
 		}
@@ -74,8 +83,7 @@ export default{
 			}).then(({ value, action }) => {
 				if (action == 'confirm') {
 	            	if(value.trim().length>1){	            		
-	            		that.$api('/Execute.do',{action:'updateFriendInfo',friend:this.$route.params.userseq,remark:value}).then(function(r){
-	            			console.log(JSON.stringify(r));
+	            		that.$api('/Execute.do',{action:'updateFriendInfo',friend:this.ownerseq,remark:value}).then(function(r){
 	            			if(r.errorCode==0){
 	            				that.remarker=value;
 	            			}else{
@@ -96,8 +104,7 @@ export default{
 	    },
 	    getuserInfo(){//获取用户信息
 	    	var that=this;
-	    	this.$api('/Execute.do',{action:'userInfo',userseq:this.$route.params.userseq}).then(function(r){
-	    		console.log(JSON.stringify(r));
+	    	this.$api('/Execute.do',{action:'userInfo',userseq:this.ownerseq}).then(function(r){
 	    		if(r.errorCode==0){
 	    			if(r.data.userInfo==null||r.data.userInfo==undefined||r.data.userInfo==""){
 	    				that.$toast({
@@ -117,16 +124,81 @@ export default{
 	    				duration:1500
 	    			})
 	    		}
+	    	}).then(function(r){
+	    		that.$api('/Execute.do',{action:'blog.blogs',userseq:that.ownerseq,mediatype:0,minvalue:0,pageSize:5}).then(function(r){
+		    		if(r.errorCode==0){
+		    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
+		    				that.$toast({
+			    				message:"没有数据",
+			    				position:'bottom',
+			    				duration:1500
+			    			})
+		    				that.allLoaded=true;
+		    			}else{
+		    				that.picturelist=that.picturelist.concat(r.data.blogs);
+							if(r.data.blogs.length<5){
+								that.allLoaded=true;
+							}else{
+								that.allLoaded=false;
+								that.pnum=r.data.blogs[r.data.blogs.length-1].blogseq;
+							}
+		    			}
+		    		}else{
+		    			that.$toast({
+		    				message:r.errorMessage,
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+		    		}
+		    	})
 	    	})
 	    },
 	    gochat(){//跳往聊天页面
-	    	this.$router.replace({name:'chat',params:{chatgroup:0,nickname:this.remarker=='添加备注'?this.nickname:this.remarker,userseq:this.$route.params.userseq}});
-	    	console.log()
+	    	this.$router.push({name:'chat',params:{chatgroup:0,nickname:this.remarker=='添加备注'?this.nickname:this.remarker,userseq:this.ownerseq}});
+	    },
+	    getblogs(pnum,psize){//获取动态列表
+	    	var that=this;
+	    	this.$api('/Execute.do',{action:'blog.blogs',userseq:this.ownerseq,mediatype:0,minvalue:pnum,pageSize:psize}).then(function(r){
+	    		if(r.errorCode==0){
+	    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
+	    				that.$toast({
+		    				message:"没有数据",
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+	    				that.allLoaded=true;
+	    			}else{
+	    				that.picturelist=that.picturelist.concat(r.data.blogs);
+						if(r.data.blogs.length<5){
+							that.allLoaded=true;
+						}else{
+							that.allLoaded=false;
+							that.pnum=r.data.blogs[r.data.blogs.length-1].blogseq;
+						}
+						console.log(JSON.stringify(that.picturelist));
+	    			}
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})
+	    },
+	    loadTop:function() { //组件提供的下拉触发方法
+	        //下拉刷新
+	        this.picturelist=[];
+	        this.getblogs(0,5);
+	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    loadBottom:function(){
+	    	this.getblogs(this.pnum,5);
+	    	this.$refs.loadmore.onBottomLoaded();	    	
 	    }
 	},
 	mounted(){
-		this.getuserInfo()
-		console.log(this.$route.params.userseq);
+		this.getuserInfo();
 	}
 }
 </script>
@@ -139,6 +211,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 .homepage-wrap-head{
 	width:100%;
@@ -220,6 +293,10 @@ export default{
 .homepage-container{
 	flex:1;
 	background: #f7f7f7;
+	overflow: hidden;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
 }
 .homepage-container-center{
 	height:1.58rem;
@@ -250,5 +327,16 @@ export default{
 }
 .homepage-container-center .active{
 	border-bottom:1px solid #fff;
+}
+.homepage-container-bottom{
+	flex:1;
+	overflow:hidden;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+}
+.picture,.video{
+	flex:1;
+	overflow-y: auto;
 }
 </style>

@@ -1,8 +1,7 @@
 <template>
 	<div class="fourpicture" id="fourpicture">
 		<div class="fourpicture-avatar">
-			<div class="fourpicture-avatar-left"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg" @click="gohomepage(datalist.userseq,datalist.owner.friend)"/><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
-			<div class="fourpicture-avatar-right" v-show="($store.state.faxian.blogs.userseq!=datalist.userseq)&&(!datalist.owner.friend)"><p @click="addfriend(datalist.userseq)">加好友</p></div>
+			<div class="fourpicture-avatar-left"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg"/><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
 		</div>
 		<router-link tag="div" class="fourpicture-content" :to="{name:'detailpage',params:{datalist}}">
 			<div class="fourpicture-box" v-if="datalist.images&&datalist.images.length==1">
@@ -118,48 +117,6 @@
 			          }
 			        });
 				}
-			},
-			addfriend(userseq){//添加好友
-				var that=this;
-				if(localStorage.getItem('loginInfo')){
-					this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
-						if(r.errorCode==0){
-							that.$toast({
-				          		message:'消息已发送',
-					            position: 'bottom',
-			  				    duration: 1500
-				            });
-						}else{
-							that.$toast({
-				          		message:r.errorMessage,
-					            position: 'bottom',
-			  				    duration: 1500
-				            });
-						}
-					})
-				}else{
-					MessageBox.confirm('', {
-				        message: '您还没有登陆，去登陆',
-				        showConfirmButton:true,
-				        showCancelButton:true,
-				        confirmButtonText:'确定',
-				        cancelButtonText:'取消'
-			        }).then(action => {
-			          if (action == 'confirm') {
-			            that.$router.push('/bootPage')
-			          }
-			        }).catch(err => {
-			          if (err == 'cancel') {
-			            console.log('123');
-			          }
-			        });
-				}
-			},
-			gohomepage(touserseq,friend){
-				this.$router.push('/homepage')
-				this.$store.commit('setblog_touserseq',touserseq);
-				this.$store.commit('setblog_friend',friend);
-				this.$store.commit('setblog_remark',null);
 			}
 		}
 	}

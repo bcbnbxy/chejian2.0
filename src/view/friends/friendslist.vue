@@ -8,16 +8,16 @@
 		<div class="friends-cotaire-chatlist" v-if="index==2">
 			<ul>
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-					<router-link tag="li" :to="{name:'chat',params:{chatgroup:item.chatgroup,nickname:item.chat.user.nickname,userseq:0}}" v-for="(item,index) in chatlist" :key="index" ><p><img :src="item.chat.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.chat.user.headphoto:require('../../assets/img/shouye/defaultavatar.png')"></p><p><span><b>{{item.chat.user.nickname}}</b><i>{{item.chat.createtime | formatDate}}</i></span><span>{{item.chat.content}}</span></p></router-link>		    		
+					<router-link tag="li" :to="{name:'chat',params:{nickname:item.target.nickname,userseq:item.target.userseq,chatgroup:item.chatgroup}}" v-for="(item,index) in chatlist" :key="index" ><p><img :src="item.target.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.target.headphoto:require('../../assets/img/shouye/defaultavatar.png')"></p><p><span><b>{{item.target.nickname}}</b><i>{{item.lastChat.createtime | formatDate}}</i></span><span>{{item.lastChat.content}}</span></p></router-link>		    		
 				</mt-loadmore>
 			</ul>
 		</div>
 		<div class="addresslist" v-else>
 			<mt-index-list>
 				<mt-index-section :index="item.initial" v-for="(item,index) in friends" :key="index">
-				    <router-link tag="div" :to="{name:'homepage',params:{userseq:list.friend,friends:true,remark:list.remark}}" class="addresslist-item" v-for="(list,Index) in item.friends" :key="Index">
+				    <div @click="gohomepage(list.friend,true,list.remark)" class="addresslist-item" v-for="(list,Index) in item.friends" :key="Index">
 				    	<img :src="list.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+list.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span class="cell-content">{{list.remark?list.remark:list.userInfo.nickname}}</span>
-				    </router-link>
+				    </div>
 				</mt-index-section>
 			</mt-index-list>
 		</div>
@@ -48,8 +48,7 @@ export default{
 	methods:{
 		getchatlist(minseq,psize){//获取私信列表
 			var that=this;
-			this.$api('/Execute.do',{action:'chating.talkers',minseq:minseq,pageSize:psize}).then(function(r){
-				console.log(JSON.stringify(r));
+			this.$api('/Execute.do',{action:'chating.talkers',minvalue:minseq,pageSize:psize}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.talkers==null||r.data.talkers==undefined||r.data.talkers==''){
 						that.$toast({
@@ -90,7 +89,6 @@ export default{
 			if(this.index==2){
 				this.getchatlist(this.pnum,this.psize);
 			}else if(this.index==1){
-				console.log("现在展示的是好友列表")
 				this.getcarfriends();
 			}
 		},
@@ -116,6 +114,12 @@ export default{
 					})
 				}
 			})
+		},
+		gohomepage(touserseq,friend,remark){
+			this.$router.push('/homepage');
+			this.$store.commit('setblog_touserseq',touserseq);
+			this.$store.commit('setblog_friend',friend);
+			this.$store.commit('setblog_remark',remark);
 		}
 	},
 	filters:{
@@ -140,6 +144,13 @@ export default{
 			}else{
 				return "刚刚"
 			}				
+		}
+	},
+	beforeRouteEnter(to,from,next){
+		if(!localStorage.getItem('loginInfo')){
+			next({path:'/nologin'});
+		}else{
+			next();
 		}
 	}
 }

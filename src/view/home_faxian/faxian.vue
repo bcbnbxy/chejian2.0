@@ -4,8 +4,8 @@
 		<span>动态</span>
 		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>
 		<div class="pic-text-video" v-show="$store.state.faxian.pic_text_video">
-			<router-link :to="{name:'upload',params:{id:'picture'}}" tag="p">文图</router-link>
-			<router-link :to="{name:'upload',params:{id:'video'}}" tag="p">视频</router-link>
+			<router-link to="/upload" tag="p">文图</router-link>
+			<router-link to="/uploadvideo" tag="p">视频</router-link>
 		</div>
 	</div>
 	<div class="faxianlist" :style="{'-webkit-overflow-scrolling': scrollMode}">
@@ -19,7 +19,7 @@
 </template>
 <script>
 import Dynamicslist from '@/components/search/dynamics'
-
+import { MessageBox } from 'mint-ui'
 export default{
 	components:{Dynamicslist},
 	data(){
@@ -33,12 +33,32 @@ export default{
 	},
 	methods:{
 		showpictextvideo:function(){
-			this.$store.commit('changepopupmean');
-			this.$store.commit('changepictextvideo');
+			var that=this;
+			if(localStorage.getItem('loginInfo')){
+				this.$store.commit('changepopupmean');
+				this.$store.commit('changepictextvideo');
+			}else{
+				MessageBox.confirm('', {
+				    message: '您还没有登陆，去登陆',
+				    showConfirmButton:true,
+				    showCancelButton:true,
+				    confirmButtonText:'确定',
+				    cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			    });
+			}
+			
 		},
 		gettrends:function(minvalue,pageSize){//获取动态列表
 			var that=this;
-			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs'}).then(function(r){
+			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs',userseq:0}).then(function(r){
 				if(r.errorCode=="0"){
 					if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 						that.$toast({

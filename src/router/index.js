@@ -31,6 +31,7 @@ import Phonebook from '@/view/home_faxian/phonebook'
 import Homepage from '@/view/home/homepage'
 import Fensi from '@/view/home_faxian/fensi'
 import Upload from '@/view/home_faxian/upload'
+import Uploadvideo from '@/view/home_faxian/uploadvideo'
 import Personal from '@/view/my/personal'
 import Devicebind from '@/view/my/Devicebinding'
 import ContactService from '@/view/my/contactservice'
@@ -130,6 +131,10 @@ export default new Router({
 		path:'/upload',
 		name:"upload",
 		component:Upload
+	},{
+		path:'/uploadvideo',
+		name:"uploadvideo",
+		component:Uploadvideo
 	},{
 		path:'/devicebinding',
 		component:Devicebind

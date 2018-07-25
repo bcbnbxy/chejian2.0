@@ -46,7 +46,7 @@
 			<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>			
 			<div class="homeindex-car-friends-list">
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto"><span>{{item.remark?item.remark:item.userInfo.nickname}}</span><i>12345</i></div>
+		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
 		    	</mt-loadmore>
 			</div>
 		</div>
@@ -67,13 +67,13 @@ export default{
 		}
 	},
 	mounted(){
-		this.getdevices();
-		this.getfriends(0,5);
+		this.getdevices();		
 	},
 	methods:{
 		getdevices(){//我的设备查询
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					console.log(JSON.stringify(r))
 					that.devices=r.data.devices;
@@ -85,6 +85,33 @@ export default{
   					  duration: 1500
 			       });
 				}
+			}).then(function(r){
+				that.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:0, pageSize:5}).then(function(r){
+					if(r.errorCode==0){
+						if(r.data.friendDeviceScores==null||r.data.friendDeviceScores==undefined||r.data.friendDeviceScores==''){
+							that.$toast({
+						        message: '没有数据了',
+						        position: 'bottom',
+								duration: 1500
+						    });
+						}else{
+							that.friends=that.friends.concat(r.data.friendDeviceScores);
+							if(r.data.friends.length<5){
+								that.allLoaded=true;
+								return;
+							}else{
+								that.allLoaded=false;
+								that.pageNo=r.data.friends[r.data.friendDeviceScores.length-1].deviceseq;	
+							}						
+						}					
+					}else{
+						that.$toast({
+				          message: r.errorMessage,
+				          position: 'bottom',
+						  duration: 1500
+				      });
+					}
+				})
 			})
 		},
 		devicesshow(){
@@ -96,16 +123,24 @@ export default{
 		},
 		getfriends(minvalue,pageSize){//获取车友列表
 			var that=this;
-			this.$api('/Execute.do',{action:"friends",minvalue:minvalue, pageSize:pageSize}).then(function(r){
+			this.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:minvalue, pageSize:pageSize}).then(function(r){
 				if(r.errorCode==0){
-					that.friends=that.friends.concat(r.data.friends);
-					if(r.data.friends.length<5){
-						that.allLoaded=true;
-						return;
+					if(r.data.friendDeviceScores==null||r.data.friendDeviceScores==undefined||r.data.friendDeviceScores==''){
+						that.$toast({
+					        message: '没有数据了',
+					        position: 'bottom',
+							duration: 1500
+					    });
 					}else{
-						that.allLoaded=false;
-					}
-					that.pageNo=r.data.friends[r.data.friends.length-1].userseq;					
+						that.friends=that.friends.concat(r.data.friendDeviceScores);
+						if(r.data.friends.length<5){
+							that.allLoaded=true;
+							return;
+						}else{
+							that.allLoaded=false;
+							that.pageNo=r.data.friends[r.data.friendDeviceScores.length-1].deviceseq;	
+						}						
+					}					
 				}else{
 					that.$toast({
 			          message: r.errorMessage,

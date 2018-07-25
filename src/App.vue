@@ -20,6 +20,10 @@
 export default {
     name: 'App',
         created(){
+        		this.$store.commit('setblog_userseq');
+			      this.$store.commit('setblog_touserseq',null);
+			      this.$store.commit('setblog_friend',null);
+			      this.$store.commit('setblog_remark',null);
 //	 localStorage.removeItem('loginInfo');
 //	 	this.checklogin();
     },

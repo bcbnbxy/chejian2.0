@@ -2,8 +2,17 @@
 	<div class="replaylist-wrap">
 		<div class="reply-list">
 			<div class="reply-avatar clear">
-				<div class="reply-avatar-left"><img :src="replyitem.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+replyitem.owner.headphoto:require('../../assets/img/faxianimg/avatar.png')"/><p><b>{{replyitem.owner.nickname}}</b><span>{{formatDate(replyitem.createtime)}}</span></p></div>
-				<div class="reply-avatar-right"><i class="iconfont icon-xin"></i><span>{{replyitem.praisecount}}</span></div>
+				<div class="reply-avatar-left">
+					<img :src="replyitem.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+replyitem.owner.headphoto:require('../../assets/img/shouye/defaultavatar.png')" @click="gohomepage(replyitem.userseq,replyitem.owner.friend)"/>
+					<p>
+						<b>{{replyitem.owner.nickname}}</b>
+						<span>{{formatDate(replyitem.createtime)}}</span>
+					</p>
+				</div>
+				<div class="reply-avatar-right">
+					<i class="iconfont icon-xin" :style="replyitem.praised?'color:#ff0000':''" @click="togglepraise(replyitem.reviewseq)"></i>
+					<span>{{replyitem.praisecount}}</span>
+				</div>
 			</div>
 			<div class="reply-list-container">
 				{{replyitem.content}}
@@ -44,6 +53,60 @@ export default{
 			}else{
 				return "刚刚"
 			}				
+		},
+		togglepraise(reviewseq){//点赞评论
+			var that=this;
+			if(localStorage.getItem('loginInfo')){
+				if(that.replyitem.praised){//取消点赞
+					this.$api('/Execute.do',{action:'blog.cancelPraiseBlogReview',reviewseq:reviewseq}).then(function(r){
+						if(r.errorCode==0){
+							that.replyitem.praised=!that.replyitem.praised;
+							that.replyitem.praisecount=parseInt(that.replyitem.praisecount)-1;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{//点赞
+					this.$api('/Execute.do',{action:'blog.praiseBlogReview',reviewseq:reviewseq}).then(function(r){
+						if(r.errorCode==0){
+							that.replyitem.praised=!that.replyitem.praised;
+							that.replyitem.praisecount=parseInt(that.replyitem.praisecount)+1;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}
+			}else{
+				MessageBox.confirm('', {
+			        message: '您还没有登陆，去登陆',
+			        showConfirmButton:true,
+			        showCancelButton:true,
+			        confirmButtonText:'确定',
+			        cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            that.$router.push('/bootPage')
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		        });
+			}
+		},
+		gohomepage(touserseq,friend){
+	    	this.$router.replace('/homepage')
+			this.$store.commit('setblog_touserseq',touserseq);
+			this.$store.commit('setblog_friend',friend);
+			this.$store.commit('setblog_remark',null);
 		}
 	}
 }

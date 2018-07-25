@@ -8,18 +8,20 @@
 		<div class="detail-wrap">
 			<div class="pic-detail">
 				<div class="fourpicture-avatar clear">
-					<div class="fourpicture-avatar-left"><img :src="data.owner.headphoto?data.owner.headphoto:defaultImg" width="46" height="46" style="border-radius: 50%;"/><p><b>{{data.owner.nickname}}</b><span>{{formatDate(data.createtime)}}</span></p></div>
-					<!--<div class="fourpicture-avatar-right"><p v-if="data.attention" style='background: #fff;border:1px solid #ff481d;color:#ff481d;'>已关注</p><p v-else>+关注</p></div>-->
+					<div class="fourpicture-avatar-left"><img :src="data.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.owner.headphoto:defaultImg" width="46" height="46" style="border-radius: 50%;"/><p><b>{{data.owner.nickname}}</b><span>{{formatDate(data.createtime)}}</span></p></div>
 				</div>
 				<div class="fourpicture-content">
-					<div class="fourpicture-box" v-if="data.images">
+					<div class="fourpicture-box" v-if="data.images&&data.images.length==1">
 						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images"/>
+					</div>
+					<div class="fourpicture-box-moreimg" v-else-if="data.images&&data.images.length>1">
+						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data.images" :key="index"/>
 					</div>
 					<p>{{data.content}}</p>
 				</div>
 				<div class="pic-detail-zan" @click="togglepraise">
 					<ul class="avatar-list">
-						<li v-for="(item,index) in data.praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/faxianimg/avatar.png')"/></li>
+						<li v-for="(item,index) in data.praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/></li>
 					</ul>
 					<div class="dianzan-renshu">
 						<p>{{data.praisecount}}人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
@@ -38,8 +40,8 @@
 		<div class="detail-foot">
 			<div class="detail-footer">
 				<div class="input" @click="toggleInput"><span>发表评论...</span></div>
-				<p><i class="iconfont icon-xin"></i><span>236</span></p>
-				<p @click="goTop"><i class="iconfont icon-pinglun1"></i><span>365</span></p>
+				<p @click="togglezan($route.params.datalist.blogseq)"><i class="iconfont icon-xin" :style="$route.params.datalist.praised?'color:#ff0000':''"></i><span>{{$route.params.datalist.praisecount}}</span></p>
+				<p @click="goTop"><i class="iconfont icon-pinglun1"></i><span>{{$route.params.datalist.refcount}}</span></p>
 			</div>
 			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
 				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
@@ -139,7 +141,7 @@ export default{
 	        }
 	        stop = true;
 	    },
-	    Send(){
+	    Send(){//发表评论
 		    	if(localStorage.getItem('loginInfo')){
 			    	if(this.content.trim().length<1){
 			    		this.$toast({
@@ -147,6 +149,8 @@ export default{
 				            position: 'bottom',
 		  				    duration: 1500
 			           });
+			           this.detailinput=true;
+					   this.$refs.send.focus();
 			    	}else{
 			    		var that=this;
 			    		var params={action:'blog.addBlogReview',blogseq:this.data.blogseq,content:this.content}
@@ -157,9 +161,9 @@ export default{
 					          		message:"发表评论成功",
 						            position: 'bottom',
 				  				    duration: 1500
-					           });
-//					           that.replylist=[];
-								that.sendflag=true;
+					          });
+							   that.$route.params.datalist.refcount=parseInt(that.$route.params.datalist.refcount)+1;
+							   that.sendflag=true;
 					           that.getblogReviews(0,5)
 			    			}else{
 			    				that.$toast({
@@ -188,7 +192,7 @@ export default{
 		        });
 	    	}
 	    },
-	    getblogReviews(minvalue,pageSize){
+	    getblogReviews(minvalue,pageSize){//获取评论列表
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'blog.blogReviews',blogseq:this.data.blogseq,minvalue:minvalue,pageSize:pageSize}).then(function(r){
 	    		if(r.errorCode==0){
@@ -209,15 +213,63 @@ export default{
 	    		}
 	    	})
 	    },
-	    loadTop:function() { //组件提供的下拉触发方法
+	    loadTop(){ //组件提供的下拉触发方法
 	        //下拉刷新
 	        this.replylist=[];
 	        this.getblogReviews(0,5);
 	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
 	    },
-	    loadBottom:function(){
+	    loadBottom(){
 	    	this.getblogReviews(this.pageNo,5);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
+	    },
+	    togglezan(blogseq){//点赞和取消点赞
+	    	var that=this;
+	    	if(localStorage.getItem('loginInfo')){
+				if(this.$route.params.datalist.praised){//取消点赞
+					this.$api('/Execute.do',{action:'blog.cancelPraiseBlog',blogseq:blogseq}).then(function(r){
+						if(r.errorCode==0){
+							that.$route.params.datalist.praised=!that.$route.params.datalist.praised;
+							that.$route.params.datalist.praisecount=parseInt(that.$route.params.datalist.praisecount)-1;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{//点赞
+					this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
+						if(r.errorCode==0){
+							that.$route.params.datalist.praised=!that.$route.params.datalist.praised;
+							that.$route.params.datalist.praisecount=parseInt(that.$route.params.datalist.praisecount)+1;
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}
+			}else{
+				MessageBox.confirm('', {
+			        message: '您还没有登陆，去登陆',
+			        showConfirmButton:true,
+			        showCancelButton:true,
+			        confirmButtonText:'确定',
+			        cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            that.$router.push('/bootPage')
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		        });
+			}
 	    }
 	}
 }
@@ -271,7 +323,6 @@ export default{
 	flex-direction:column ;
 }
 .pic-detail{
-	flex:1;
 	background: #fff;
 	padding:0 0.48rem;
 	border-bottom:1px solid #dcdcdc;
@@ -345,6 +396,17 @@ export default{
 .fourpicture-box img{
 	width:30%;
 	display: block;
+}
+.fourpicture-box-moreimg{
+	width:100%;
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
+}
+.fourpicture-box-moreimg img{
+	width:32%;
+	height:3.48rem;
+	margin:0.1rem 2%;
 }
 .pic-detail-zan{
 	padding-top:0.42rem;

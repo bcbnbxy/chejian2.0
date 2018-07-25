@@ -2,7 +2,7 @@
 	<div class="upload-wrap">
 		<div class="upload-head">
 			<span @click="$router.go(-1)">取消</span>
-			<span @click="publish">发布</span>
+			<span>发布</span>
 		</div>
 		<div class="upload-container">
 			<div class="upload-container-top">
@@ -10,7 +10,6 @@
 			</div>
 			<div class="upload-container-bottom">
 				<div class="picturelist">
-					<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data" class="imglist"/>
 					<div class="upload-button imglist" :class="data.length>8?'upload-button-hidden':''">
 						<p  @click="actionSheetpic"></p>
 						<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
@@ -30,11 +29,11 @@ export default{
 			content:'',
 			remnant: 120,
 			actionpic: [{  
-		        name: '拍照',  
-		        method : this.captureImage// 调用methods中的函数  
+		        name: '选择视频',  
+		        method : this.pickervideo// 调用methods中的函数   选择视频
 		      }, {  
-		        name: '从相册中选择',   
-		        method : this.getLibrary// 调用methods中的函数  
+		        name: '拍摄视频',   
+		        method : this.testVideo// 调用methods中的函数  拍摄视频
 		      }], 
 		    sheetVisible: false,
 		    data:[],//'blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'
@@ -45,56 +44,32 @@ export default{
 		}
 	},
 	methods:{
-		publish:function(){//发表动态
-			var that=this;
-			if(!this.content&&this.data.length<1){
-				this.$toast({
-					message:'发布内容能为空!',
-					position:'bottom',
-					duration:1500
-				})
-			}else{
-				this.$api('/Execute.do',this.params).then(function(r){
-					if(r.errorCode==0){
-						that.$toast({
-				          message: '发表成功',
-				          position: 'bottom',
-		  				  duration: 1500
-				        });
-					}else{
-						that.$toast({
-				          message: r.errorMessage,
-				          position: 'bottom',
-		  				  duration: 1500
-				        });
-					}
-				})
-			}		
-		},
-		actionSheetpic: function(){
+		actionSheetpic(){
 	      this.sheetVisible = true;  
 	   },  
-	    getLibrary: function(){ //从相册选择视频或图片 
-	      var ret =  window.gallery.pickImage();
-	      if(ret==""||ret==null||ret==undefined){
-	      	that.$toast({
-	          message: "请重新选择图片",
-	          position: 'bottom',
-			  duration: 1500
-	        });
-	      	return ;
-	      }else{
-	      	 this.testUploadAli(ret)
-	      }	     
+	    pickervideo(){//选择视频
+	    	console.log(localStorage.getItem('loginInfo'));
+		    var ret = window.gallery.pickVideo();
+	        if(ret==""||ret==null||ret==undefined){
+	      	    that.$toast({
+	                message: "请重新选择图片",
+	                position: 'bottom',
+			        duration: 1500
+	            });
+	      	    return ;
+	        }else{
+	        	alert(ret+'--------------------------------------61行');
+	      	    this.testUploadVodAli(ret)
+	        }	     
 	    },
-	    descInput:function(){
+	    descInput(){
 	        var txtVal = this.content.length;
 	        this.remnant = 120 - txtVal;
 	    },
-	    captureImage:function(){ //调用手机摄像头进行拍照
-			var param = (new Date()).getTime() + '.jpg';
+	    testVideo(){ //拍摄视频
+			var param = (new Date()).getTime() + '.mp4';
 			param = '{"filename" : "' + param + '"}';
-			param = window.camera.captureImage(param);
+			param = window.camera.captureVideo(param);
 			if(param==""||param==null||param==undefined){
 				that.$toast({
 		          message: "请重新拍照",
@@ -103,21 +78,26 @@ export default{
 		        });
 	      		return ;
 			}else{
-				this.testUploadAli(param);
+				alert(param+'----------------------------81行')
+				this.testUploadVodAli(param);
 			}
 		},
-		testUploadAli(file){
-			var ret = window.action.doUpload(file, '{"path":"blog"}');
-			ret=JSON.parse(ret);
-			if(ret.errorCode=="0"){
-				this.data.push(ret.data)
-			}else{
-				this.$toast({
-		          message: ret.errorMessage,
-		          position: 'bottom',
-				  duration: 1500
-		        });
-			}			
+		testUploadVodAli(filename){
+//			var ret = window.action.doUpload(file, '{"path":"blog"}');
+//			ret=JSON.parse(ret);
+//			if(ret.errorCode=="0"){
+//				this.data.push(ret.data)
+//			}else{
+//				this.$toast({
+//		          message: ret.errorMessage,
+//		          position: 'bottom',
+//				  duration: 1500
+//		        });
+//			}
+			alert(localStorage.getItem('loginInfo')+'-------------------------------97行');
+			window.action.setMobileno(JSON.parse(localStorage.getItem('loginInfo')).mobileno);
+			var ret = window.aliUpload.uploadVod('test vod ' + (new Date()).getTime(), filename);
+			alert(JSON.stringify(ret)+'------------------------100行')
 		}
 	},
 	watch:{
