@@ -1,213 +1,166 @@
 <template>
-	<div class="fourpicture">
+	<div class="fourpicture" id="fourpicture">
 		<div class="fourpicture-avatar">
-			<div class="fourpicture-avatar-left"><router-link tag="div" to="/homepage"><img :src="datalist.owner.headphoto?datalist.owner.headphoto:defaultImg"/></router-link><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
-			<div class="fourpicture-avatar-right" v-show="!(userseq==datalist.userseq)"><p v-if="!favorite" @click="addMyFavorite(datalist.userseq)">+关注</p><p v-else style='background: #fff;border:1px solid #ff481d;color:#ff481d;' @click="removeMyFavorit(datalist.userseq)">已关注</p></div>
+			<div class="fourpicture-avatar-left"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg" @click="gohomepage(datalist.userseq,datalist.owner.friend)"/><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
+			<div class="fourpicture-avatar-right" v-show="($store.state.faxian.blogs.userseq!=datalist.userseq)&&(!datalist.owner.friend)"><p @click="addfriend(datalist.userseq)">加好友</p></div>
 		</div>
-		<div class="fourpicture-content">
-			<div class="video-box">
-				<!--<video width="1" height="1" style="background: tan;"></video>		-->		
+		<router-link tag="div" class="fourpicture-content" :to="{name:'detailvideo',params:{datalist}}">
+			<div class="fourpicture-content-video">
+				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.videocover" class="videoposter"/>
 				<img src="../../assets/img/faxianimg/playbtn.png" class="playbtn"/>
-				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<p>{{datalist.content}}</p>
-		</div>
+		</router-link>
 		<div class="fourpicture-title">
-			<p><i class="iconfont icon-xin" style="vertical-align: baseline;" v-if="!praiseflag" @click="praise(datalist.blogseq,praisecount)"></i> <svg class="icon" aria-hidden="true" v-else @click="cancelPraiseBlog(datalist.blogseq,praisecount)"><use xlink:href="#icon-heart-copy"></use></svg><span>{{praisecount}}</span></p>
-			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>365</span></router-link>
+			<p><i class="iconfont icon-xin" :style="praiseflag?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,praisecount)"></i><span>{{praisecount}}</span></p>
+			<router-link :to="{name:'detailvideo',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>{{data.refcount}}</span></router-link>
 			<p @click="more(index)">···</p>
 		</div>
 		<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
 			<li @click="showshare">转发</li>
 			<li @click="popupmeanreport">举报</li>
-			<li>减少推荐此类内容</li>
 		</ul>
 	</div>
 </template>
-
 <script>
-import { MessageBox } from 'mint-ui'
-export default{		
-	props:['data','index'],
-	data(){
-		return {
-			defaultImg:require('../../assets/img/faxianimg/avatar.png') ,
-			datalist:this.data,
-			userseq:localStorage.getItem('loginInfo')==null?'':JSON.parse(localStorage.getItem('loginInfo')).userseq,
-			favorite:this.data.owner.favorite,
-			praiseflag:false,
-			praisecount:this.data.praisecount
-		}
-	},
-	methods:{
-		more:function($index){
-			this.$store.commit('changepopupmean');
-			this.$store.commit('changepopupmean_more',$index);
-		},
-		popupmeanreport:function(){
-			this.$store.commit('changepopupmean_more');
-			this.$store.commit('changereport');
-		},
-		showshare:function(){
-			this.$store.commit('changepopupmean_more');
-			this.$store.commit('changeshare');
-		},
-		formatDate(seconds){//时间转换函数
-			seconds=new Date().getTime()-parseInt(seconds);
-			seconds= seconds / 1000;
-			var day =  Math.floor(seconds / 86400 );
-			seconds = seconds % 86400;
-			var hour =  Math.floor( seconds / 3600);
-			seconds = seconds % 3600;
-			var mintues = Math.floor( seconds / 60);
-			var beforeStr = "";
-			if(day>0){
-				beforeStr += day;
-				return beforeStr+"天前";
-			}else if(hour>0){
-				beforeStr += hour;
-				return beforeStr +"小时前"
-			}else if(mintues>0){
-				beforeStr += mintues;
-				return beforeStr +"分钟前"
-			}else{
-				return "刚刚"
-			}				
-		},
-		praise(blogseq,count){//点赞帖子
-			var that=this;
-			if(localStorage.getItem('loginInfo')){
-				this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
-					if(r.errorCode==0){
-						that.praiseflag=!that.praiseflag;
-						that.praisecount=parseInt(count)+1
-					}else{
-						that.$toast({
-			          		message:r.errorMessage,
-				            position: 'bottom',
-		  				    duration: 1500
-			            });
-					}
-				})
-			}else{
-				MessageBox.confirm('', {
-			        message: '您还没有登陆，去登陆',
-			        showConfirmButton:true,
-			        showCancelButton:true,
-			        confirmButtonText:'确定',
-			        cancelButtonText:'取消'
-		        }).then(action => {
-		          if (action == 'confirm') {
-		            that.$router.push('/bootPage')
-		          }
-		        }).catch(err => {
-		          if (err == 'cancel') {
-		            console.log('123');
-		          }
-		        });
+	import { MessageBox } from 'mint-ui'
+	export default{
+		props:['data','index'],
+		data(){
+			return {
+				defaultImg:require('../../assets/img/shouye/defaultavatar.png') ,
+				datalist:this.data,
+				praiseflag:this.data.praised,
+				praisecount:this.data.praisecount,
 			}
 		},
-		cancelPraiseBlog(blogseq,count){//取消点赞帖子
-			var that=this;
-			if(localStorage.getItem('loginInfo')){
-				this.$api('/Execute.do',{action:'blog.cancelPraiseBlog',blogseq:blogseq}).then(function(r){
-					if(r.errorCode==0){
-						that.praiseflag=!that.praiseflag;
-						that.praisecount=parseInt(count)-1
-					}else{
-						that.$toast({
-			          		message:r.errorMessage,
-				            position: 'bottom',
-		  				    duration: 1500
-			            });
-					}
-				})
-			}else{
-				MessageBox.confirm('', {
-			        message: '您还没有登陆，去登陆',
-			        showConfirmButton:true,
-			        showCancelButton:true,
-			        confirmButtonText:'确定',
-			        cancelButtonText:'取消'
-		        }).then(action => {
-		          if (action == 'confirm') {
-		            that.$router.push('/bootPage')
-		          }
-		        }).catch(err => {
-		          if (err == 'cancel') {
-		            console.log('123');
-		          }
-		        });
-			}
-		},
-		addMyFavorite(userseq){//关注
+		methods:{
+			more:function($index){
+				this.$store.commit('changepopupmean');
+				this.$store.commit('changepopupmean_more',$index);
+			},
+			popupmeanreport:function(){
+				this.$store.commit('changepopupmean_more');
+				this.$store.commit('changereport');
+			},
+			showshare:function(){
+				this.$store.commit('changepopupmean_more');
+				this.$store.commit('changeshare');
+			},
+			formatDate(seconds){//时间转换函数
+				seconds=new Date().getTime()-parseInt(seconds);
+				seconds= seconds / 1000;
+				var day =  Math.floor(seconds / 86400 );
+				seconds = seconds % 86400;
+				var hour =  Math.floor( seconds / 3600);
+				seconds = seconds % 3600;
+				var mintues = Math.floor( seconds / 60);
+				var beforeStr = "";
+				if(day>0){
+					beforeStr += day;
+					return beforeStr+"天前";
+				}else if(hour>0){
+					beforeStr += hour;
+					return beforeStr +"小时前"
+				}else if(mintues>0){
+					beforeStr += mintues;
+					return beforeStr +"分钟前"
+				}else{
+					return "刚刚"
+				}				
+			},
+			togglePraise(blogseq,count){//点赞帖子
 				var that=this;
-			if(localStorage.getItem('loginInfo')){
-				this.$api('/Execute.do',{action:'addMyFavorite',favorite:userseq}).then(function(r){
-					if(r.errorCode==0){
-						that.favorite=!that.favorite;
-					}else{
-						that.$toast({
-			          		message:r.errorMessage,
-				            position: 'bottom',
-		  				    duration: 1500
-			            });
+				if(localStorage.getItem('loginInfo')){
+					if(this.praiseflag){//取消点赞
+						this.$api('/Execute.do',{action:'blog.cancelPraiseBlog',blogseq:blogseq}).then(function(r){
+							if(r.errorCode==0){
+								that.praiseflag=!that.praiseflag;
+								that.praisecount=parseInt(count)-1;
+							}else{
+								that.$toast({
+					          		message:r.errorMessage,
+						            position: 'bottom',
+				  				    duration: 1500
+					            });
+							}
+						})
+					}else{//点赞
+						this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
+							if(r.errorCode==0){
+								that.praiseflag=!that.praiseflag;
+								that.praisecount=parseInt(count)+1;
+							}else{
+								that.$toast({
+					          		message:r.errorMessage,
+						            position: 'bottom',
+				  				    duration: 1500
+					            });
+							}
+						})
 					}
-				})
-			}else{
-				MessageBox.confirm('', {
-			        message: '您还没有登陆，去登陆',
-			        showConfirmButton:true,
-			        showCancelButton:true,
-			        confirmButtonText:'确定',
-			        cancelButtonText:'取消'
-		        }).then(action => {
-		          if (action == 'confirm') {
-		            that.$router.push('/bootPage')
-		          }
-		        }).catch(err => {
-		          if (err == 'cancel') {
-		            console.log('123');
-		          }
-		        });
-			}			
-		},
-		removeMyFavorit(userseq){//取消关注
-			var that=this;
-			if(localStorage.getItem('loginInfo')){					
-				this.$api('/Execute.do',{action:'removeMyFavorite',favorite:userseq}).then(function(r){
-					console.log(JSON.stringify(r));
-					if(r.errorCode==0){
-						that.favorite=!that.favorite;
-					}else{
-						that.$toast({
-			          		message:r.errorMessage,
-				            position: 'bottom',
-		  				    duration: 1500
-			            });
-					}
-				})
-			}else{
-				MessageBox.confirm('', {
-			        message: '您还没有登陆，去登陆',
-			        showConfirmButton:true,
-			        showCancelButton:true,
-			        confirmButtonText:'确定',
-			        cancelButtonText:'取消'
-		        }).then(action => {
-		          if (action == 'confirm') {
-		            	that.$router.push('/bootPage')
-		          }
-		        }).catch(err => {
-		          if (err == 'cancel') {
-		            console.log('123');
-		          }
-		        });
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+			},
+			addfriend(userseq){//添加好友
+				var that=this;
+				if(localStorage.getItem('loginInfo')){
+					this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
+						if(r.errorCode==0){
+							that.$toast({
+				          		message:'消息已发送',
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}else{
+							that.$toast({
+				          		message:r.errorMessage,
+					            position: 'bottom',
+			  				    duration: 1500
+				            });
+						}
+					})
+				}else{
+					MessageBox.confirm('', {
+				        message: '您还没有登陆，去登陆',
+				        showConfirmButton:true,
+				        showCancelButton:true,
+				        confirmButtonText:'确定',
+				        cancelButtonText:'取消'
+			        }).then(action => {
+			          if (action == 'confirm') {
+			            that.$router.push('/bootPage')
+			          }
+			        }).catch(err => {
+			          if (err == 'cancel') {
+			            console.log('123');
+			          }
+			        });
+				}
+			},
+			gohomepage(touserseq,friend){
+				this.$router.push('/homepage')
+				this.$store.commit('setblog_touserseq',touserseq);
+				this.$store.commit('setblog_friend',friend);
+				this.$store.commit('setblog_remark',null);
 			}
-			
 		}
 	}
-}
 </script>
 
 <style>
@@ -215,6 +168,7 @@ export default{
 	background: #fff;
 	padding:0 0.48rem;
 	margin-bottom:0.3rem;
+	position: relative;
 }
 .fourpicture-avatar{
 	padding-top:0.81rem;
@@ -249,7 +203,8 @@ export default{
 	padding-top:0.3rem;
 }
 .fourpicture-avatar-right p{
-	padding:0.15rem 0.36rem;
+	line-height: 1;
+	padding:0.23rem 0.36rem;
 	background: #ff481d;
 	color:#fff;
 	font-size:0.3rem;
@@ -267,46 +222,71 @@ export default{
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
 }
-.video-box{
-	width:100%;
-	margin-bottom:0.24rem;
-	height:6.2rem;
-	position: relative;
-}
-.video-box video{
-	position: absolute;
-	left:0;
-	top:0;
-}
-.video-box .playbtn{
-	position: absolute;
-	left:50%;
-	top:50%;
-	margin-left:-0.8rem;
-	margin-top:-0.8rem;
-	width:1.6rem;
-	height:1.6rem;
-	display: block;
-}
-.video-box img{
-	width:100%;
-	height:6.2rem;
-}
 .fourpicture-title{
 	height:1.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: flex-end;
-	padding-top:0.36rem;
+	line-height:1.3rem;
+	text-align: right;
 }
 .fourpicture-title p{
-	font-size:0.3rem;
+	font-size:0.38rem;
 	color:#666;
 	margin-left:0.6rem;
+	display: inline;
 }
-.fourpicture-title p i{
+.fourpicture-title p:nth-child(3){
+	font-size:1rem;
+	vertical-align: bottom;
+}
+.fourpicture-title .icon-xin{
+	display: inline-block;
+	vertical-align: baseline !important;
+}
+.fourpicture-title p .icon{	
+	font-size:0.6rem;
+	margin-right:0.12rem;
+}
+.fourpicture-title p .iconfont{
 	vertical-align: middle;
 	font-size:0.6rem;
 	margin-right:0.12rem;
+}
+.popupmean-more{
+	position: absolute;
+	width:6rem;
+	height:4.72rem;
+	background: #fff;
+	border-radius: 5px;
+	z-index: 11;
+	bottom:0;
+	right:0.5rem;
+}
+.popupmean-more li{
+	height:1.57rem;
+	border-bottom:1px solid #dcdcdc;
+	font-size:14px;
+	color:#666;
+	line-height:1.57rem;
+	text-align: center;
+}
+.popupmean-more li:last-child{
+	border-bottom:none;
+}
+.fourpicture-content-video{
+	width:100%;
+	height:6.2rem;
+	position: relative;
+}
+.fourpicture-content-video>.videoposter{
+	width:100%;
+	height:100%;
+}
+.fourpicture-content-video>.playbtn{
+	width:1.6rem;
+	height:1.6rem;
+	position: absolute;
+	left:50%;
+	top:50%;
+	margin-top:-0.8rem;
+	margin-left:-0.8rem;
 }
 </style>

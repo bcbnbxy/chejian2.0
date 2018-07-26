@@ -27,6 +27,7 @@ import Idlingsystem from '@/view/home_shouye/idlingsystem'
 import Faxian from '@/view/home_faxian/faxian'
 import Search from '@/components/common/search'
 import Detailpage from '@/view/home_faxian/detailpage'
+import Detailvideo from '@/view/home_faxian/detailvideo'
 import Phonebook from '@/view/home_faxian/phonebook'
 import Homepage from '@/view/home/homepage'
 import Fensi from '@/view/home_faxian/fensi'
@@ -124,6 +125,10 @@ export default new Router({
 		path:'/detailpage',
 		name:'detailpage',
 		component:Detailpage
+    },{
+		path:'/detailvideo',
+		name:'detailvideo',
+		component:Detailvideo
     },{
 		path:'/fensi',
 		component:Fensi

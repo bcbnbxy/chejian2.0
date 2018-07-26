@@ -2,7 +2,7 @@
 	<div class="upload-wrap">
 		<div class="upload-head">
 			<span @click="$router.go(-1)">取消</span>
-			<span>发布</span>
+			<span @click="publish">发布</span>
 		</div>
 		<div class="upload-container">
 			<div class="upload-container-top">
@@ -10,7 +10,8 @@
 			</div>
 			<div class="upload-container-bottom">
 				<div class="picturelist">
-					<div class="upload-button imglist" :class="data.length>8?'upload-button-hidden':''">
+					<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+poster" v-if="poster"/>
+					<div class="upload-button imglist" :class="videoflag?'':'upload-button-hidden'">
 						<p  @click="actionSheetpic"></p>
 						<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
 					</div>
@@ -36,21 +37,23 @@ export default{
 		        method : this.testVideo// 调用methods中的函数  拍摄视频
 		      }], 
 		    sheetVisible: false,
-		    data:[],//'blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'
+		    videoid:'',
+		    videoflag:true,
+		    poster:'',
 		    params:{
 		    	action:'blog.addBlog',
-		    	mediatype:'0',
+		    	mediatype:'1',
 		    }
 		}
 	},
 	methods:{
 		actionSheetpic(){
 	      this.sheetVisible = true;  
-	   },  
+	    },  
 	    pickervideo(){//选择视频
-	    	console.log(localStorage.getItem('loginInfo'));
 		    var ret = window.gallery.pickVideo();
 	        if(ret==""||ret==null||ret==undefined){
+	        	this.sheetVisible=false;
 	      	    that.$toast({
 	                message: "请重新选择图片",
 	                position: 'bottom',
@@ -58,7 +61,6 @@ export default{
 	            });
 	      	    return ;
 	        }else{
-	        	alert(ret+'--------------------------------------61行');
 	      	    this.testUploadVodAli(ret)
 	        }	     
 	    },
@@ -71,6 +73,7 @@ export default{
 			param = '{"filename" : "' + param + '"}';
 			param = window.camera.captureVideo(param);
 			if(param==""||param==null||param==undefined){
+				this.sheetVisible=false;
 				that.$toast({
 		          message: "请重新拍照",
 		          position: 'bottom',
@@ -78,44 +81,95 @@ export default{
 		        });
 	      		return ;
 			}else{
-				alert(param+'----------------------------81行')
 				this.testUploadVodAli(param);
 			}
 		},
 		testUploadVodAli(filename){
-//			var ret = window.action.doUpload(file, '{"path":"blog"}');
-//			ret=JSON.parse(ret);
-//			if(ret.errorCode=="0"){
-//				this.data.push(ret.data)
-//			}else{
-//				this.$toast({
-//		          message: ret.errorMessage,
-//		          position: 'bottom',
-//				  duration: 1500
-//		        });
-//			}
-			alert(localStorage.getItem('loginInfo')+'-------------------------------97行');
-			window.action.setMobileno(JSON.parse(localStorage.getItem('loginInfo')).mobileno);
-			var ret = window.aliUpload.uploadVod('test vod ' + (new Date()).getTime(), filename);
-			alert(JSON.stringify(ret)+'------------------------100行')
+			var str="";
+			str=filename.split('/')[filename.split('/').length-1];
+			var ret = window.action.doUploadVideo(filename, '{"title":"'+str+'", "filename":"'+str+'"}');
+			ret=JSON.parse(ret);
+			if(ret.errorCode=="0"){
+				this.videoflag=false;
+				this.videoid=ret.data;
+			}else{
+				this.videoflag=true;	
+				this.$toast({
+		          message: ret.errorMessage,
+		          position: 'bottom',
+				  duration: 1500
+		       });
+	   		}
+		},
+		publish:function(){//发表动态
+			if(!this.content&&!this.videoid){
+				this.$toast({
+					message:'发布内容不能为空!',
+					position:'bottom',
+					duration:1500
+				})
+			}else if(this.content&&!this.videoid){
+					this.params.mediatype='0';
+					this.senddongtai()			
+			}else{
+				this.getVideoPlayInfo(this.videoid);
+			}
+		},
+		getVideoPlayInfo(videoid){
+			var that=this;
+			this.$api('/Execute.do',{action:'blog.getVideoPlayInfo',videoId:videoid}).then(function(r){
+				if(r.errorCode==0){
+					that.$toast({
+			            message: '视频上传成功',
+			            position: 'bottom',
+					    duration: 1500
+			       });
+			        if(r.data.getVideoPlayInfo.coverURL){
+			       	    that.poster=r.data.getVideoPlayInfo.coverURL;
+			       	    that.params.videocover=that.poster;
+			       	    alert(that.params.videocover+'-----------------------------------------130行')
+			       	    that.senddongtai()
+			        }else{
+			        	that.getVideoPlayInfo(that.videoid);
+			        }
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+				}
+			})
+		},
+		senddongtai(){
+			var that=this;
+			this.$api('/Execute.do',this.params).then(function(r){
+				if(r.errorCode==0){
+					that.$toast({
+			          message: '发表成功',
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+			        that.$router.go(-1);
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+	  				  duration: 1500
+			        });
+				}
+			})
 		}
 	},
 	watch:{
 		content:function(){
-			if(content.length>0){
+			if(this.content.length>0){
 				this.params.content=this.content;
 			}			
 		},
-		data:function(){
-			if(this.data.length>0){
-				var str = "";
-				for(let i=0;i<this.data.length;i++){
-					if(str.length > 0){
-						str  += ",";
-					}
-					str+=this.data[i];
-				}
-				this.params.images=str;
+		videoid:function(){
+			if(this.videoid.length>0){
+				this.params.video=this.videoid;
 			}
 		}
 	}

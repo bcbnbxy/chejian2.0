@@ -2,7 +2,7 @@
 	<div class="detail">
 		<div class="detail-head">
 			<span @click="$router.go(-1)">返回</span>
-			<span>详情</span>
+			<span>详情1</span>
 			<span @click="share">分享</span>
 		</div>
 		<div class="detail-wrap">
@@ -11,12 +11,9 @@
 					<div class="fourpicture-avatar-left"><img :src="data.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.owner.headphoto:defaultImg" width="46" height="46" style="border-radius: 50%;"/><p><b>{{data.owner.nickname}}</b><span>{{formatDate(data.createtime)}}</span></p></div>
 				</div>
 				<div class="fourpicture-content">
-					<div class="fourpicture-box" v-if="data.images&&data.images.length==1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images"/>
-					</div>
-					<div class="fourpicture-box-moreimg" v-else-if="data.images&&data.images.length>1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data.images" :key="index"/>
-					</div>
+					<div class="video-wrap">
+					    <div  class="prism-player" id="videoPlayer"></div>
+					</div>					
 					<p>{{data.content}}</p>
 				</div>
 				<div class="pic-detail-zan" @click="togglepraise">
@@ -60,14 +57,6 @@ import { MessageBox } from 'mint-ui'
 let stop = false;                                   // 全局变量,坑处
 let timer = null;
 export default{
-	created(){
-		this.getblogReviews(0,5);
-	},	
-	mounted() {
-        this.$nextTick(function () {
-            window.addEventListener('scroll', this.needToTop);  //滚动事件监听
-        });
-   },
 	data(){
 		return {
 			data:this.$route.params.datalist,
@@ -80,9 +69,63 @@ export default{
 	        pageSize:5,
 	        allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
 	        sendflag:false,
+	        videocover:this.$route.params.datalist.videocover,
+	        videoid:this.$route.params.datalist.video,
+	        playauth:'',
 		}
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
+	mounted() {	
+//		this.getblogReviews(0,5);
+		var that=this;
+		this.getVideoPlayAuth();
+		var player = new Aliplayer({
+        id: "videoPlayer", // 容器id   
+        vid :that.videoid,
+        playauth :that.playauth ,
+        cover: that.$route.params.datalist.videocover,  //播放器封面图
+        autoplay: false,      // 是否自动播放
+        width: "100%",       // 播放器宽度
+        height: "100%",      // 播放器高度
+        playsinline: true,
+        seekable: true,
+        skinLayout: [{
+            "name": "bigPlayButton",
+            "align": "cc",
+        }, {
+            "align": "blabs",
+            "x": 0,
+            "y": 0,
+            "name": "controlBar",
+            "children": [
+                {
+                    "align": "tl",
+                    "x": 20,
+                    "y": 25,
+                    "name": "playButton"
+                },{
+                    "align": "tl",
+                    "x": 20,
+                    "y": 10,
+                    "name": "timeDisplay"
+                },{
+                    "align": "tr",
+                    "x": 20,
+                    "y": 25,
+                    "name": "fullScreenButton"
+                },{
+                    "align": "tr",
+                    "x": 20,
+                    "y": 25,
+                    "name": "volume"
+                }                
+            ]
+        }]
+    });
+        this.$nextTick(function () {
+            window.addEventListener('scroll', this.needToTop);  //滚动事件监听
+        });
+    },
 	methods:{
 		share(){
 			this.$store.commit('changeshare');
@@ -232,6 +275,21 @@ export default{
 	        this.replylist=[];
 	        this.getblogReviews(0,5);
 	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    getVideoPlayAuth(){
+	    	var that=this;
+	    	this.$api('/Execute.do',{action:'blog.getVideoPlayAuth',videoId:this.$route.params.datalist.video}).then(function(r){
+	    		console.log(JSON.stringify(r));
+	    		if(r.errorCode==0){
+	    			that.playauth=r.data.getVideoPlayAuth.playAuth;
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})
 	    },
 	    loadBottom(){
 	    	this.getblogReviews(this.pageNo,5);
@@ -403,25 +461,7 @@ export default{
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
 }
-.fourpicture-box{
-	width:100%;
-	padding-bottom:0.24rem;
-}
-.fourpicture-box img{
-	width:30%;
-	display: block;
-}
-.fourpicture-box-moreimg{
-	width:100%;
-	display: flex;
-	display: -webkit-flex;
-	flex-wrap: wrap;
-}
-.fourpicture-box-moreimg img{
-	width:32%;
-	height:3.48rem;
-	margin:0.1rem 2%;
-}
+
 .pic-detail-zan{
 	padding-top:0.42rem;
 	height:2rem;
@@ -544,5 +584,90 @@ export default{
 }
 .icon-arrow-right-copy-copy-copy{
 	font-size:0.44rem;
+}
+.video-wrap{
+	width:100%;
+	height:6.2rem;
+	background: tan;
+}
+.prism-player{	
+	position: relative;
+}
+
+/*****************修改播放器样式*************************/
+.prism-player .prism-big-play-btn .outter{
+	border: 0.1rem solid rgba(255,255,255,.51);
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 100%;
+    position: absolute;
+    box-sizing: border-box;
+    top: -0.05rem;
+    left: -0.07rem;
+}
+.prism-player .prism-big-play-btn {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-top:-0.8rem !important;
+    margin-left: -0.8rem !important;
+}
+.prism-player .prism-controlbar .prism-controlbar-bg{
+	height:1.2rem;
+}
+.prism-player .prism-controlbar{
+	height: 1.2rem;
+}
+.prism-player .prism-fullscreen-btn{
+	width:0.8rem;
+	height:0.8rem;
+	margin-top:0.25rem !important;
+	margin-right:0.2rem !important;
+}
+.prism-player .prism-volume{
+	margin-top:0.25rem !important;
+	margin-right:0.2rem !important;
+	width:0.8rem;
+	height:0.8rem;
+}
+.prism-player .prism-play-btn{
+	margin-top:0.25rem !important;
+	margin-left:0.2rem !important;
+	width:0.8rem;
+	height:0.8rem;
+}
+.prism-player .prism-time-display{
+	height:1.2rem;
+	line-height:1.2rem;
+	margin-left:0.2rem !important;
+	margin-top:0.1rem !important;
+	font-size:0.38rem;
+}
+.prism-player .prism-volume-control{
+    bottom: 1.5rem;
+    width: 0.5rem;
+    height: 4.5rem;
+    margin-right: 0.85rem !important;
+    margin-top: 0.25rem !important;
+    right: 0.6rem !important;
+}
+.prism-player .prism-volume-control .volume-cursor{
+	    width: 0.34rem;
+    	height: 0.34rem;
+    	left: -0.09rem;
+}
+.prism-player .prism-volume-control .volume-range{
+	bottom: 0.15rem;
+	width: 0.15rem;
+    height: 4rem;
+    margin-left: -0.1rem;
+}
+.prism-player .prism-volume .volume-icon{
+	width:0.8rem;
+	height:0.8rem;
+}
+.prism-player .prism-volume .volume-icon .long-horizontal{
+	right: 0.05rem;
+	height: 0.2rem;
+	width: 0.1rem;
 }
 </style>

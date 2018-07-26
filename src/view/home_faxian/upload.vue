@@ -122,7 +122,7 @@ export default{
 	},
 	watch:{
 		content:function(){
-			if(content.length>0){
+			if(this.content.length>0){
 				this.params.content=this.content;
 			}			
 		},
