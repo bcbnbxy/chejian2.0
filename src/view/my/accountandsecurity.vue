@@ -10,7 +10,7 @@
 		<span>{{telphone}}</span>
 	</div>
 	<ul class="intercalate-list">
-		<li><span>微信绑定</span><p><b>未绑定</b><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
+		<!--<li><span>微信绑定</span><p><b>未绑定</b><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>-->
 		<router-link tag="li" to="/changepassword"><span>修改密码</span><p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></router-link>				
 	</ul>
 </div>
@@ -61,7 +61,8 @@
 	font-size:0.38rem;
 	color:#222;
 	background: #fff;
-	margin-bottom:0.3rem;
+	border-bottom: 1px solid #ddd;
+	/*margin-bottom:0.3rem;*/
 	padding:0 0.5rem;
 }
 .intercalate-list li{

@@ -88,14 +88,17 @@ export default{
 		    this.chosecity=data;
 		},
 		inquiry(){
-			this.$router.replace('/violationinquiry')
+//			this.$router.replace('/violationinquiry')
+			this.$toast({
+				message:'暂未开放，敬请期待!',
+				position:'bottom',
+				duration:1500
+			})
 		},
 		getcity(){//获取省份信息
 			var that=this;
 			this.$api('/Execute.do',{action:'orderProvinces'}).then(function(r){
-//				console.log(JSON.stringify(r));
-				if(r.errorCode==0){
-					
+				if(r.errorCode==0){					
 					that.citylist=r.data.orderProvinces;
 				}else{
 					that.$toast({

@@ -28,14 +28,16 @@
 					</mt-loadmore>
 				</div>
 				<div class="video" v-show="currentView=='video'">
-					<video></video>
+					<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">					
+						<Video :data="item" :index="index" v-for="(item,index) in videolist" :key="index"></Video>
+					</mt-loadmore>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-import Video from '@/components/faxian/faxianvideo'
+import Video from '@/components/faxian/video'
 import Picture from '@/components/faxian/picture'
 import { MessageBox } from 'mint-ui';
 export default{
@@ -50,8 +52,12 @@ export default{
 			nickname:null,
 			descript:null,
 			picturelist:[],
+			videolist:[],
+			allLoaded1:false,
 			allLoaded:false,
+			pagenum:0,
 			pnum:0,
+			pagesize:5,
 			psize:5,
 			active: 0,
 			index:0,
@@ -71,6 +77,11 @@ export default{
 		toggle(i,v) {
 	      this.active = i
 	      this.currentView = v
+	      if(this.currentView=='picture'){
+	      		this. getblogs(0,5);
+	      }else if(this.currentView=='video'){
+	      	this.getblogsvideo(0,5);
+	      }
 	  },
 	  addmarker(){//添加备注
 	  	var that=this;
@@ -195,6 +206,45 @@ export default{
 	    loadBottom:function(){
 	    	this.getblogs(this.pnum,5);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
+	    },
+	    getblogsvideo(pnum,psize){//获取动态列表
+	    	var that=this;
+	    	this.$api('/Execute.do',{action:'blog.blogs',userseq:this.ownerseq,mediatype:1,minvalue:pnum,pageSize:psize}).then(function(r){
+	    		if(r.errorCode==0){
+	    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
+	    				that.$toast({
+		    				message:"没有数据",
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+	    				that.allLoaded1=true;
+	    			}else{
+	    				that.videolist=that.videolist.concat(r.data.blogs);
+						if(r.data.blogs.length<5){
+							that.allLoaded1=true;
+						}else{
+							that.allLoaded1=false;
+							that.pagenum=r.data.blogs[r.data.blogs.length-1].blogseq;
+						}
+	    			}
+	    		}else{
+	    			that.$toast({
+	    				message:r.errorMessage,
+	    				position:'bottom',
+	    				duration:1500
+	    			})
+	    		}
+	    	})
+	    },
+	    loadTop1:function() { //组件提供的下拉触发方法
+	        //下拉刷新
+	        this.videolist=[];
+	        this.getblogsvideo(0,5);
+	        this.$refs.loadmore1.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+	    },
+	    loadBottom1:function(){
+	    	this.getblogsvideo(this.pagenum,5);
+	    	this.$refs.loadmore1.onBottomLoaded();	    	
 	    }
 	},
 	mounted(){

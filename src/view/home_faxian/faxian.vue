@@ -24,7 +24,7 @@ export default{
 	components:{Dynamicslist},
 	data(){
 		return {
-    		datalist:[],   			    		
+    		datalist:[],    		
 	        pageNo:0,
 	        pageSize:5,
             allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了

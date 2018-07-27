@@ -14,7 +14,7 @@
 					<input class="loginpassword" type="password" placeholder="请输入密码"  v-model="password" ref="loginpassword" @keyup="PassWord"/><i class="iconfont" :class="ismingwen?'icon-chakanyanjingshishifenxi':'icon-biyanjing'" @click="togglemingwen"></i>
 				</div>
 			</div>
-			<router-link tag="p" to="/login/restpassword">忘记密码?</router-link>
+			<p><router-link tag="span" to="/login/restpassword">忘记密码?</router-link></p>
 			<mt-button type="default" :disabled="isdisabled" @click="login">登录</mt-button>
 		</div>
 	</div>

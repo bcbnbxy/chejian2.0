@@ -4,23 +4,23 @@
 			<div class="fourpicture-avatar-left"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg"/><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
 		</div>
 		<router-link tag="div" class="fourpicture-content" :to="{name:'detailpage',params:{datalist}}">
+			<p>{{datalist.content}}</p>
 			<div class="fourpicture-box" v-if="datalist.images&&datalist.images.length==1">
 				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<div class="fourpicture-box-moreimg" v-else-if="datalist.images&&datalist.images.length>1">
 				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in datalist.images" :key="index"/>
 			</div>
-			<p>{{datalist.content}}</p>
 		</router-link>
 		<div class="fourpicture-title">
 			<p><i class="iconfont icon-xin" :style="praiseflag?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,praisecount)"></i><span>{{praisecount}}</span></p>
 			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>{{data.refcount}}</span></router-link>
-			<p @click="more(index)">···</p>
+			<!--<p @click="more(index)">···</p>-->
 		</div>
-		<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
+		<!--<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
 			<li @click="showshare">转发</li>
 			<li @click="popupmeanreport">举报</li>
-		</ul>
+		</ul>-->
 	</div>
 </template>
 <script>
@@ -36,18 +36,18 @@
 			}
 		},
 		methods:{
-			more:function($index){
-				this.$store.commit('changepopupmean');
-				this.$store.commit('changepopupmean_more',$index);
-			},
+//			more:function($index){
+//				this.$store.commit('changepopupmean');
+//				this.$store.commit('changepopupmean_more',$index);
+//			},
 			popupmeanreport:function(){
 				this.$store.commit('changepopupmean_more');
 				this.$store.commit('changereport');
 			},
-			showshare:function(){
-				this.$store.commit('changepopupmean_more');
-				this.$store.commit('changeshare');
-			},
+//			showshare:function(){
+//				this.$store.commit('changepopupmean_more');
+//				this.$store.commit('changeshare');
+//			},
 			formatDate(seconds){//时间转换函数
 				seconds=new Date().getTime()-parseInt(seconds);
 				seconds= seconds / 1000;
@@ -183,7 +183,7 @@
 }
 .fourpicture-box{
 	width:100%;
-	padding-bottom:0.24rem;
+	margin-top:0.24rem;
 }
 .fourpicture-box img{
 	width:30%;
@@ -194,6 +194,7 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-wrap: wrap;
+	margin-top:0.24rem;
 }
 .fourpicture-box-moreimg img{
 	width:32%;

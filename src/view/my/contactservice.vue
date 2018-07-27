@@ -9,14 +9,36 @@
 		您有什么问题可以随时联系我们:
 	</div>
 	<ul class="contactservice-wrap-tel">
-		<li>客服热线:<a>2522-525526563</a></li>
-		<li>客服热线:<a>2522-525526563</a></li>
-		<li>客服热线:<a>2522-525526563</a></li>
+		<li @click="callphone('13012345678')">客服热线:<span>13012345678</span></li>
+		<li @click="callphone('2522-525526563')">客服热线：<span>2522-525526563</span></li>
+		<li @click="callphone('13012345680')">客服热线:<span>13012345680</span></li>
 	</ul>
 </div>
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
+export default{
+	methods:{
+		callphone(phonenum){
+			MessageBox.confirm('', {
+		        message: '确定拨打电话？',
+		        showConfirmButton:true,
+		        showCancelButton:true,
+		        confirmButtonText:'确定',
+		        cancelButtonText:'取消'
+	        }).then(action => {
+	          if (action == 'confirm') {
+	            window.device.callPhone(phonenum);
+	          }
+	        }).catch(err => {
+	          if (err == 'cancel') {
+	            console.log('123');
+	          }
+	        });			
+		}
+	}
+}
 </script>
 
 <style scoped>
@@ -63,7 +85,7 @@
 	font-size:0.44rem;
 	color:#222;
 }
-.contactservice-wrap-tel li a{
+.contactservice-wrap-tel li span{
 	color:#1989f5;
 }
 .contactservice-wrap-tel li:last-child{

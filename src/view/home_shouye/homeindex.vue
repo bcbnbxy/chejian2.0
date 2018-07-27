@@ -10,7 +10,7 @@
 					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item.deviceVehicle&&item.deviceVehicle.brandname}}{{item.deviceVehicle&&item.deviceVehicle.modelname}}</span></li>
 				</ul>
 			</div>
-			<i class="iconfont icon-scan"></i>
+			<router-link tag="i" to="/devicebinding" class="iconfont icon-scan"></router-link>
 		</div>
 		<div class="homeindex-wrap-head-bottom">
 			<div class="homeindex-wrap-head-bottom-contaire">
@@ -73,9 +73,7 @@ export default{
 		getdevices(){//我的设备查询
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
-					console.log(JSON.stringify(r))
 					that.devices=r.data.devices;
 					that.selected=r.data.devices[0];
 				}else{

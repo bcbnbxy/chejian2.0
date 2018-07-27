@@ -5,18 +5,6 @@
 </template>
 
 <script>
-
-//let platform="";
-//document.addEventListener( "plusready",function(){
-//			alert(plus.device.uuid);
-//			var u = navigator.userAgent;
-//			var isAndroid=true;
-//			if(isAndroid){
-//				platform="Android";
-//			}else{
-//				platform="iOS";
-//			}		
-//	}, false );
 export default {
     name: 'App',
         created(){
@@ -24,19 +12,17 @@ export default {
 			      this.$store.commit('setblog_touserseq',null);
 			      this.$store.commit('setblog_friend',null);
 			      this.$store.commit('setblog_remark',null);
-//	 localStorage.removeItem('loginInfo');
-//	 	this.checklogin();
-    },
-	  methods:{
-	  	//判断用户的登录状态
-	  checklogin:function(){
-		    if(localStorage.getItem('loginInfo')){
-				    this.$router.push('/home');
-			  }else{
-				    this.$router.push('/');
-	  			  }  		
-	  	  },
-	  }
+			      var u = navigator.userAgent;
+						var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+						var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端						
+						if(isAndroid){
+							this.$store.commit('getplatform','Android');
+						}else if(isiOS){
+							this.$store.commit('getplatform','iOS');
+						}
+						this.$store.commit('getuuid',window.device.getUUID());
+			  //	localStorage.removeItem('loginInfo');
+    }
 }
 </script>
 

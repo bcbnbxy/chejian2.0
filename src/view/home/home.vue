@@ -93,6 +93,7 @@ export default {
 	border-top:1px solid #dcdcdc;
 	position: relative;
 	top:-1px;
+	border-top: 1px solid #dcdcdc;
 }
 .footer>div>p{
 	width:0.7rem;

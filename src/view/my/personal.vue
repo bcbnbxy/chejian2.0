@@ -17,23 +17,23 @@
 		<section class="personal-bottom">
 			<nav>
 				<div @click="gopersonal"><p><svg class="icon" aria-hidden="true"><use xlink:href="#icon-guanli"></use></svg></p><span>管理</span></div>
-				<router-link tag="div" to="/devicelist"><p><i class="iconfont icon-wodeshebei" style="color:#1989f5;"></i></p><span>设备</span></router-link>
+				<router-link tag="div" to="/devicelist"><p><svg class="icon" aria-hidden="true"><use xlink:href="#icon-shebei"></use></svg></p><span>设备</span></router-link>
 			</nav>
 			<router-link to="/devicebinding" tag="div" class="personal-bottom-shebei">
-				<i class="iconfont icon-bangding"></i><span>设备绑定</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+				<svg class="icon" aria-hidden="true"><use xlink:href="#icon-bangding1"></use></svg><span>设备绑定</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 			</router-link>
 			<ul class="personal-bottom-shezhi">
-				<router-link to="/manageaddress" tag="li">
+				<!--<router-link to="/manageaddress" tag="li">
 					<i class="iconfont icon-dizhi"></i><span>收货地址</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
-				</router-link>
+				</router-link>-->
 				<router-link to="/contactservice" tag="li">
-					<i class="iconfont icon-kefu1"></i><span>联系客服</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+					<svg class="icon" aria-hidden="true"><use xlink:href="#icon-kefu2"></use></svg><span>联系客服</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 				</router-link>
 				<router-link to="/feedback" tag="li">
-					<i class="iconfont icon-yijianfankui1"></i><span>意见反馈</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+					<svg class="icon" aria-hidden="true"><use xlink:href="#icon-yijian"></use></svg><span>意见反馈</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 				</router-link>
 				<router-link to="/intercalate" tag="li">
-					<i class="iconfont icon-shezhi1"></i><span>设置</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+					<svg class="icon" aria-hidden="true"><use xlink:href="#icon-shezhi2"></use></svg><span>设置</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 				</router-link>
 			</ul>
 		</section>
@@ -108,7 +108,7 @@ export default{
 }
 </script>
 
-<style scoped>
+<style>
 .personal-wrap{
 	width:100%;
 	height:100%;
@@ -224,25 +224,8 @@ export default{
 	flex: 1;
 	padding-left:0.52rem;
 }
-.personal-bottom-shebei .icon-bangding{
+.personal-bottom-shebei>svg{
 	font-size:0.96rem;
-	color:#f5694d;
-}
-.personal-bottom-shezhi li .icon-dizhi{
-	font-size:0.96rem;
-	color:#16c34b;
-}
-.personal-bottom-shezhi li .icon-kefu1{
-	font-size:0.96rem;
-	color:#51bfb5;
-}
-.personal-bottom-shezhi li .icon-yijianfankui1{
-	font-size:0.96rem;
-	color:#ff818d;
-}
-.personal-bottom-shezhi li .icon-shezhi1{
-	font-size:0.96rem;
-	color:#f39800;
 }
 .colora0{
 	color:#a0a0a0;
@@ -262,6 +245,9 @@ export default{
 	color:#222;
 	background: #fff;
 	margin-bottom:0.3rem;
+}
+.personal-bottom-shezhi li>svg{
+	font-size:0.96rem;
 }
 .personal-bottom-shezhi li:last-child{
 	border-bottom: none;

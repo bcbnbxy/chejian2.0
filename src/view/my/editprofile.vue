@@ -117,7 +117,7 @@ export default {
 	      }	     
 	    },
 	    testUpload(file){//上传头像到服务器
-			var ret = window.action.doUpload(file, '{"path":"headphoto"}');
+			var ret = window.action.doUploadImage(file, '{"path":"headphoto"}');
 			ret=JSON.parse(ret);
 			if(ret.errorCode=="0"){
 				this.headImg=ret.data
@@ -203,9 +203,6 @@ export default {
 				}
 			})
 	    }
-  	},
-  	created(){
-  		console.log(JSON.stringify(this.$route.params.userInfo));
   	}
 }
 </script>

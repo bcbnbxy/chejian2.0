@@ -2,7 +2,7 @@
 	<div class="detail">
 		<div class="detail-head">
 			<span @click="$router.go(-1)">返回</span>
-			<span>详情1</span>
+			<span>详情</span>
 			<span @click="share">分享</span>
 		</div>
 		<div class="detail-wrap">
@@ -76,52 +76,7 @@ export default{
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
 	mounted() {	
-//		this.getblogReviews(0,5);
-		var that=this;
 		this.getVideoPlayAuth();
-		var player = new Aliplayer({
-        id: "videoPlayer", // 容器id   
-        vid :that.videoid,
-        playauth :that.playauth ,
-        cover: that.$route.params.datalist.videocover,  //播放器封面图
-        autoplay: false,      // 是否自动播放
-        width: "100%",       // 播放器宽度
-        height: "100%",      // 播放器高度
-        playsinline: true,
-        seekable: true,
-        skinLayout: [{
-            "name": "bigPlayButton",
-            "align": "cc",
-        }, {
-            "align": "blabs",
-            "x": 0,
-            "y": 0,
-            "name": "controlBar",
-            "children": [
-                {
-                    "align": "tl",
-                    "x": 20,
-                    "y": 25,
-                    "name": "playButton"
-                },{
-                    "align": "tl",
-                    "x": 20,
-                    "y": 10,
-                    "name": "timeDisplay"
-                },{
-                    "align": "tr",
-                    "x": 20,
-                    "y": 25,
-                    "name": "fullScreenButton"
-                },{
-                    "align": "tr",
-                    "x": 20,
-                    "y": 25,
-                    "name": "volume"
-                }                
-            ]
-        }]
-    });
         this.$nextTick(function () {
             window.addEventListener('scroll', this.needToTop);  //滚动事件监听
         });
@@ -279,9 +234,53 @@ export default{
 	    getVideoPlayAuth(){
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'blog.getVideoPlayAuth',videoId:this.$route.params.datalist.video}).then(function(r){
-	    		console.log(JSON.stringify(r));
 	    		if(r.errorCode==0){
 	    			that.playauth=r.data.getVideoPlayAuth.playAuth;
+					var player = new Aliplayer({
+			        id: "videoPlayer", // 容器id   
+			        vid :that.videoid,
+			        playauth :that.playauth,
+			        cover:that.videocover,  //播放器封面图
+			        videoHeight:"100%",
+			        videoWidth:"100%",
+			        autoplay: false,      // 是否自动播放
+			        width: "100%",       // 播放器宽度
+			        height: "100%",      // 播放器高度
+			        playsinline: true,
+			        seekable: true,
+			        skinLayout: [{
+			            "name": "bigPlayButton",
+			            "align": "cc",
+				        }, {
+				            "align": "blabs",
+				            "x": 0,
+				            "y": 0,
+				            "name": "controlBar",
+				            "children": [
+				                {
+				                    "align": "tl",
+				                    "x": 20,
+				                    "y": 25,
+				                    "name": "playButton"
+				                },{
+				                    "align": "tl",
+				                    "x": 20,
+				                    "y": 10,
+				                    "name": "timeDisplay"
+				                },{
+				                    "align": "tr",
+				                    "x": 20,
+				                    "y": 25,
+				                    "name": "fullScreenButton"
+				                },{
+				                    "align": "tr",
+				                    "x": 20,
+				                    "y": 25,
+				                    "name": "volume"
+				                }                
+				            ]
+				        }]
+			        });
 	    		}else{
 	    			that.$toast({
 	    				message:r.errorMessage,
@@ -289,6 +288,39 @@ export default{
 	    				duration:1500
 	    			})
 	    		}
+	    	}).then(function(r){
+		    	that.$api('/Execute.do',{action:'blog.blogReviews',blogseq:that.data.blogseq,minvalue:0,pageSize:5}).then(function(r){
+		    		if(r.errorCode==0){
+		    			if(r.data.blogReviews.length<1){
+		    				that.$toast({
+			    				message:'没有更评论了',
+			    				position:'bottom',
+			    				duration:1500
+			    			})
+		    			}else{
+		    				if(that.sendflag){
+			    				that.replylist.unshift(r.data.blogReviews[0]);
+			    				that.sendflag=false;
+			    				that.pageNo=that.replylist[that.replylist.length-1].reviewseq;
+			    			}else{
+			    				that.replylist=that.replylist.concat(r.data.blogReviews);
+			    				that.pageNo=r.data.blogReviews[r.data.blogReviews.length-1].reviewseq;
+			    			}
+			    			if(r.data.blogReviews.length<5){
+								that.allLoaded=true;
+								return;
+							}else{
+								that.allLoaded=false;
+							}
+		    			}	    			
+		    		}else{
+		    			that.$toast({
+		    				message:r.errorMessage,
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+		    		}
+		    	})
 	    	})
 	    },
 	    loadBottom(){
@@ -588,7 +620,6 @@ export default{
 .video-wrap{
 	width:100%;
 	height:6.2rem;
-	background: tan;
 }
 .prism-player{	
 	position: relative;
