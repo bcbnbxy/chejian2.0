@@ -54,7 +54,6 @@ export default {
 	}
 }
 </script>
-
 <style>
 .home-wrap{
 	width:100%;
@@ -100,29 +99,55 @@ export default {
 	height:0.7rem;
 	background-size:0.7rem 0.7rem;
 }
+@media(-webkit-min-device-pixel-ratio:3),(min-device-pixel-ratio:3){
+	.bghome{	
+		background-image: url(../../assets/img/shouye/home@3x.png);
+	}
+	.bgfaxian{
+		background-image: url(../../assets/img/shouye/faxian@3x.png);
+	}
+	.bgcheyou{
+		background-image: url(../../assets/img/shouye/cheyou@3x.png);
+	}
+	.bgmy{
+		background-image: url(../../assets/img/shouye/my@3x.png);
+	}
+	.v-link-active .bghome{
+		background-image: url(../../assets/img/shouye/homeactive@3x.png);
+	}
+	.v-link-active .bgfaxian{
+		background-image: url(../../assets/img/shouye/faxianactive@3x.png);
+	}
+	.v-link-active .bgcheyou{
+		background-image: url(../../assets/img/shouye/cheyouactive@3x.png);
+	}
+	.v-link-active .bgmy{
+		background-image: url(../../assets/img/shouye/myactive@3x.png);
+	}
+}
 .bghome{	
-	background-image: url(../../assets/img/shouye/home.png);
+	background-image: url(../../assets/img/shouye/home@2x.png);
 }
 .bgfaxian{
-	background-image: url(../../assets/img/shouye/faxian.png);
+	background-image: url(../../assets/img/shouye/faxian@2x.png);
 }
 .bgcheyou{
-	background-image: url(../../assets/img/shouye/cheyou.png);
+	background-image: url(../../assets/img/shouye/cheyou@2x.png);
 }
 .bgmy{
-	background-image: url(../../assets/img/shouye/my.png);
+	background-image: url(../../assets/img/shouye/my@2x.png);
 }
 .v-link-active .bghome{
-	background-image: url(../../assets/img/shouye/homeactive.png);
+	background-image: url(../../assets/img/shouye/homeactive@2x.png);
 }
 .v-link-active .bgfaxian{
-	background-image: url(../../assets/img/shouye/faxianactive.png);
+	background-image: url(../../assets/img/shouye/faxianactive@2x.png);
 }
 .v-link-active .bgcheyou{
-	background-image: url(../../assets/img/shouye/cheyouactive.png);
+	background-image: url(../../assets/img/shouye/cheyouactive@2x.png);
 }
 .v-link-active .bgmy{
-	background-image: url(../../assets/img/shouye/myactive.png);
+	background-image: url(../../assets/img/shouye/myactive@2x.png);
 }
 .footer>div>span{
 	font-size:0.24rem;

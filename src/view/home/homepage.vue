@@ -2,7 +2,7 @@
 	<div class="homepage-wrap">
 		<div class="homepage-wrap-head">
 			<div class="homepage-wrap-headtop">
-				<span @click="$router.go(-1)">返回</span>
+				<i class="iconfont icon-fanhui" @click="$router.go(-1)" style="font-size:0.6rem"></i>
 				<span>主页</span>
 				<span @click="gochat" v-show="friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq">私信</span>
 			</div>

@@ -1,7 +1,7 @@
 <template>
 	<div class="detail">
 		<div class="detail-head">
-			<span @click="$router.go(-1)">返回</span>
+			<i class="iconfont icon-fanhui" @click="$router.go(-1)" style="font-size:0.6rem"></i>
 			<span>详情</span>
 			<span @click="share">分享</span>
 		</div>

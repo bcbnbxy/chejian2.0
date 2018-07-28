@@ -114,7 +114,7 @@ export default{
 			}else{
 				this.$toast({
 		          message: ret.errorMessage,
-		          position: 'bottom',
+		          position:'bottom',
 				  duration: 1500
 		        });
 			}			
