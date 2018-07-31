@@ -107,7 +107,7 @@ export default{
 			}
 		},
 		testUploadAli(file){
-			var ret = window.action.doUpload(file, '{"path":"blog"}');
+			var ret = window.action.doUploadImage(file, '{"path":"blog"}');
 			ret=JSON.parse(ret);
 			if(ret.errorCode=="0"){
 				this.data.push(ret.data)

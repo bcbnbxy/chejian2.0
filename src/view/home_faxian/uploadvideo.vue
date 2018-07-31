@@ -127,7 +127,6 @@ export default{
 			        if(r.data.getVideoPlayInfo.coverURL){
 			       	    that.poster=r.data.getVideoPlayInfo.coverURL;
 			       	    that.params.videocover=that.poster;
-			       	    alert(that.params.videocover+'-----------------------------------------130行')
 			       	    that.senddongtai()
 			        }else{
 			        	that.getVideoPlayInfo(that.videoid);

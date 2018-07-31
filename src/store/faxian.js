@@ -9,7 +9,7 @@ export default {
 			userseq:null,//用户自己的seq
 			remark:null,//
 			touserseq:null,
-			friend:null//是否是好友
+			friend:null,//是否是好友
 		}
 	},
 	mutations: {

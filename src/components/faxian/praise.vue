@@ -1,7 +1,7 @@
 <template>
 	<div class="praise-wrap">
 		<div class="praise-head">
-			<span @click="praisehidden">返回</span>
+			<i class="iconfont icon-fanhui" @click="praisehidden"></i>
 			<span>他们也点赞了</span>
 			<span></span>
 		</div>
@@ -91,15 +91,18 @@ export default {
 	height:1.32rem;
 	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
 	padding:0.21rem 0.5rem;
-	font-size:0.42rem;
+	font-size:0.56rem;
 	color:#fff;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;
 	align-items: center;
 }
-.praise-head span:nth-child(2){
-	font-size:0.56rem;
+.praise-head span:last-child{
+	font-size:0.44rem;
+}
+.praise-head i{
+	font-size:0.6rem;
 }
 .praise-list{
 	flex:1;

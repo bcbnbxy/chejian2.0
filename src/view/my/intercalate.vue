@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui';
 export default{
 	created(){
 		if(localStorage.getItem('loginInfo')){
@@ -41,24 +42,38 @@ export default{
 	methods:{
 		loginOut:function(){
 			let that=this;
-			this.$api('/Execute.do',{action:'logout'}).then(function(r){
-				if(r.errorCode=='0'){
-					that.$toast({
-			          message: '退出登录成功!',
-			          position: 'bottom',
-  					  duration: 1500
-			       });
-			       that.login=true;
-			       that.loginout=false;
-			       localStorage.removeItem('loginInfo');
-				}else{
-					that.$toast({
-			          message: r.errorMessage,
-			          position: 'bottom',
-  					  duration: 1500
-			       });
-				}
-			})
+			MessageBox.confirm('', {
+		        message: '确定要退出吗?',
+		        showConfirmButton:true,
+		        showCancelButton:true,
+		        confirmButtonText:'确定',
+		        cancelButtonText:'取消'
+	        }).then(action => {
+	          if (action == 'confirm') {
+	            this.$api('/Execute.do',{action:'logout'}).then(function(r){
+					if(r.errorCode=='0'){
+						that.$toast({
+				          message: '退出登录成功!',
+				          position: 'bottom',
+						  duration: 1500
+				       });
+				       that.login=true;
+				       that.loginout=false;
+				       localStorage.removeItem('loginInfo');
+					}else{
+						that.$toast({
+				          message: r.errorMessage,
+				          position: 'bottom',
+						  duration: 1500
+				       });
+					}
+				})
+	          }
+	        }).catch(err => {
+	          if (err == 'cancel') {
+	            console.log('123');
+	          }
+	        });			
 		},
 		Login:function(){
 			this.$router.push('/bootPage')

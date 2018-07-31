@@ -3,7 +3,6 @@
 		<div class="detail-head">
 			<i class="iconfont icon-fanhui" @click="$router.go(-1)" style="font-size:0.6rem"></i>
 			<span>详情</span>
-			<span @click="share">分享</span>
 		</div>
 		<div class="detail-wrap">
 			<div class="pic-detail">
@@ -84,10 +83,10 @@ export default{
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
 	methods:{
-		share(){
-			this.$store.commit('changeshare');
-			this.$store.commit('changepopupmean');
-		},
+//		share(){
+//			this.$store.commit('changeshare');
+//			this.$store.commit('changepopupmean');
+//		},
 		formatDate(seconds){//时间转换函数
 			seconds=new Date().getTime()-parseInt(seconds);
 			seconds= seconds / 1000;
@@ -320,15 +319,16 @@ export default{
 	height:1.32rem;
 	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	text-align: center;
+	line-height:1.32rem;
+	position:relative;
 	color:#fff;
-	font-size:0.42rem;
-}
-.detail-head span:nth-child(2){
 	font-size:0.56rem;
+}
+.detail-head i{
+	font-size:0.6rem;
+	position:absolute;
+	left:0.5rem;
 }
 .detail-wrap{
 	flex:1;

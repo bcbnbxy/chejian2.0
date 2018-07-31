@@ -3,11 +3,13 @@
 	<div class="homeindex-wrap-head">
 		<div class="homeindex-wrap-head-top">
 			<div class="homeindex-wrap-head-top-left">
-				<img :src="selected.deviceVehicle&&selected.deviceVehicle.logo"/>
-				<span>{{selected.deviceVehicle&&selected.deviceVehicle.brandname}}{{selected.deviceVehicle&&selected.deviceVehicle.modelname}}</span>
+				<img :src="selected&&selected.deviceVehicle&&selected.deviceVehicle.logo" v-if="selected"/>
+				<span v-show="selected">{{selected&&selected.deviceVehicle&&selected.deviceVehicle.brandname}}{{selected&&selected.deviceVehicle&&selected.deviceVehicle.modelname}}</span>
+				<span v-show="!selected">暂无车辆</span>
 				<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''" @click="devicesshow"></i>
 				<ul class="devices-list" v-show="devicesflag">
-					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item.deviceVehicle&&item.deviceVehicle.brandname}}{{item.deviceVehicle&&item.deviceVehicle.modelname}}</span></li>
+					<router-link tag="li" to="/devicebinding" style="color:#666;font-size:0.44rem;padding-left:0.5rem;" v-show="!selected">您还没有车辆，去添加</router-link>
+					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}}{{item&&item.deviceVehicle&&item.deviceVehicle.modelname}}</span></li>
 				</ul>
 			</div>
 			<router-link tag="i" to="/devicebinding" class="iconfont icon-scan"></router-link>
@@ -16,7 +18,7 @@
 			<div class="homeindex-wrap-head-bottom-contaire">
 				<p><b>{{selected&&selected.ranking}}</b><span>/名</span></p>
 				<p>当前排名</p>
-				<p>车辆安全系数 ： {{selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
+				<p>车辆安全系数 ： {{selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
@@ -37,8 +39,9 @@
 		<div class="homeindex-car-service">
 			<p class="homeindex-car-service-title">车辆服务</p>			
 			<ul>
-				<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>
-				<li><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
+				<!--<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>-->
+				<li @click="weizhangchaxun"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></li>
+				<li @click="shebeigoumai"><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
 				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
 			</ul>
 		</div>
@@ -54,12 +57,13 @@
 </div>
 </template>
 <script>
+import { MessageBox } from 'mint-ui';
 export default{
 	data(){
 		return {
 			devices:[],
 			devicesflag:false,
-			selected:[],
+			selected:null,
 			friends:[],
 			pageNo:0,
 	        pageSize:5,
@@ -67,15 +71,23 @@ export default{
 		}
 	},
 	mounted(){
-		this.getdevices();		
+		this.getdevices();	
 	},
 	methods:{
 		getdevices(){//我的设备查询
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
 				if(r.errorCode==0){
-					that.devices=r.data.devices;
-					that.selected=r.data.devices[0];
+					if(r.data.devices==undefined||r.data.devices==null||r.data.devices==""){
+						that.$toast({
+				          message: '没有数据',
+				          position: 'bottom',
+	  					  duration: 1500
+				       });
+					}else{
+						that.devices=r.data.devices;
+						that.selected=r.data.devices[0];
+					}					
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -118,6 +130,12 @@ export default{
 		select(item,index){
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
+		},
+		shebeigoumai(){
+			MessageBox.alert('暂未开放，敬请期待!')
+		},
+		weizhangchaxun(){
+			MessageBox.alert('暂未开放，敬请期待!')
 		},
 		getfriends(minvalue,pageSize){//获取车友列表
 			var that=this;

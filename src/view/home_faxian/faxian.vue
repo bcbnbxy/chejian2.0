@@ -60,7 +60,6 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs',userseq:0}).then(function(r){
 				if(r.errorCode=="0"){
-					console.log(JSON.stringify(r));
 					if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 						that.$toast({
 				            message:'暂无数据',

@@ -9,7 +9,7 @@
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 				<ul v-for="(item,index) in chats" :key="index">
 					<li v-if="userseq!=item.senderseq">
-					   	<span class='twoimg'><img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
+					   	<span class='twoimg'><img @click="gohomepage(item.senderseq,true)" :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
 					   	<span class='twox'></span>
 					   	<span class='chattwo'>{{item.content}}</span>
 				   </li>
@@ -47,9 +47,7 @@ export default{
 		getchats(minvalue,psize){//获取聊天明细列表
 			var that=this;
 			this.$api('/Execute.do',{action:'chating.chats',chatgroup:this.$route.params.chatgroup,minvalue:minvalue,pageSize:psize,touserseq:this.$route.params.userseq}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
-					console.log(JSON.stringify(r));
 					if(r.data.chats==null||r.data.chats==undefined||r.data.chats==''){
 						return ;
 					}else{
@@ -100,6 +98,12 @@ export default{
 					})
 				}
 			})
+		},
+		gohomepage(touserseq,friend){
+			this.$router.replace('/homepage');
+			this.$store.commit('setblog_touserseq',touserseq);
+			this.$store.commit('setblog_friend',friend);
+			this.$store.commit('setblog_remark',null);
 		}
 	},
 	created(){

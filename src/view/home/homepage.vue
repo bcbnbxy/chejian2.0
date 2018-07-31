@@ -186,7 +186,6 @@ export default{
 							that.allLoaded=false;
 							that.pnum=r.data.blogs[r.data.blogs.length-1].blogseq;
 						}
-						console.log(JSON.stringify(that.picturelist));
 	    			}
 	    		}else{
 	    			that.$toast({
@@ -283,7 +282,7 @@ export default{
 	position: relative;
 	
 }
-.homepage-wrap-headtop span:nth-child(1){
+.homepage-wrap-headtop .icon-fanhui{
 	position: absolute;
 	left:0.5rem;
 }

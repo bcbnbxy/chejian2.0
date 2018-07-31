@@ -251,7 +251,8 @@ export default{
 	overflow:hidden;
 }
 .friends-cotaire-chatlist ul li>p:nth-child(1) img{
-	width:100%;
+	width:1.4rem;
+	height:1.4rem;
 }
 .friends-cotaire-chatlist ul li>p:nth-child(2){
 	flex:1;
@@ -318,23 +319,23 @@ export default{
 	border-bottom:1px solid #ddd;
 }
 .mint-indexlist{
-	height:100%;
+	height:100% !important;
 }
 .mint-indexlist-content{
 	margin-right:0 !important;
 }
 .mint-indexlist-nav{
-	background: none;
-	border-left:none;
+	background: none !important;
+	border-left:none !important;
 }
 .mint-indexlist-navitem{
-	font-size:0.44rem;
-	color:#1989F5;
+	font-size:0.44rem !important;
+	color:#222 !important;
 }
 .mint-indexsection-index{
 	font-size:0.48rem;
-	color:#999;
-	padding:0.15rem;
-	padding-left:0.2rem;
+	color:#999 !important;
+	padding:0.15rem !important;
+	padding-left:0.2rem !important;
 }
 </style>
