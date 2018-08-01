@@ -61,6 +61,7 @@ export default{
 				          position: 'bottom',
 		  				  duration: 1500
 				        });
+				        that.$router.go(-1);
 					}else{
 						that.$toast({
 				          message: r.errorMessage,

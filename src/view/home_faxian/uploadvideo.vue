@@ -10,7 +10,7 @@
 			</div>
 			<div class="upload-container-bottom">
 				<div class="picturelist">
-					<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+poster" v-if="poster"/>
+					<img :src="poster" v-if="poster"/>
 					<div class="upload-button imglist" :class="videoflag?'':'upload-button-hidden'">
 						<p  @click="actionSheetpic"></p>
 						<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>

@@ -20,17 +20,19 @@
 	export default{
 		data () {
 			return {
-				tel:'13782056503'
+				tel:JSON.parse(localStorage.getItem('loginInfo')).mobileno
 			}
 		},
 		computed:{
 			telphone:function(){
 				return this.tel.replace(this.tel.substring(3,8),'*****');
 			}
+		},
+		created(){
+			console.log(localStorage.getItem('loginInfo'))
 		}
 	}
 </script>
-
 <style scoped>
 .accountandsecurity-wrap{
 	width:100%;

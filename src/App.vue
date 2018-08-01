@@ -20,7 +20,7 @@ export default {
 							this.$store.commit('getplatform','iOS');
 						}
 						this.$store.commit('getuuid',window.device.getUUID());
-			  //	localStorage.removeItem('loginInfo');
+			  	//localStorage.removeItem('loginInfo');
     }
 }
 </script>
