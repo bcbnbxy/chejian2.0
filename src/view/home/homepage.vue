@@ -13,7 +13,7 @@
 					<p>{{descript}}</p>
 					<p @click="addmarker" v-show="friend&&$store.state.faxian.blogs.userseq"><span>{{remarker}}</span><i class="iconfont icon-bianji"></i></p>
 				</div>
-				<p class="addfriend" v-show="!friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq">加好友</p>
+				<p class="addfriend" v-show="!friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq" @click="addfriend(ownerseq)">加好友</p>
 			</div>
 		</div>
 		<div class="homepage-container">
@@ -196,13 +196,13 @@ export default{
 	    		}
 	    	})
 	    },
-	    loadTop:function() { //组件提供的下拉触发方法
+	    loadTop(){ //组件提供的下拉触发方法
 	        //下拉刷新
 	        this.picturelist=[];
 	        this.getblogs(0,5);
 	        this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
 	    },
-	    loadBottom:function(){
+	    loadBottom(){
 	    	this.getblogs(this.pnum,5);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
 	    },
@@ -235,16 +235,52 @@ export default{
 	    		}
 	    	})
 	    },
-	    loadTop1:function() { //组件提供的下拉触发方法
+	    loadTop1(){ //组件提供的下拉触发方法
 	        //下拉刷新
 	        this.videolist=[];
 	        this.getblogsvideo(0,5);
 	        this.$refs.loadmore1.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
 	    },
-	    loadBottom1:function(){
+	    loadBottom1(){
 	    	this.getblogsvideo(this.pagenum,5);
 	    	this.$refs.loadmore1.onBottomLoaded();	    	
-	    }
+	    },
+	    addfriend(userseq){//添加好友
+			var that=this;
+			if(localStorage.getItem('loginInfo')){
+				this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
+					if(r.errorCode==0){
+						that.$toast({
+			          		message:'消息已发送',
+				            position: 'bottom',
+		  				    duration: 1500
+			            });
+					}else{
+						that.$toast({
+			          		message:r.errorMessage,
+				            position: 'bottom',
+		  				    duration: 1500
+			            });
+					}
+				})
+			}else{
+				MessageBox.confirm('', {
+			        message: '您还没有登陆，去登陆',
+			        showConfirmButton:true,
+			        showCancelButton:true,
+			        confirmButtonText:'确定',
+			        cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            that.$router.push('/bootPage')
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		        });
+			}
+		}
 	},
 	mounted(){
 		this.getuserInfo();
@@ -252,7 +288,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 .homepage-wrap{
 	width:100%;
 	height:100%;

@@ -7,14 +7,14 @@
 	<div class="adduser-wrap-contaire">
 		<div class="adduser-wrap-search">
 			<p>
-				<i class="iconfont icon-search" @click="search()"></i>
+				<i class="iconfont icon-search"></i>
 				<input type="text" placeholder="手机号/昵称" v-model="value"/>
 				<i class="iconfont icon-clear" v-show="value" @click="value=''"></i>
 			</p>
 		</div>
 		<div class="adduser-wrap-result">
 			<router-link tag="div" :to="{name:'gerenxinxi',params:{personal:item}}" class="adduser-wrap-result-item" v-for="(item,index) in personal" :key='index'>
-				<img :src="item.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.headphoto:require('../../assets/img/faxianimg/avatar.png')" />
+				<img :src="item.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.headphoto:require('../../assets/img/shouye/defaultavatar.png')" />
 				<p>
 					<span><i class="iconfont icon-shouji"></i><b>手机：{{item.mobileno}}</b></span>
 					<span><i class="iconfont icon-yonghu"></i><span>昵称：{{item.nickname}}</span></span>

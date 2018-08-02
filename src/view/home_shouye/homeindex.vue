@@ -16,20 +16,24 @@
 		</div>
 		<div class="homeindex-wrap-head-bottom">
 			<div class="homeindex-wrap-head-bottom-contaire">
-				<p><b>{{selected&&selected.ranking}}</b><span>/名</span></p>
+				<p v-if="selected&&selected.ranking"><b>{{selected&&selected.ranking}}</b><span>/名</span></p>
+				<p v-else>暂无排名</p>
 				<p>当前排名</p>
-				<p>车辆安全系数 ： {{selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
+				<p v-if="selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue>=0">车辆安全系数 ： {{selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
+				<p v-else>添加车辆获取安全系数</p>
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
 					<router-link tag="div" :to="{name:'breakdown',params:{index:2,devicenum:selected&&selected.device,vin:selected&&selected.vin}}" class="homeindex-wrap-head-bottom-guzhang-contaire-left">
 						<p>当前警告</p>
-						<p><b>{{selected&&selected.warnCount}}</b><span>/处</span></p>
+						<p v-if="selected&&selected.warnCount>=0"><b>{{selected&&selected.warnCount}}</b><span>/处</span></p>
+						<router-link tag="p" to="/devicebinding" v-else style="font-size:0.44rem;color:#0061ff;padding-top:0.3rem">去添加车辆</router-link>
 					</router-link>
 					<div class="homeindex-wrap-head-bottom-guzhang-contaire-center"></div>
 					<router-link tag="div" :to="{name:'breakdown',params:{index:1,devicenum:selected&&selected.device,vin:selected&&selected.vin}}" class="homeindex-wrap-head-bottom-guzhang-contaire-right">
 						<p>当前故障</p>
-						<p><b>{{selected&&selected.faultCount}}</b><span>/处</span></p>
+						<p v-if="selected&&selected.faultCount>=0"><b>{{selected&&selected.faultCount}}</b><span>/处</span></p>
+						<router-link tag="p" to="/devicebinding" v-else style="font-size:0.44rem;color:#0061ff;padding-top:0.3rem">去添加车辆</router-link>
 					</router-link>
 				</div>
 			</div>
@@ -46,11 +50,13 @@
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
-			<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>			
-			<div class="homeindex-car-friends-list">
-				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
-		    	</mt-loadmore>
+				<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>
+				<div class="homeindex-car-friends-nodata" v-if="friends.length<=0">暂无数据</div>
+				<div class="homeindex-car-friends-list" v-else>
+					<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+			     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
+			    	</mt-loadmore>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -98,7 +104,7 @@ export default{
 			}).then(function(r){
 				that.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:0, pageSize:5}).then(function(r){
 					if(r.errorCode==0){
-						if(r.data.friendDeviceScores==null||r.data.friendDeviceScores==undefined||r.data.friendDeviceScores==''){
+						if(r.data.friendDeviceScores.length<=0){
 							that.$toast({
 						        message: '没有数据了',
 						        position: 'bottom',
@@ -106,12 +112,12 @@ export default{
 						    });
 						}else{
 							that.friends=that.friends.concat(r.data.friendDeviceScores);
-							if(r.data.friends.length<5){
+							if(r.data.friendDeviceScores.length<5){
 								that.allLoaded=true;
 								return;
 							}else{
 								that.allLoaded=false;
-								that.pageNo=r.data.friends[r.data.friendDeviceScores.length-1].deviceseq;	
+								that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;	
 							}						
 						}					
 					}else{
@@ -426,6 +432,7 @@ export default{
 }
 .homeindex-car-friends-list{
 	flex:1;
+	background: #f7f7f7;
 	overflow-y:auto;
 }
 .homeindex-car-friends-item{
@@ -434,6 +441,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
+	background: #fff;
 }
 .homeindex-car-friends-item img{
 	width:1rem;
@@ -451,5 +459,13 @@ export default{
 	color:#2d3461;
 	font-style: normal;
 	text-align: right;
+}
+.homeindex-car-friends-nodata{
+	flex:1;
+	background: #f7f7f7;
+	text-align: center;
+	font-size:0.44rem;
+	color:#999;
+	padding-top:3rem;
 }
 </style>

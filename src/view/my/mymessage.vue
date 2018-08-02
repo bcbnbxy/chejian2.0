@@ -44,7 +44,6 @@ export default{
 		getmessageCounts(){
 			var that=this;
 			this.$api('/Execute.do',{action:"messageCounts"}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					if(r.data.messageCounts==null||r.data.messageCounts==undefined||r.data.messageCounts==''){
 						return;

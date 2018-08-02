@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
     	'/customer': {
-	      target: 'http://192.168.31.193:8080 ',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
+	      target: 'http://192.168.31.193:8080',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
 	      changeOrigin: true,
 	      pathRewrite: {
           '^/customer': '/customer'   //需要rewrite重写的,

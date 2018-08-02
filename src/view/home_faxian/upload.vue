@@ -37,7 +37,7 @@ export default{
 		        method : this.getLibrary// 调用methods中的函数  
 		      }], 
 		    sheetVisible: false,
-		    data:[],//'blog/216e6e94-bea5-4e2b-9a2c-cf7073ebe5e7.jpg'
+		    data:[],
 		    params:{
 		    	action:'blog.addBlog',
 		    	mediatype:'0',

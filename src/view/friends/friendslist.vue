@@ -2,6 +2,7 @@
 <div class="friends-wrap">
 	<div class="friends-wrap-head">
 		<span>好友</span>
+		<span @click="toggleaddfriend">添加好友</span>
 	</div>
 	<div class="friends-cotaire">
 		<div class="friends-cotaire-nav"><p><span :class="index==1?'navcontaire':''" @click="togglenav(1)">车友</span><span :class="index==2?'navcontaire':''" @click="togglenav(2)">消息</span></p></div>
@@ -22,11 +23,16 @@
 			</mt-index-list>
 		</div>
 	</div>
+	<div class="addfriend-contaire" :class="addfriend?'addfriend-show':'addfriend-hidden'">
+		<v-Addfriend v-on:listaddfriendshow="toggleaddfriend"></v-Addfriend>
+	</div>
 </div>
 </template>
 
 <script>
+import Addfriend from '@/components/faxian/addfriend'
 export default{
+	components:{"v-Addfriend":Addfriend},
 	data(){
 		return{
 			chatlist:[],
@@ -34,7 +40,8 @@ export default{
 			psize:10,
 			allLoaded:false,
 			index:1,
-			friends:null
+			friends:null,
+			addfriend:false,
 		}
 	},
 	mounted(){
@@ -91,6 +98,9 @@ export default{
 			}else if(this.index==1){
 				this.getcarfriends();
 			}
+		},
+		toggleaddfriend(){
+			this.addfriend=!this.addfriend;
 		},
 		getcarfriends(){//获取我的车友列表
 			var that=this;
@@ -165,6 +175,7 @@ export default{
 	display: -webkit-flex;
 	flex-direction: column;
 	overflow: hidden;
+	position: relative;
 }
 .friends-wrap-head{
 	height:1.32rem;
@@ -173,8 +184,15 @@ export default{
 	line-height:1.32rem;
 	font-size:0.56rem;
 	color:#fff;
+	padding:0 0.5rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+	position: relative;
+}
+.friends-wrap-head span:last-child{
+	position: absolute;
+	right:0.5rem;
+	font-size:0.44rem;
 }
 .friends-cotaire-nav{
 	width:100%;
@@ -337,5 +355,21 @@ export default{
 	color:#999 !important;
 	padding:0.15rem !important;
 	padding-left:0.2rem !important;
+}
+.addfriend-contaire{
+	width:100%;
+	height:100%;
+	position: fixed;
+	top:0;
+	background: tan;
+	z-index: 1000;	
+}
+.addfriend-show{
+	left:0;
+	transition: all 0.3s;
+}
+.addfriend-hidden{
+	left:100%;
+	transition: all 0.3s;
 }
 </style>
