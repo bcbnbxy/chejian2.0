@@ -117,7 +117,7 @@ export default{
 .personal-top{
 	height:4.7rem;
 	width:100%;
-	background-image: url(../../assets/img/faxianimg/headbg.png);
+	background-image: url(../../assets/img/shouye/bg.png);
 	background-size: cover;
 }
 .personal-top header{

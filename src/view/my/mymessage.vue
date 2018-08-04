@@ -119,7 +119,6 @@ export default{
 }
 .mymessage-contaire li p:nth-child(1) img{
 	width:0.62rem;
-	height:0.5rem;
 	margin-right:0.5rem;
 	vertical-align: middle
 }

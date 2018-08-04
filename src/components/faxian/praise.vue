@@ -89,7 +89,8 @@ export default {
 .praise-head{
 	width: 100%;
 	height:1.32rem;
-	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
+	background-image: url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover ;
 	padding:0.21rem 0.5rem;
 	font-size:0.56rem;
 	color:#fff;

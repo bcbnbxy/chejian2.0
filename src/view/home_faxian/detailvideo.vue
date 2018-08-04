@@ -37,8 +37,8 @@
 		<div class="detail-foot">
 			<div class="detail-footer">
 				<div class="input" @click="toggleInput"><span>发表评论...</span></div>
-				<p @click="togglezan($route.params.datalist.blogseq)"><i class="iconfont icon-xin" :style="$route.params.datalist.praised?'color:#ff0000':''"></i><span>{{$route.params.datalist.praisecount}}</span></p>
-				<p @click="goTop"><i class="iconfont icon-pinglun1"></i><span>{{$route.params.datalist.refcount}}</span></p>
+				<p @click="togglezan($route.params.datalist.blogseq)"><i class="iconfont icon-dianzan" :style="$route.params.datalist.praised?'color:#ff0000':''"></i><span>{{$route.params.datalist.praisecount}}</span></p>
+				<p @click="goTop"><i class="iconfont icon-xiaoxi1"></i><span>{{$route.params.datalist.refcount}}</span></p>
 			</div>
 			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
 				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
@@ -76,7 +76,6 @@ export default{
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
 	mounted() {	
-		console.log(111);
 		this.getVideoPlayAuth();
         this.$nextTick(function () {
             window.addEventListener('scroll', this.needToTop);  //滚动事件监听
@@ -397,6 +396,7 @@ export default{
 	background: tan;
 	position: absolute;
 	top:0;
+	z-index: 1001;
 }
 .praise-contaire-show{
 	left:0;
@@ -409,7 +409,8 @@ export default{
 .detail-head{
 	width:100%;
 	height:1.32rem;
-	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
+	background-image: url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover;
 	padding:0 0.5rem;
 	text-align: center;
 	line-height:1.32rem;
@@ -441,7 +442,7 @@ export default{
 .detail-noreply{
 	flex:1;
 	display: flex;
-	display: -webkit-box;
+	display: -webkit-flex;
 	align-items: center;
 	justify-content: center;
 	font-size:0.36rem;
@@ -469,7 +470,7 @@ export default{
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.3rem;
+	font-size:0.4rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -560,7 +561,7 @@ export default{
 	flex:1;
 	background:#eee;
 	height:1.02rem;
-	padding-left:0.1rem;
+	padding-left:0.5rem;
 	border-radius: 5px;
 	line-height: 1.02rem;
 }

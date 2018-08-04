@@ -203,7 +203,7 @@ export default{
 .homeindex-wrap-head{
 	width:100%;
 	height:6.63rem;
-	background-image:url(../../assets/img/faxianimg/headbg.png);
+	background-image:url(../../assets/img/shouye/bg.png);
 	background-size:cover ;
 }
 .homeindex-wrap-head>.icon-scan{
@@ -328,6 +328,7 @@ export default{
 	display: -webkit-flex;
 	align-items: center;
 	justify-content: space-around;
+	padding-top: 0.2rem
 }
 .homeindex-wrap-head-bottom-guzhang-contaire-center{
 	width:1px;

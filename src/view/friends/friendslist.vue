@@ -353,8 +353,11 @@ export default{
 .mint-indexsection-index{
 	font-size:0.48rem;
 	color:#999 !important;
-	padding:0.15rem !important;
+	/*padding:0.15rem !important;*/
+	padding:0 !important;
 	padding-left:0.2rem !important;
+	height:0.8rem !important;
+	line-height:0.7rem !important;
 }
 .addfriend-contaire{
 	width:100%;

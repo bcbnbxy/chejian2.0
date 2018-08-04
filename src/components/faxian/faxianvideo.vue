@@ -12,8 +12,8 @@
 			</div>			
 		</router-link>
 		<div class="fourpicture-title">
-			<p><i class="iconfont icon-xin" :style="praiseflag?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,praisecount)"></i><span>{{praisecount}}</span></p>
-			<router-link :to="{name:'detailvideo',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>{{data.refcount}}</span></router-link>
+			<p><i class="iconfont icon-dianzan" :style="praiseflag?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,praisecount)"></i><span>{{praisecount}}</span></p>
+			<router-link :to="{name:'detailvideo',params:{datalist}}" tag="p"><i class="iconfont icon-xiaoxi1"></i><span>{{data.refcount}}</span></router-link>
 			<!--<p @click="more(index)">···</p>-->
 		</div>
 		<!--<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
@@ -215,7 +215,7 @@
 }
 .fourpicture-content p{
 	line-height:0.54rem;
-	font-size:0.36rem;
+	font-size:0.44rem;
 	color:#333;
 	margin:0;
 	padding:0;
@@ -239,10 +239,6 @@
 .fourpicture-title p:nth-child(3){
 	font-size:1rem;
 	vertical-align: bottom;
-}
-.fourpicture-title .icon-xin{
-	display: inline-block;
-	vertical-align: baseline !important;
 }
 .fourpicture-title p .icon{	
 	font-size:0.6rem;

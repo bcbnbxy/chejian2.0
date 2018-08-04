@@ -30,17 +30,17 @@
 			<div class="detail-reply" id="scroll" v-if="replylist.length>0">
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 		     		<Reply-list v-for="(item,index) in replylist" :replyitem="item" :key="index"></Reply-list>
-		       </mt-loadmore>				
+		        </mt-loadmore>				
 			</div>
-			<div class="detail-noreply" v-else>
+			<div class="detail-noreply" v-else>	
 				<p>哎同学，这个沙发你不抢吗~</p>
 			</div>
 		</div>
 		<div class="detail-foot">
 			<div class="detail-footer">
 				<div class="input" @click="toggleInput"><span>发表评论...</span></div>
-				<p @click="togglezan($route.params.datalist.blogseq)"><i class="iconfont icon-xin" :style="$route.params.datalist.praised?'color:#ff0000':''"></i><span>{{$route.params.datalist.praisecount}}</span></p>
-				<p @click="goTop"><i class="iconfont icon-pinglun1"></i><span>{{$route.params.datalist.refcount}}</span></p>
+				<p @click="togglezan($route.params.datalist.blogseq)"><i class="iconfont icon-dianzan" :style="$route.params.datalist.praised?'color:#ff0000':''"></i><span>{{$route.params.datalist.praisecount}}</span></p>
+				<p @click="goTop"><i class="iconfont icon-xiaoxi1"></i><span>{{$route.params.datalist.refcount}}</span></p>
 			</div>
 			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
 				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
@@ -317,7 +317,8 @@ export default{
 .detail-head{
 	width:100%;
 	height:1.32rem;
-	background: url(../../assets/img/faxianimg/headbg.png) center no-repeat;
+	background-image: url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover ;
 	padding:0 0.5rem;
 	text-align: center;
 	line-height:1.32rem;
@@ -342,18 +343,18 @@ export default{
 	border-bottom:1px solid #dcdcdc;
 }
 .detail-reply{
-	flex: 1;
-	background: #fff;
+	flex:1;
+	background:#fff;
 	overflow: auto;
 }
 .detail-noreply{
 	flex:1;
-	display: flex;
-	display: -webkit-box;
-	align-items: center;
-	justify-content: center;
 	font-size:0.36rem;
 	color:#999;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	justify-content: center;
 }
 .fourpicture-avatar{
 	padding-top:0.81rem;
@@ -377,7 +378,7 @@ export default{
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.3rem;
+	font-size:0.4rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -486,7 +487,7 @@ export default{
 	flex:1;
 	background:#eee;
 	height:1.02rem;
-	padding-left:0.1rem;
+	padding-left:0.5rem;
 	border-radius: 5px;
 	line-height: 1.02rem;
 }
@@ -523,6 +524,7 @@ export default{
 }
 .detail-input span{
 	font-size:0.48rem;
+	padding-left:0.5rem;
 }
 .detail-foot p{
 	margin-left:0.8rem;

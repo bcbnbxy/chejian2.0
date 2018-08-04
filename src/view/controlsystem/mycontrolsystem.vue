@@ -116,7 +116,7 @@ export default{
 .mycontrolsystem-wrap-top{
 	width:100%;
 	height:6.4rem;
-	background-image:url(../../assets/img/faxianimg/headbg.png) ;
+	background-image:url(../../assets/img/shouye/bg.png) ;
 	background-size:cover ;
 }
 .mycontrolsystem-wrap-header{
