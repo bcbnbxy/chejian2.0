@@ -89,32 +89,50 @@ export default {
 		    return y + ' ' + m + ' ' + d
 		},
 	    captureImage(){//拍照
-			var param = (new Date()).getTime() + '.jpg';
-			param = '{"filename" : "' + param + '"}';
-			param = window.camera.captureImage(param);
-			if(param==""||param==null||param==undefined){
-				this.$toast({
-		          message: "请重新拍照",
-		          position: 'bottom',
-				  duration: 1500
-		        });
-	      		return ;
-			}else{
-				this.testUpload(param);
-			}
+			var that=this;
+			window.captureImage(
+		        function(result){
+		          if(result==""||result==null||result==undefined){
+						that.sheetVisible=false;
+						that.$toast({
+				          message: "请重新拍照",
+				          position: 'bottom',
+						  duration: 1500
+				        });
+			      		return ;
+					}else{
+						that.testUpload(result);
+					}
+		        },function(code, err){
+		          that.$toast({
+			          message: 'captureImage code:'+code+'error:'+err,
+			          position: 'bottom',
+					  duration: 1500
+			        });
+		        });	
 		},
-		getLibrary(){ //从相册选择视频或图片 
-	      var ret =  window.gallery.pickImage();
-	      if(ret==""||ret==null||ret==undefined){
-	      	this.$toast({
-	          message: "请重新选择图片",
-	          position: 'bottom',
-			  duration: 1500
-	        });
-	      	return ;
-	      }else{
-	      	 this.testUpload(ret)
-	      }	     
+		getLibrary(){ //从相册选择视频或图片  
+			var that=this;
+			window.pickImage(
+		        function(result){
+		          if(result==""||result==null||result==undefined){
+						that.sheetVisible=false;
+						that.$toast({
+				          message: "请重新选择图片",
+				          position: 'bottom',
+						  duration: 1500
+				        });
+			      		return ;
+					}else{
+						that.testUpload(result);
+					}
+		        },function(code, err){
+		          that.$toast({
+			          message: 'pickImage code:'+code+'error:'+err,
+			          position: 'bottom',
+					  duration: 1500
+			        });
+		        });	
 	    },
 	    testUpload(file){//上传头像到服务器
 			var ret = window.action.doUploadImage(file, '{"path":"headphoto"}');

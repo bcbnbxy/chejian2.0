@@ -75,37 +75,55 @@ export default{
 		actionSheetpic: function(){
 	      this.sheetVisible = true;  
 	   },  
-	    getLibrary: function(){ //从相册选择视频或图片 
-	      var ret =  window.gallery.pickImage();
-	      if(ret==""||ret==null||ret==undefined){
-	      	that.$toast({
-	          message: "请重新选择图片",
-	          position: 'bottom',
-			  duration: 1500
-	        });
-	      	return ;
-	      }else{
-	      	 this.testUploadAli(ret)
-	      }	     
+	    getLibrary: function(){ //从相册选择视频或图片
+	    	var that=this;
+	    	window.pickImage(
+		        function(result){
+		          if(result==""||result==null||result==undefined){
+						that.sheetVisible=false;
+						that.$toast({
+				          message: "请重新拍照",
+				          position: 'bottom',
+						  duration: 1500
+				        });
+			      		return ;
+					}else{
+						that.testUploadAli(result);
+					}
+		        },function(code, err){
+		          that.$toast({
+			          message: 'pickImage code:'+code+'error:'+err,
+			          position: 'bottom',
+					  duration: 1500
+			        });
+		        });	  
 	    },
 	    descInput:function(){
 	        var txtVal = this.content.length;
 	        this.remnant = 120 - txtVal;
 	    },
 	    captureImage:function(){ //调用手机摄像头进行拍照
-			var param = (new Date()).getTime() + '.jpg';
-			param = '{"filename" : "' + param + '"}';
-			param = window.camera.captureImage(param);
-			if(param==""||param==null||param==undefined){
-				that.$toast({
-		          message: "请重新拍照",
-		          position: 'bottom',
-				  duration: 1500
-		        });
-	      		return ;
-			}else{
-				this.testUploadAli(param);
-			}
+	    	var that=this;
+	    	window.captureImage(
+		        function(result){
+		          if(result==""||result==null||result==undefined){
+						that.sheetVisible=false;
+						that.$toast({
+				          message: "请重新拍照",
+				          position: 'bottom',
+						  duration: 1500
+				        });
+			      		return ;
+					}else{
+						that.testUploadAli(result);
+					}
+		        },function(code, err){
+		          that.$toast({
+			          message: 'captureImage code:'+code+'error:'+err,
+			          position: 'bottom',
+					  duration: 1500
+			        });
+		        });	
 		},
 		testUploadAli(file){
 			var ret = window.action.doUploadImage(file, '{"path":"blog"}');

@@ -17,7 +17,6 @@
 	</div>
 </template>
 <script>
-import User from '@/components/search/user'
 export default {
 	props:{
 		praisers:{
@@ -27,7 +26,6 @@ export default {
 			}
 		}
 	},
-	components:{User},
 	data(){
 		return{
 			userseq:localStorage.getItem('loginInfo')==null?'':JSON.parse(localStorage.getItem('loginInfo')).userseq,

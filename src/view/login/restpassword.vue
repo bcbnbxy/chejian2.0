@@ -9,7 +9,7 @@
 				  <input placeholder="请输入手机号" type="tel" v-model="loginname" @keydown="LoginName"/>
 			</div>
 			<div class="restpassword-yzm">
-				<input class="loginpassword" type="text" placeholder="请输入验证码"  v-model="yzm"/>
+				<input class="loginpassword" type="text" placeholder="请输入验证码"  v-model="yzm" @keydown="checkcode"/>
 				<div class="getyzm" @click="sendcode"><span v-show="!$store.state.login.yzmtrue">{{$store.state.login.sendmessage}}</span><span v-show="$store.state.login.yzmtrue">{{$store.state.login.sendcodetime}} s</span></div>
 			</div>
 			<mt-button type="default" :disabled="isdisabled" @click="gosetpassword">下一步</mt-button>
@@ -61,7 +61,8 @@ export default{
 		       	self.$store.commit('sendcodedjs');
 	        }
 		},
-		YZM:lodash.debounce(function(){
+		checkcode:lodash.debounce(function(){
+			console.log(this.yzm);
 				if(this.yzm.trim().length<1){
 					this.$toast({
 			          message: '验证码不能为空',
@@ -84,8 +85,9 @@ export default{
 			       });
 					this.yzmtrue=true;
 				}
-			},1500),
+			},1000),
 		LoginName:lodash.debounce(function(){
+				console.log(111);
 				if(this.loginname.trim().length<1){
 					this.$toast({
 			          message: '手机号不能为空',

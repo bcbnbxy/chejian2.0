@@ -92,8 +92,9 @@ export default{
 			          message: '登录成功',
 			          position: 'bottom',
   					  duration: 1500
-			       });
-			       that.$store.commit('getloginInfo',r.data.login)
+			      });
+//			       window.action.registerPush(r.data.login.mobileno);
+			       that.$store.commit('getloginInfo',r.data.login);
 			       that.$router.push('/home');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));
 			       that.$store.commit('setblog_userseq');

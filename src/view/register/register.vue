@@ -12,7 +12,7 @@
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="text" placeholder="请输入短信验证码" v-model="code" @keyup="Code"/>
-				<p @click="getcode"><span v-show="!$store.state.register.yzmtrue" style="color:#1989F5;">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.register.sendcodetime}} s</span></p>
+				<p @click="mobilenoflag&&getcode()"><span v-show="!$store.state.register.yzmtrue" :style="mobilenoflag?'color:#1989F5;':'color:#ddd'">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.register.sendcodetime}} s</span></p>
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="password" placeholder="请设置密码" v-model="password" @keyup="Password"/>
@@ -40,7 +40,8 @@ export default{
 			nickname:'',
 			nicknameflag:false,
 			code:'',
-			codeflag:false
+			codeflag:false,
+			getcheckcode:false
 		}
 	},
 	computed:{
@@ -50,7 +51,7 @@ export default{
 			}else{
 				return true;
 			}
-		}
+		},
 	},
 	methods:{
 		Phonenum:lodash.debounce(function(){

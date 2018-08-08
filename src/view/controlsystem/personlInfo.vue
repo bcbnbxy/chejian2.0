@@ -7,17 +7,16 @@
 			<span style="font-size:0.44rem;" @click="deleteuser">删除</span>
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img :src="$route.params.myInfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.myInfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+			<img :src="$store.state.controls.staffinfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$store.state.controls.staffinfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 			<p>
-				<span>{{$route.params.myInfo.userInfo.nickname}}</span>
-				<!--<span>24岁   女</span>-->
+				<span>{{$store.state.controls.staffinfo.userInfo.nickname}}</span>
 			</p>
 		</div>
 	</div>
 	<div class="personlInfo-list">
 		<div class="personlInfo-list-item">
 			<p>手机号</p>
-			<p>{{$route.params.myInfo.userInfo.mobileno}}</p>
+			<p>{{$store.state.controls.staffinfo.userInfo.mobileno}}</p>
 		</div>
 		<div class="personlInfo-list-item" @click="Revisenotes">
 			<p>备注</p>
@@ -27,12 +26,12 @@
 			<p>所属团队</p>
 			<p><span>{{group}}</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
-		<div class="personlInfo-list-item">
+		<div class="personlInfo-list-item" @click="gohomepage($store.state.controls.staffinfo.staffseq)">
 			<p>他的主页</p>
 			<p><span></span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p>
 		</div>
 	</div>
-	<div class="personlInfo-wrap-save"><button @click="save" :style="(remark!=$route.params.myInfo.staffname||group!=$route.params.departmentname)?'':'background:#ccc;'">保存</button></div>
+	<div class="personlInfo-wrap-save"><button @click="save" :style="(remark!=$store.state.controls.staffinfo.staffname||group!=$store.state.controls.departmentname)?'':'background:#ccc;'">保存</button></div>
 	<mt-popup v-model="popupVisible"  position="bottom"  style="width:100%;"> 	  	 
 		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" valueKey="departname"></mt-picker>
 	</mt-popup>
@@ -44,10 +43,10 @@ import { MessageBox } from 'mint-ui';
 export default{
 	data(){
 		return {
-			remark:this.$route.params.myInfo.staffname?this.$route.params.myInfo.staffname:'',
+			remark:this.$store.state.controls.staffinfo.staffname?this.$store.state.controls.staffinfo.staffname:'',
 			popupVisible:false,
 			flag:0,
-			departseq:this.$route.params.departseq,
+			departseq:this.$store.state.controls.departseq,
 			group:'',
 			slots:[
 				{
@@ -63,7 +62,7 @@ export default{
 		onValuesChange(picker, values){
 			if(this.flag==0){
 				this.flag=1;
-				this.group=this.$route.params.departmentname;
+				this.group=this.$store.state.controls.departmentname;
 				return;
 			}
 			this.group=values[0].departname;
@@ -73,8 +72,20 @@ export default{
 			var that=this;
 			MessageBox.confirm('确定删除此成员吗？').then(action => {
 	            if (action == 'confirm') {
-	            	that.$api('/Execute.do',{action:'device.fireAgentStaff',staffseq:this.$route.params.myInfo.staffseq}).then(function(r){
-	            		console.log(JSON.stringify(r));
+	            	that.$api('/Execute.do',{action:'device.fireAgentStaff',staffseq:this.$store.state.controls.staffinfo.staffseq}).then(function(r){
+	            		if(r.errorCode==0){
+	            			that.$toast({
+								message:'删除业务员成功',
+								position:'bottom',
+								duration:1500
+							})
+	            		}else{
+	            			that.$toast({
+								message:r.errorMessage,
+								position:'bottom',
+								duration:1500
+							})
+	            		}
 	            	})
 	            }
 	        }).catch(err => {
@@ -82,6 +93,11 @@ export default{
 	                console.log('123');
 	            }
 	        });
+		},
+		gohomepage(touserseq){
+			this.$router.push('/homepage')
+			this.$store.commit('setblog_touserseq',touserseq);
+			this.$store.commit('setblog_remark',null);
 		},
 		Revisenotes(){
 			var that=this;
@@ -105,18 +121,18 @@ export default{
 		},
 		getdepartment(){
 			var departmentlist=[];
-			for(var i=0;i<this.$route.params.department.length;i++){
+			for(var i=0;i<this.$store.state.controls.department.length;i++){
 				let obj={};
-				obj.departname=this.$route.params.department[i].departname;
-				obj.departseq=this.$route.params.department[i].departseq;
+				obj.departname=this.$store.state.controls.department[i].departname;
+				obj.departseq=this.$store.state.controls.department[i].departseq;
 				departmentlist.push(obj)
 			}
 			return departmentlist;
 		},
 		save(){
 			var that=this;
-			if(this.remark!=this.$route.params.myInfo.staffname||this.group!=this.$route.params.departmentname){
-				this.$api('/Execute.do',{action:'device.updateAgentStaff',staffname:this.remark,departseq:this.departseq,staffseq:this.$route.params.myInfo.staffseq}).then(function(r){
+			if(this.remark!=this.$store.state.controls.staffinfo.staffname||this.group!=this.$store.state.controls.departmentname){
+				this.$api('/Execute.do',{action:'device.updateAgentStaff',staffname:this.remark,departseq:this.departseq,staffseq:this.$store.state.controls.staffinfo.staffseq}).then(function(r){
 					if(r.errorCode==0){
 						that.$toast({
 							message:'修改资料成功',

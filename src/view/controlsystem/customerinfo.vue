@@ -6,19 +6,19 @@
 			<span>编辑客户信息</span>
 		</div>
 		<div class="gerenxinxi-wrap-head-bottom">
-			<img :src="$route.params.customerinfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.customerinfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+			<img :src="$store.state.controls.customerinfo.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$store.state.controls.customerinfo.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
 			<p>
-				<span>{{$route.params.customerinfo.userInfo.nickname}}</span>
-				<span>{{$route.params.customerinfo.userInfo.gender | sex}}</span>
+				<span>{{$store.state.controls.customerinfo.userInfo.nickname}}</span>
+				<span>{{$store.state.controls.customerinfo.userInfo.gender | sex}}</span>
 			</p>
 		</div>
 	</div>
 	<ul class="customerinfo-wrap-list">
-		<li><span>手机号码</span><p>{{$route.params.customerinfo.userInfo.mobileno}}</p></li>
+		<li><span>手机号码</span><p>{{$store.state.controls.customerinfo.userInfo.mobileno}}</p></li>
 		<li @click="Revisenotes"><span>备注</span><p>{{remark}}<i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
-		<li><span>他的主页</span><p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
+		<li @click="gohomepage($store.state.controls.customerinfo.userseq)"><span>他的主页</span><p><i class="iconfont icon-arrow-right-copy-copy-copy"></i></p></li>
 	</ul>
-	<div class="customerinfo-wrap-footer"><button @click="save" :style="remark!=$route.params.customerinfo.remark?'':'background:#ccc'">保存</button></div>
+	<div class="customerinfo-wrap-footer"><button @click="save" :style="remark!=$store.state.controls.customerinfo.remark?'':'background:#ccc'">保存</button></div>
 </div>
 </template>
 
@@ -27,7 +27,7 @@ import { MessageBox } from 'mint-ui';
 export default{
 	data(){
 		return {
-			remark:this.$route.params.customerinfo.remark,
+			remark:this.$store.state.controls.customerinfo.remark,
 		}
 	},
 	methods:{
@@ -53,8 +53,8 @@ export default{
 		},
 		save(){//修改备注
 			var that=this;
-			if(this.remark!=this.$route.params.customerinfo.remark){			
-				this.$api('/Execute.do',{action:'device.updateCustomerInfo',remark:this.remark,userseq:this.$route.params.customerinfo.userseq}).then(function(r){
+			if(this.remark!=this.$store.state.controls.customerinfo.remark){			
+				this.$api('/Execute.do',{action:'device.updateCustomerInfo',remark:this.remark,userseq:this.$store.state.controls.customerinfo.userseq}).then(function(r){
 					if(r.errorCode==0){
 						that.$toast({
 							message:'修改资料成功',
@@ -70,6 +70,11 @@ export default{
 					}
 				})
 			}
+		},
+		gohomepage(touserseq){
+			this.$router.push('/homepage')
+			this.$store.commit('setblog_touserseq',touserseq);
+			this.$store.commit('setblog_remark',null);
 		}
 	},
 	filters:{

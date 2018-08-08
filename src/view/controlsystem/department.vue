@@ -50,7 +50,6 @@ export default{
 		getdepartments(){//获取部门列表及部门人员信息
 			var that=this;
 			this.$api('/Execute.do',{action:'device.departments'}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					that.dataList=r.data.departments;
 				}else{

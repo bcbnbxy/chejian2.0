@@ -114,7 +114,8 @@ export default{
 }
 .faxianlist{
 	flex:1;
-	overflow: auto;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 .faxianhead{
 	height:1.32rem;

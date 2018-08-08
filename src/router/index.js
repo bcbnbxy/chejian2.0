@@ -17,19 +17,10 @@ import Violationinquiry from '@/view/home_shouye/Violationinquiry'
 import Chosecar from '@/view/home_shouye/chosecar'
 import Fillinfo from '@/view/home_shouye/fillinfo'
 import Detailsviolation from '@/view/home_shouye/detailsviolation'
-import Friendslist from '@/view/home_shouye/friendslist'
-import Rankings from '@/view/home_shouye/rankings'
-import Personaldata from '@/view/home_shouye/personaldata'
-import Listrankings from '@/view/home_shouye/listrankings'
-import Carlovescore from '@/view/home_shouye/carlovescore'
-import Powersystem from '@/view/home_shouye/powersystem'
-import Idlingsystem from '@/view/home_shouye/idlingsystem'
 import Faxian from '@/view/home_faxian/faxian'
 import Detailpage from '@/view/home_faxian/detailpage'
 import Detailvideo from '@/view/home_faxian/detailvideo'
-import Phonebook from '@/view/home_faxian/phonebook'
 import Homepage from '@/view/home/homepage'
-import Fensi from '@/view/home_faxian/fensi'
 import Upload from '@/view/home_faxian/upload'
 import Uploadvideo from '@/view/home_faxian/uploadvideo'
 import Personal from '@/view/my/personal'
@@ -109,9 +100,6 @@ export default new Router({
     	},{
     		path:'/nonetwork',
     		component:Nonetwork
-    	},{
-    		path:'/phonebook',
-    		component:Phonebook
     	}]
     },{
 		path:'/homepage',
@@ -126,9 +114,6 @@ export default new Router({
 		name:'detailvideo',
 		component:Detailvideo
     },{
-		path:'/fensi',
-		component:Fensi
-	},{
 		path:'/upload',
 		name:"upload",
 		component:Upload
@@ -252,34 +237,6 @@ export default new Router({
 		path:'/detailsviolation',
 		name:'detailsviolation',
 		component:Detailsviolation
-	},{
-		path:'/friendslist',
-		name:'friendslist',
-		component:Friendslist
-	},{
-		path:'/personaldata',
-		name:'personaldata',
-		component:Personaldata
-	},{
-		path:'/listrankings',
-		name:'listrankings',
-		component:Listrankings
-	},{
-		path:'/rankings',
-		name:'rankings',
-		component:Rankings
-	},{
-		path:'/carlovescore',
-		name:'carlovescore',
-		component:Carlovescore
-	},{
-		path:'/powersystem',
-		name:'powersystem',
-		component:Powersystem
-	},{
-		path:'/idlingsystem',
-		name:'idlingsystem',
-		component:Idlingsystem
 	},{
 		path:'/devicelist',
 		component:Devicelist

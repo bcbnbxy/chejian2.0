@@ -47,7 +47,7 @@ export default{
 			currentView:'picture',
 			ownerseq:this.$store.state.faxian.blogs.touserseq,//点击的那个用户的唯一标示
 			headphoto:null,
-			friend:this.$store.state.faxian.blogs.friend,
+			friend:false,
 			remarker:this.$store.state.faxian.blogs.remark?this.$store.state.faxian.blogs.remark:'请添加备注',
 			nickname:null,
 			descript:null,
@@ -127,6 +127,7 @@ export default{
 	    				that.headphoto=r.data.userInfo.headphoto;
 	    				that.nickname=r.data.userInfo.nickname;
 	    				that.descript=r.data.userInfo.descript?r.data.userInfo.descript:'这个人很懒，什么也没有说';
+	    				that.friend=r.data.userInfo.friend;
 	    			}
 	    		}else{
 	    			that.$toast({

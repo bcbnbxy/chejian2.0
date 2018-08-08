@@ -7,7 +7,7 @@
 	</div>
 	<dl>
 		<dt @click="addgroup"><i class="iconfont icon-jia"></i><span>添加部门名称</span></dt>
-		<dd @click="deletegroup(item.departseq,item.departname)" v-for="(item,index) in departmentlist"><i class="iconfont icon-jian"></i><span>{{item.departname}}</span></dd>
+		<dd @click="deletegroup(item.departseq,item.departname,item.staffs.length)" v-for="(item,index) in departmentlist"><i class="iconfont icon-jian"></i><span>{{item.departname}}</span></dd>
 		<!--<dd @click="deletegroup"><i class="iconfont icon-jian"></i><span>推广部</span></dd>-->
 	</dl>
 	<div class="messagebox-prompt" v-if="isprompt">
@@ -48,39 +48,42 @@ export default{
             this.$emit("listenTochildEvent");
             this.$emit("agingetdepartments");
         },
-        deletegroup(departseq,departname){
+        deletegroup(departseq,departname,length){
         	var that=this;
-      	    MessageBox.confirm('', {
-                message: '确定删除此部门吗？这项操作会删除该部门下的所有人员，请谨慎操作！',
-                showConfirmButton:true,
-                showCancelButton:true,
-                confirmButtonText:'确定',
-                cancelButtonText:'取消'
-           }).then(action => {
-                if (action == 'confirm') {
-                    that.$api('/Execute.do',{action:'device.updateDepartment;device.departments',departseq:departseq,departname:departname,status:2}).then(function(r){
-                    	console.log(JSON.stringify(r));
-                    	if(r.errorCode==0){
-                    		that.departmentlist=r.data.departments;
-                    		that.$toast({
-								message:'部门删除成功',
-								position:'bottom',
-								duration:1500
-							})
-                    	}else{
-                    		that.$toast({
-								message:r.errorMessage,
-								position:'bottom',
-								duration:1500
-							})
-                    	}
-                    })
-                }
-            }).catch(err => {
-                if (err == 'cancel') {
-                    console.log('123');
-                }
-            });
+      	    if(length>0){
+      	    	MessageBox('提示', '请先移除该部门下的人员,再删除该部门');
+      	    }else{
+      	    	MessageBox.confirm('', {
+	                message: '确定删除此部门吗？这项操作会删除该部门下的所有人员，请谨慎操作！',
+	                showConfirmButton:true,
+	                showCancelButton:true,
+	                confirmButtonText:'确定',
+	                cancelButtonText:'取消'
+	           }).then(action => {
+	                if (action == 'confirm') {
+	                    that.$api('/Execute.do',{action:'device.updateDepartment;device.departments',departseq:departseq,departname:departname,status:2}).then(function(r){
+	                    	if(r.errorCode==0){
+	                    		that.departmentlist=r.data.departments;
+	                    		that.$toast({
+									message:'部门删除成功',
+									position:'bottom',
+									duration:1500
+								})
+	                    	}else{
+	                    		that.$toast({
+									message:r.errorMessage,
+									position:'bottom',
+									duration:1500
+								})
+	                    	}
+	                    })
+	                }
+	            }).catch(err => {
+	                if (err == 'cancel') {
+	                    console.log('123');
+	                }
+	            });
+      	    }
         },
         addgroup(){
       		this.isprompt=true;

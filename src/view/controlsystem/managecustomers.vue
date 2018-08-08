@@ -7,8 +7,8 @@
 	<div class="managecustomers-wrap-list">
 		<ul>
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-				<router-link tag="li" :to="{name:'customerinfo',params:{customerinfo:item}}" v-for="(item,index) in customerlist" :key="index"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></router-link>						
-	   	    </mt-loadmore>	
+				<li @click="gocustomerinfo(item)" v-for="(item,index) in customerlist" :key="index"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></li>						
+	   	    </mt-loadmore>
 		</ul>
 	</div>
 </div>
@@ -51,6 +51,11 @@ export default{
 		loadBottom(){//上拉加载
 			this.getcustomers(this.pnum,this.psize);
 	    	this.$refs.loadmore.onBottomLoaded();	 
+		},
+		gocustomerinfo(customerinfo){
+			this.$store.commit('setcustomerinfo',customerinfo);
+			this.$router.push('/customerinfo')
+//			:to="{name:'customerinfo',params:{customerinfo:item}}"
 		}
 
 	},

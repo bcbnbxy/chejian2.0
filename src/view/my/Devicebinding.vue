@@ -29,16 +29,19 @@ export default {
 	},
 	methods:{
 		startRecognize:function(){
-			var param = window.barcode.scan();
-			if(param==""||param==null||param==undefined){
-				this.$toast({
-			          message: '扫描失败',
+			var that=this;
+			 window.scan(
+		        function(result){
+		            that.devicenum=result;
+		        },
+		        function(code, err){
+		          that.$toast({
+			          message: 'testQrcode code:' + code + 'err:' + err,
 			          position: 'bottom',
 	  				  duration: 1500
 			        });
-			}else{
-				this.devicenum=param;
-			}	
+		        }
+		    );
 		},
 		bindDevice(){
 			var that=this;
@@ -51,7 +54,6 @@ export default {
 				return
 			}else{
 				this.$api("/Execute.do",{action:"device.bindDevice",device:this.devicenum}).then(function(r){
-					console.log(JSON.stringify(r));
 					if(r.errorCode==0){
 						that.$toast({
 				          message: '设备绑定成功',

@@ -357,7 +357,7 @@ export default{
 	padding:0 !important;
 	padding-left:0.2rem !important;
 	height:0.8rem !important;
-	line-height:0.7rem !important;
+	line-height:0.8rem !important;
 }
 .addfriend-contaire{
 	width:100%;

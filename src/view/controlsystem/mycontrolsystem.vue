@@ -22,7 +22,7 @@
 				<p><img src="../../assets/img/my/guanli.png"/></p>
 				<span>管理</span>
 			</li>
-			<li>
+			<li @click="godata">
 				<p><img src="../../assets/img/my/shuju.png"/></p>
 				<span>数据</span>
 			</li>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
 export default{
 	data(){
 		return {
@@ -69,13 +70,9 @@ export default{
 				this.$router.push({name:'adduser'})
 			}
 		},
-//		godata(){
-//			if(this.identity==1){
-//				this.$router.push('/data')
-//			}else if(this.identity==2){
-//				this.$router.push('/data')
-//			}
-//		},
+		godata(){
+			MessageBox('提示', '该功能暂未开发,敬请期待!');
+		},
 		getuserInfo(){
 			var that=this;
 			this.$api('/Execute.do',{action:'device.carshopInfo'}).then(function(r){

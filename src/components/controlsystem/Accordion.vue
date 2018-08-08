@@ -5,10 +5,10 @@
 	  <i class="iconfont icon-arrow-right-copy-copy-copy" :class="isDisplay?'open_menu':'close_menu'"/>	  
 	</div>
 	<ul v-if="isDisplay">
-	  <router-link tag="li" :to="{name:'personlInfo',params:{'myInfo':item,'department':department,'departmentname':title.departname,'departseq':title.departseq}}" v-for="item in list" :key="item.id" class="accListItem">
+	  <li  v-for="item in list" :key="item.id" class="accListItem" @click="gopersonal(item,title.departname,title.departseq,department)">
 	  	<img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')">
 	    <span>{{ item.staffname?item.staffname:item.userInfo.nickname }}</span>
-	  </router-link>
+	  </li>
 	</ul>
 </nav>
 </template>
@@ -43,6 +43,14 @@ export default {
     methods: {
         toggleList () {
             this.isDisplay = !this.isDisplay
+        },
+        gopersonal(item,departname,departseq,department){        	
+        	this.$store.commit('setstaffinfo',item);
+        	this.$store.commit('setdepartmentname',departname);
+        	this.$store.commit('setdepartseq',departseq);
+        	this.$store.commit('setdepartment',department);
+//      	console.log(JSON.stringify(this.$store.state.controls.staffinfo));
+        	this.$router.push('/personlInfo')
         }
     }
 }

@@ -51,38 +51,53 @@ export default{
 	      this.sheetVisible = true;  
 	    },  
 	    pickervideo(){//选择视频
-		    var ret = window.gallery.pickVideo();
-	        if(ret==""||ret==null||ret==undefined){
-	        	this.sheetVisible=false;
-	      	    that.$toast({
-	                message: "请重新选择图片",
+	    	var that=this;
+	    	window.pickVideo(function(result){
+	    		if(result==""||result==null||result==undefined){
+		        	that.sheetVisible=false;
+		      	    that.$toast({
+		                message: "请重新选择图片",
+		                position: 'bottom',
+				        duration: 1500
+		            });
+		      	    return ;
+		        }else{
+		      	    that.testUploadVodAli(result)
+		        }	
+	    	},function(code,error){
+	    		 that.$toast({
+	                message: 'pickVideo code:'+code+'error:'+error,
 	                position: 'bottom',
 			        duration: 1500
 	            });
-	      	    return ;
-	        }else{
-	      	    this.testUploadVodAli(ret)
-	        }	     
+	    	})
 	    },
 	    descInput(){
 	        var txtVal = this.content.length;
 	        this.remnant = 120 - txtVal;
 	    },
 	    testVideo(){ //拍摄视频
-			var param = (new Date()).getTime() + '.mp4';
-			param = '{"filename" : "' + param + '"}';
-			param = window.camera.captureVideo(param);
-			if(param==""||param==null||param==undefined){
-				this.sheetVisible=false;
-				that.$toast({
-		          message: "请重新拍照",
-		          position: 'bottom',
-				  duration: 1500
-		        });
-	      		return ;
-			}else{
-				this.testUploadVodAli(param);
-			}
+	    	var that=this;
+		    window.captureVideo(
+		        function(result){
+		          if(result==""||result==null||result==undefined){
+						that.sheetVisible=false;
+						that.$toast({
+				          message: "请重新拍照",
+				          position: 'bottom',
+						  duration: 1500
+				        });
+			      		return ;
+					}else{
+						that.testUploadVodAli(result);
+					}
+		        },function(code, err){
+		          that.$toast({
+			          message: 'captureVideo code:'+code+'error:'+err,
+			          position: 'bottom',
+					  duration: 1500
+			        });
+		        });		        
 		},
 		testUploadVodAli(filename){
 			var str="";

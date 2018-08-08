@@ -6,6 +6,7 @@ import register from './register'
 import common from './common'
 import login from './login'
 import faxian from './faxian'
+import controls from './controls'
 //import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     register: register,
     common:common,
     login:login,
-    faxian:faxian
+    faxian:faxian,
+    controls:controls
   }
 })

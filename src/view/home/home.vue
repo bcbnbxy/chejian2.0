@@ -58,20 +58,25 @@ export default {
 .home-wrap{
 	width:100%;
 	height:100%;
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: column;
+	position: relative;
 	background: #f4f4f4;
 	overflow: hidden;
+	padding-bottom:1.45rem;
 }
 .home-main{
-	flex:1;
-	overflow: auto;
+	height:100%;
+	width:100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 ::-webkit-scrollbar{
 	display: none;
 }
 .footer{
+	position:absolute;
+	left:0;
+	bottom:0;
+	width:100%;
 	height:1.45rem;
 	background: #fff;
 	padding:0 0.48rem 0 0.48rem;
@@ -150,7 +155,7 @@ export default {
 	background-image: url(../../assets/img/shouye/myactive@2x.png);
 }
 .footer>div>span{
-	font-size:0.24rem;
+	font-size:0.36rem;
 }
 .popupmean{
 	width:100%;
