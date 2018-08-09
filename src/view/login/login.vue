@@ -93,7 +93,7 @@ export default{
 			          position: 'bottom',
   					  duration: 1500
 			      });
-//			       window.action.registerPush(r.data.login.mobileno);
+			       window.action.registerPush(r.data.login.mobileno);
 			       that.$store.commit('getloginInfo',r.data.login);
 			       that.$router.push('/home');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));

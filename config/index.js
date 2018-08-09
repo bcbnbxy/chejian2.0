@@ -6,13 +6,12 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
     	'/customer': {
-	      target: 'https://m.chehaode.com',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
+	      target: 'http://192.168.31.193:8080 ',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
 	      changeOrigin: true,
 	      pathRewrite: {
           '^/customer': '/customer'   //需要rewrite重写的,
@@ -39,7 +38,6 @@ module.exports = {
     // set this to false - it *may* help
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
-
     cssSourceMap: true
   },
 

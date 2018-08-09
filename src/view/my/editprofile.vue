@@ -43,7 +43,7 @@ export default {
 	    return {	     
 	        param:this.$route.params.userInfo.gender,
 	        nickname:this.$route.params.userInfo.nickname,
-	        birthday:this.$route.params.userInfo.birthday?this.formatDate(new Date(parseInt(this.$route.params.userInfo.birthday))):'未知',
+	        birthday:this.$route.params.userInfo.birthday?this.formatDate(new Date(parseInt(this.$route.params.userInfo.birthday))):null,
 	        sign:this.$route.params.userInfo.descript,
 	        headImg:this.$route.params.userInfo.headphoto,
 	        provinces:this.$route.params.userInfo.province,
@@ -135,13 +135,12 @@ export default {
 		        });	
 	    },
 	    testUpload(file){//上传头像到服务器
-			var ret = window.action.doUploadImage(file, '{"path":"headphoto"}');
-			ret=JSON.parse(ret);
-			if(ret.errorCode=="0"){
-				this.headImg=ret.data
+			var ret = window.aliUpload.doUploadImage('{"localfile":"'+file+'","path":"headphoto"}');
+			if(ret){
+				this.headImg=ret
 			}else{
 				this.$toast({
-		          message: ret.errorMessage,
+		          message: '上传头像失败',
 		          position: 'bottom',
 				  duration: 1500
 		        });
@@ -195,16 +194,29 @@ export default {
 	    },
 	    save(){
 			var that=this;
-			this.$api('/Execute.do',{
-				action:"updateUserInfo",
-				nickname:this.nickname,
-				headphoto:this.headImg,
-				descript:this.sign,
-				gender:this.param,
-				birthday:new Date(this.birthday).getTime(),
-				province:this.provinces,
-				city:this.city
-			}).then(function(r){
+			var params={action:"updateUserInfo"};
+			if(this.nickname){
+				params.nickname=this.nickname;
+			};
+			if(this.headImg){
+				params.headphoto=this.headImg;
+			};
+			if(this.sign){
+				params.descript=this.sign;
+			};
+			if(this.param){
+				params.gender=this.param;
+			};
+			if(this.birthday){
+				params.birthday=new Date(this.birthday).getTime();
+			};
+			if(this.provinces){
+				params.province=this.provinces;
+			};
+			if(this.city){
+				params.city=this.city;
+			};
+			this.$api('/Execute.do',params).then(function(r){
 				if(r.errorCode==='0'){
 					that.$toast({
 				          message: '修改资料成功',

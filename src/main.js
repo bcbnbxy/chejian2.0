@@ -10,7 +10,7 @@ import store from './store/index.js'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import Es6Promise from 'es6-promise'
-//Es6Promise.polyfill();
+Es6Promise.polyfill();
 //import Vconsole from 'vconsole'
 //let vconsole = new Vconsole() 
 Vue.use(MintUI);

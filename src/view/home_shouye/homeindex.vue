@@ -434,7 +434,8 @@ export default{
 .homeindex-car-friends-list{
 	flex:1;
 	background: #f7f7f7;
-	overflow-y:auto;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 .homeindex-car-friends-item{
 	height:1.6rem;

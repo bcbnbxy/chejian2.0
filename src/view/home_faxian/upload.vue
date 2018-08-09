@@ -126,13 +126,12 @@ export default{
 		        });	
 		},
 		testUploadAli(file){
-			var ret = window.action.doUploadImage(file, '{"path":"blog"}');
-			ret=JSON.parse(ret);
-			if(ret.errorCode=="0"){
-				this.data.push(ret.data)
+			var ret = window.aliUpload.doUploadImage('{"localfile":"'+file+'","path":"blog"}');
+			if(ret){
+				this.data.push(ret)
 			}else{
 				this.$toast({
-		          message: ret.errorMessage,
+		          message: '上传图片失败',
 		          position:'bottom',
 				  duration: 1500
 		        });

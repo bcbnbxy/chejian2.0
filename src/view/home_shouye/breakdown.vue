@@ -17,20 +17,20 @@
 			</div>
 		</div>
 		<div class="breakdown-wrap-contaire-main">
-			<dl v-show="yijiindex==1">
-				<dt><i></i><span>故障码</span><b>原因</b></dt>
-				<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">
-		     		<dd v-for="(item,index) in faultCodes"><span>{{item.faultcode}}</span><p><span>{{item.descript}}</span><span><b>{{item.happentime | getdate}}</b><i>{{item.happentime | gettime}}</i></span></p></dd>
-		    	</mt-loadmore>
-			</dl>
+			<div v-show="yijiindex==1" class="breakdown-wrap-contaire-main-guzhang">
+				<div class="breakdown-wrap-contaire-main-guzhang-title"><i></i><span>故障码</span><b>原因</b></div>
+				<div style="flex:1;overflow-y: scroll;-webkit-overflow-scrolling: touch;">
+					<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">
+			     		<div class="breakdown-wrap-contaire-main-guzhang-item" v-for="(item,index) in faultCodes"><span>{{item.faultcode}}</span><p><span>{{item.descript}}</span><span><b>{{item.happentime | getdate}}</b><i>{{item.happentime | gettime}}</i></span></p></div>
+			    	</mt-loadmore>
+				</div>				
+			</div>
 			<div class="breakdown-wrap-jinggao" v-show="yijiindex==2">
-				<div class="breakdown-wrap-jinggao-contaire">
-					<ul class="breakdown-wrap-jinggao-contaire-jinggao" >
-						<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-				     		<li v-for="(item,index) in warns"><span>{{item.warntype | getwarnsInfo}}</span><p><span>{{item.happentime | getdate}}</span><b>{{item.happentime | gettime}}</b></p></li>
-				    	</mt-loadmore>
-					</ul>
-				</div>
+				<ul class="breakdown-wrap-jinggao-contaire-jinggao" >
+					<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+			     		<li v-for="(item,index) in warns"><span>{{item.warntype | getwarnsInfo}}</span><p><span>{{item.happentime | getdate}}</span><b>{{item.happentime | gettime}}</b></p></li>
+			    	</mt-loadmore>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -183,7 +183,7 @@ export default{
 	}
 }
 </script>
-<style scoped>
+<style>
 .breakdown-wrap{
 	width:100%;
 	height:100%;
@@ -191,6 +191,7 @@ export default{
 	display: flex;
 	display:-webkit-flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 .breakdown-wrap-head{
 	width:1005;
@@ -214,6 +215,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	overflow: hidden;
 }
 .breakdown-wrap-contaire-title{
 	height:2.58rem;
@@ -249,12 +251,17 @@ export default{
 .breakdown-wrap-contaire-main{
 	margin-top:0.3rem;
 	flex:1;
-	overflow: auto;
+	overflow: hidden;
 }
-.breakdown-wrap-contaire-main dl{
+.breakdown-wrap-contaire-main-guzhang{
+	height:100%;
 	background: #fff;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+	overflow: hidden;
 }
-.breakdown-wrap-contaire-main dl dt{
+.breakdown-wrap-contaire-main-guzhang-title{
 	width:100%;
 	height:1.6rem;
 	border-bottom:1px solid #ddd;
@@ -263,23 +270,23 @@ export default{
 	align-items: center;
 	padding:0 0.5rem;
 }
-.breakdown-wrap-contaire-main dl dt i{
+.breakdown-wrap-contaire-main-guzhang-title i{
 	width:0.12rem;
 	height:0.6rem;
 	background: #1989f5;
 	margin-right:0.32rem;
 }
-.breakdown-wrap-contaire-main dl dt span{
+.breakdown-wrap-contaire-main-guzhang-title span{
 	font-size:0.44rem;
 	color:#222;
 }
-.breakdown-wrap-contaire-main dl dt b{
+.breakdown-wrap-contaire-main-guzhang-title b{
 	flex: 1;
 	text-align: right;
 	font-size:0.44rem;
 	font-weight: 400;
 }
-.breakdown-wrap-contaire-main dl dd{
+.breakdown-wrap-contaire-main-guzhang-item{
 	width:100%;
 	height:1.6rem;
 	padding:0 0.5rem;
@@ -289,11 +296,11 @@ export default{
 	border-bottom:1px solid #ddd;
 	justify-content: space-between;
 }
-.breakdown-wrap-contaire-main dl dd>span{
+.breakdown-wrap-contaire-main-guzhang-item>span{
 	font-size:0.44rem;
 	color:#222;
 }
-.breakdown-wrap-contaire-main dl dd>p{
+.breakdown-wrap-contaire-main-guzhang-item>p{
 	height:100%;
 	padding:0.3rem 0;
 	display: flex;
@@ -301,42 +308,30 @@ export default{
 	flex-direction: column;
 	justify-content: space-between;
 }
-.breakdown-wrap-contaire-main dl dd>p span:nth-child(1){
+.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(1){
 	font-size:0.38rem;
 	color:#222;
 }
-.breakdown-wrap-contaire-main dl dd>p span:nth-child(2){
+.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2){
 	font-size:0.34rem;
 	color:#222;
 	text-align: right;
 }
-.breakdown-wrap-contaire-main dl dd>p span:nth-child(2) b{
+.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2) b{
 	font-weight: 400;
 	margin-right:0.3rem;
 }
-.breakdown-wrap-contaire-main dl dd>p span:nth-child(2) i{
+.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2) i{
 	font-style:normal;
 }
 .breakdown-wrap-jinggao{
 	background: #fff;
-}
-.breakdown-wrap-jinggao-title{
-	height:1.6rem;
+	height:100%;
 	display: flex;
 	display: -webkit-flex;
-	align-items: center;
-	font-size:0.4rem;
-	border-bottom:1px solid #ddd;
-	color:#999;
-}
-.breakdown-wrap-jinggao-title-center{
-	height:0.9rem;
-	width:1px;
-	background: #ddd;
-}
-.breakdown-wrap-jinggao-title-left,.breakdown-wrap-jinggao-title-right{
-	flex:1;
-	text-align: center;
+	flex-direction: column;
+	overflow-y:scroll ;
+	-webkit-overflow-scrolling: touch;
 }
 .breakdown-wrap-jinggao-contaire-jinggao li{
 	height:1.6rem;

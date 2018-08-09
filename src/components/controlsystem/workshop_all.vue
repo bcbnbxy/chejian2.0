@@ -3,7 +3,7 @@
 	<ul>
 		<router-link tag="li" :to="{name:'consumer',params:{consumer:customers}}">
 			<p><img :src="customers.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+customers.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{customers.userInfo.nickname}}</span></p>
-			<p><span>{{customers.staff.staffname?customers.staff.staffname:customers.staff.userInfo.nickname}}</span><!--<img src="../../assets/img/my/tishi.png"/>--></p>
+			<p><span>{{customers.staff.staffname?customers.staff.staffname:customers.staff.userInfo.nickname}}</span><img :src="customers.faultCount>0?require('../../assets/img/my/tishi.png'):require('../../assets/img/my/tishi1.png')"/></p>
 		</router-link>
 	</ul>
 </div>

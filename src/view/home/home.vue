@@ -1,9 +1,9 @@
 <template>
 	<div class="home-wrap">
 		<div class="home-main">
-			<keep-alive>
+			<transition :name="transitionName">
 			<router-view></router-view>
-			</keep-alive>
+			</transition>
 		</div>
 		<footer class="footer">
 			<router-link to="/homeindex" tag="div" ><p class="bghome"></p><span>首页</span></router-link>
@@ -11,47 +11,26 @@
 			<router-link to="/friends" tag="div"><p class="bgcheyou"></p><span>车友</span></router-link>
 			<router-link to="/personal" tag="div"><p class="bgmy"></p><span>我的</span></router-link>
 		</footer>
-		<div v-show="$store.state.faxian.popupmean" class="popupmean" @touchmove.prevent @click.self="popupmeanhidden">
-			<dl class="popupmean-report" v-show="$store.state.faxian.report" >
-				<dt>请选择举报类型</dt>
-				<dd>营销广告</dd>
-				<dd>整治反动或敏感话题</dd>
-				<dd>淫秽色情</dd>
-				<dd>恶意谩骂攻击</dd>
-				<dd>垃圾内容</dd>
-			</dl>
-			<div class="share" v-show="$store.state.faxian.share">
-				<ul>
-					<li><img src="../../assets/img/faxianimg/wechat.png"><span>微信</span></li>
-					<li><img src="../../assets/img/faxianimg/Friendcircle.png"><span>朋友圈</span></li>
-					<li><img src="../../assets/img/faxianimg/weibo.png"><span>微博</span></li>
-					<li><img src="../../assets/img/faxianimg/QQ.png"><span>QQ</span></li>
-					<li><img src="../../assets/img/faxianimg/copy.png"><span>复制链接</span></li>
-				</ul>
-				<p @click="popupmeanhidden">取消</p>
-			</div>
-		</div>
 	</div>
 </template>
 <script>
 export default {
-	methods:{
-		popupmeanhidden:function(e){
-			if(this.$store.state.faxian.popupmean_more !== -1){
-				this.$store.commit('changepopupmean_more',-1);
-			};
-			if(this.$store.state.faxian.report){
-				this.$store.commit('changereport');
-			};
-			if(this.$store.state.faxian.pic_text_video){
-				this.$store.commit('changepictextvideo');
-			};
-			if(this.$store.state.faxian.share){
-				this.$store.commit('changeshare');
-			};
-			this.$store.commit('changepopupmean');						
+	data(){
+		return {
+			transitionName:''
 		}
-	}
+	},
+	watch: {//使用watch 监听$router的变化
+    $route(to, from) {
+      //如果to索引大于from索引,判断为前进状态,反之则为后退状态
+      if(to.meta.index > from.meta.index){
+        //设置动画名称
+        this.transitionName = 'slide-left';
+      }else{
+        this.transitionName = 'slide-right';
+      }
+    }
+  }
 }
 </script>
 <style>
@@ -234,5 +213,30 @@ export default {
 	background: #fff;
 	font-size:0.44rem;
 	color:#666;
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active,
+.slide-left-enter-active,
+.slide-left-leave-active {
+  will-change: transform;
+  transition: all 300ms;
+  position: absolute;
+}
+.slide-right-enter {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-right-leave-active {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-enter {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
+}
+.slide-left-leave-active {
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0);
 }
 </style>

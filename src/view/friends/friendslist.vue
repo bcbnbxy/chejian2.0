@@ -247,7 +247,8 @@ export default{
 .friends-cotaire-chatlist {
 	width:100%;
 	flex:1;
-	overflow-y: auto;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 .friends-cotaire-chatlist ul{
 	background: #fff;
@@ -311,7 +312,8 @@ export default{
 .addresslist{
 	width:100%;
 	flex:1;
-	overflow-y: auto;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 .addresslist-item{
 	height:1.6rem;

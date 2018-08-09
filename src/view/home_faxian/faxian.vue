@@ -2,17 +2,19 @@
 <div class="faxian-wrap">
 	<div class="faxianhead">
 		<span>动态</span>
-		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>
-		<div class="pic-text-video" v-show="$store.state.faxian.pic_text_video">
-			<router-link to="/upload" tag="p">文图</router-link>
-			<router-link to="/uploadvideo" tag="p">视频</router-link>
-		</div>
+		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>		
 	</div>
-	<div class="faxianlist" :style="{'-webkit-overflow-scrolling': scrollMode}">
+	<div class="faxianlist">
 		<div class="faxian-dynamicslist">			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 		     		<dynamicslist :callbackdata="datalist"></dynamicslist>
 		    </mt-loadmore>
+		</div>
+	</div>
+	<div class="vmint-poup" v-show="popupVisible">
+    	<div class="pic-text-video">
+			<router-link to="/upload" tag="p">文图</router-link>
+			<router-link to="/uploadvideo" tag="p">视频</router-link>
 		</div>
 	</div>
 </div>
@@ -28,15 +30,14 @@ export default{
 	        pageNo:0,
 	        pageSize:5,
             allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-            scrollMode:"auto" ,//移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+            popupVisible:false
 		}
 	},
 	methods:{
 		showpictextvideo:function(){
 			var that=this;
 			if(localStorage.getItem('loginInfo')){
-				this.$store.commit('changepopupmean');
-				this.$store.commit('changepictextvideo');
+				that.popupVisible=true;
 			}else{
 				MessageBox.confirm('', {
 				    message: '您还没有登陆，去登陆',
@@ -134,13 +135,21 @@ export default{
 	right:0.5rem;
 	font-size:0.7rem;
 }
+.vmint-poup{
+	width:100%;
+	height:100%;
+	background: rgba(0,0,0,.5);
+	position: fixed;
+	left:0;
+	top:0;
+	z-index: 2001;
+}
 .pic-text-video{
 	width:6rem;
 	background:#fff;
 	position: absolute;
-	right:0.48rem;
-	top:100%;
-	z-index: 101;
+	right:0.5rem;
+	top:1.32rem;
 	border-radius: 5px;
 }
 .pic-text-video p{

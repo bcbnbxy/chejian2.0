@@ -102,15 +102,15 @@ export default{
 		testUploadVodAli(filename){
 			var str="";
 			str=filename.split('/')[filename.split('/').length-1];
-			var ret = window.action.doUploadVideo(filename, '{"title":"'+str+'", "filename":"'+str+'"}');
-			ret=JSON.parse(ret);
-			if(ret.errorCode=="0"){
+			var params='{"localfile":"'+filename+'","title":"'+str+(new Date()).getTime()+'"}';
+			var ret = window.aliUpload.doUploadVideo(params);
+			if(ret){
 				this.videoflag=false;
-				this.videoid=ret.data;
+				this.videoid=ret;
 			}else{
 				this.videoflag=true;	
 				this.$toast({
-		          message: ret.errorMessage,
+		          message: '上传视频失败',
 		          position: 'bottom',
 				  duration: 1500
 		       });
