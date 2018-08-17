@@ -7,7 +7,7 @@
 				<span @click="gochat" v-show="friend&&$store.state.faxian.blogs.userseq&&$store.state.faxian.blogs.userseq!=ownerseq">私信</span>
 			</div>
 			<div class="homepage-wrap-headbottom">
-				<img :src="headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+				<img :src="headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+headphoto:require('../../assets/img/shouye/defaultavatar.png')" @click="bigImg(headphoto)"/>
 				<div class="homepage-wrap-headbottom-info">
 					<p>{{nickname}}</p>
 					<p>{{descript}}</p>
@@ -24,16 +24,21 @@
 			<div class="homepage-container-bottom">
 				<div class="picture" v-show="currentView=='picture'">
 					<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">					
-						<Picture  :data="item" :index="index" v-for="(item,index) in picturelist" :key="index"></Picture>
+						<Picture  :data="item" :index="index" v-for="(item,index) in picturelist" :key="index" v-on:listendelpic="delpic"></Picture>
 					</mt-loadmore>
 				</div>
 				<div class="video" v-show="currentView=='video'">
 					<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">					
-						<Video :data="item" :index="index" v-for="(item,index) in videolist" :key="index"></Video>
+						<Video :data="item" :index="index" v-for="(item,index) in videolist" :key="index" v-on:listendelvideo="delvideo"></Video>
 					</mt-loadmore>
 				</div>
 			</div>
 		</div>
+		<div :class="showBigImg?'imgMask1':'imgMaskhidden1'" @click.stop="showBigImg=!showBigImg">
+            <div class="showImg" >
+                <img class="bigImg" :src="bigImgs?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+bigImgs:''">
+            </div>
+        </div>
 	</div>
 </template>
 <script>
@@ -59,6 +64,8 @@ export default{
 			pnum:0,
 			pagesize:5,
 			psize:5,
+			bigImgs:'',
+			showBigImg:false,
 			active: 0,
 			index:0,
 			lists:[
@@ -82,6 +89,54 @@ export default{
 	      }else if(this.currentView=='video'){
 	      	this.getblogsvideo(0,5);
 	      }
+	  },
+	  delpic(obj){//删除图文动态
+	  	var that=this;
+			MessageBox.confirm('', {
+			    message: '确定要删除此条动态码？',
+			    showConfirmButton:true,
+			    showCancelButton:true,
+			    confirmButtonText:'确定',
+			    cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            	that.$api('Execute.do',{action:'blog.removeBlog',blogseq:obj.blogseq}).then(function(r){
+		            		if(r.errorCode==0){
+		            			that.picturelist.splice(obj.index,1);
+		            		}
+		            	})
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		    });
+	  },
+	  delvideo(obj){//删除视频动态
+	  	var that=this;
+			MessageBox.confirm('', {
+			    message: '确定要删除此条动态码？',
+			    showConfirmButton:true,
+			    showCancelButton:true,
+			    confirmButtonText:'确定',
+			    cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            	that.$api('Execute.do',{action:'blog.removeBlog',blogseq:obj.blogseq}).then(function(r){
+		            		if(r.errorCode==0){
+		            			that.videolist.splice(obj.index,1);
+		            		}
+		            	})
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		    });
+	  },
+	  bigImg(index){
+    	  this.showBigImg = true;
+    	  this.bigImgs = index;
 	  },
 	  addmarker(){//添加备注
 	  	var that=this;
@@ -301,8 +356,9 @@ export default{
 }
 .homepage-wrap-head{
 	width:100%;
-	height:4.35rem;
+	height:4.95rem;
 	background-image:url(../../assets/img/shouye/bg.png) ;
+	padding-top:0.6rem;
 	background-size:cover;
 	display: flex;
 	display: -webkit-flex;
@@ -424,5 +480,39 @@ export default{
 .picture,.video{
 	flex:1;
 	overflow-y: auto;
+}
+.imgMask1{
+    position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:0;
+    z-index: 100;
+    background:rgba(0,0,0,.8); 
+    transform: scale(1);
+    transition: all 0.3s; 
+}
+.imgMaskhidden1{
+	position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:0;
+    z-index: 100;
+    background:rgba(0,0,0,.8);
+    transform: scale(0);
+    transition: all 0.3s;
+}
+.showImg{
+    width:100%;
+    padding:0 0.5rem;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+.bigImg{
+    max-width:100%;
+    height:auto;
 }
 </style>

@@ -100,8 +100,10 @@ export default {
 						  duration: 1500
 				        });
 			      		return ;
-					}else{
-						that.testUpload(result);
+					}else{						
+						setTimeout(function(){
+							that.testUpload(result);
+						},50)
 					}
 		        },function(code, err){
 		          that.$toast({
@@ -123,8 +125,10 @@ export default {
 						  duration: 1500
 				        });
 			      		return ;
-					}else{
-						that.testUpload(result);
+					}else{						
+						setTimeout(function(){
+							that.testUpload(result);
+						},50)
 					}
 		        },function(code, err){
 		          that.$toast({
@@ -248,8 +252,9 @@ export default {
 	overflow: hidden;
 }
 .editprofile-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;

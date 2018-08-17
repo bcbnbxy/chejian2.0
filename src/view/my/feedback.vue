@@ -3,7 +3,6 @@
 		<header>
 			<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
 			<span>意见反馈</span>
-			<span></span>
 		</header>
 		<div class="feedback-textarea">
 			<textarea placeholder="请输入您的意见或者建议，我们将为您提供更好的服务" v-model="content"></textarea>
@@ -64,16 +63,20 @@ export default{
 	flex-direction: column;
 }
 .feedback-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	text-align: center;
+	position: relative;
 	font-size:0.56rem;
+	padding-top:0.6rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+}
+.feedback-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .feedback-textarea textarea{
 	width:100%;

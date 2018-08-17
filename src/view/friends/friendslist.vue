@@ -28,7 +28,6 @@
 	</div>
 </div>
 </template>
-
 <script>
 import Addfriend from '@/components/faxian/addfriend'
 export default{
@@ -54,8 +53,9 @@ export default{
 	},
 	methods:{
 		getchatlist(minseq,psize){//获取私信列表
+			
 			var that=this;
-			this.$api('/Execute.do',{action:'chating.talkers',minvalue:minseq,pageSize:psize}).then(function(r){
+			this.$api('/Execute.do',{action:'chating.talkers;messageCounts',minvalue:minseq,pageSize:psize}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.talkers==null||r.data.talkers==undefined||r.data.talkers==''){
 						that.$toast({
@@ -104,7 +104,7 @@ export default{
 		},
 		getcarfriends(){//获取我的车友列表
 			var that=this;
-			this.$api('/Execute.do',{action:'friends'}).then(function(r){
+			this.$api('/Execute.do',{action:'friends;messageCounts'}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.friends==null||r.data.friends==undefined||r.data.friends==""){
 						that.$toast({
@@ -178,13 +178,14 @@ export default{
 	position: relative;
 }
 .friends-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	text-align: center;
 	line-height:1.32rem;
 	font-size:0.56rem;
 	color:#fff;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
 	position: relative;

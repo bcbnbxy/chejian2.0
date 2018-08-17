@@ -14,14 +14,10 @@
 			</div>
 		</router-link>
 		<div class="fourpicture-title">
-			<p><i class="iconfont icon-dianzan" :style="praiseflag?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,praisecount)"></i><span>{{praisecount}}</span></p>
+			<p><i class="iconfont icon-dianzan" :style="datalist.praised?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,datalist.praisecount)"></i><span>{{datalist.praisecount}}</span></p>
 			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-xiaoxi1"></i><span>{{data.refcount}}</span></router-link>
-			<!--<p @click="more(index)">···</p>-->
+			<p @click="deltrends(index,datalist.blogseq)" style="vertical-align: middle;" v-show="$store.state.faxian.blogs.userseq==datalist.userseq"><i class="iconfont icon-shanchu" style="font-size:0.46rem;"></i></p>
 		</div>
-		<!--<ul v-show="$store.state.faxian.popupmean_more == index" class="popupmean-more" @touchmove.prevent>
-			<li @click="showshare">转发</li>
-			<li @click="popupmeanreport">举报</li>
-		</ul>-->
 	</div>
 </template>
 <script>
@@ -32,15 +28,13 @@
 			return {
 				defaultImg:require('../../assets/img/shouye/defaultavatar.png') ,
 				datalist:this.data,
-				praiseflag:this.data.praised,
-				praisecount:this.data.praisecount,
+				obj:{
+					index:'',
+					blogseq:''
+				}
 			}
 		},
 		methods:{
-//			more:function($index){
-//				this.$store.commit('changepopupmean');
-//				this.$store.commit('changepopupmean_more',$index);
-//			},
 			popupmeanreport:function(){
 				this.$store.commit('changepopupmean_more');
 				this.$store.commit('changereport');
@@ -71,14 +65,19 @@
 					return "刚刚"
 				}				
 			},
+			deltrends(index,blogseq){//删除动态
+				this.obj.index=index;
+				this.obj.blogseq=blogseq;
+				this.$emit('listendel',this.obj)
+			},
 			togglePraise(blogseq,count){//点赞帖子
 				var that=this;
 				if(localStorage.getItem('loginInfo')){
-					if(this.praiseflag){//取消点赞
+					if(this.datalist.praised){//取消点赞
 						this.$api('/Execute.do',{action:'blog.cancelPraiseBlog',blogseq:blogseq}).then(function(r){
 							if(r.errorCode==0){
-								that.praiseflag=!that.praiseflag;
-								that.praisecount=parseInt(count)-1;
+								that.datalist.praised=!that.datalist.praised;
+								that.datalist.praisecount=parseInt(count)-1;
 							}else{
 								that.$toast({
 					          		message:r.errorMessage,
@@ -90,8 +89,8 @@
 					}else{//点赞
 						this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
 							if(r.errorCode==0){
-								that.praiseflag=!that.praiseflag;
-								that.praisecount=parseInt(count)+1;
+								that.datalist.praised=!that.datalist.praised;
+								that.datalist.praisecount=parseInt(count)+1;
 							}else{
 								that.$toast({
 					          		message:r.errorMessage,
@@ -161,6 +160,11 @@
 				this.$store.commit('setblog_friend',friend);
 				this.$store.commit('setblog_remark',null);
 			}
+		},
+		watch:{
+			data:function(){
+				this.datalist=this.data;
+			}
 		}
 	}
 </script>
@@ -191,13 +195,13 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.42rem;
+	font-size:0.44rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.3rem;
+	font-size:0.4rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -211,12 +215,12 @@
 	text-align: center;
 	background:#ff481d;
 	color:#fff;
-	font-size:0.3rem;
+	font-size:0.4rem;
 	border-radius: 15px;
 	border:none;
 }
 .fourpicture-content p{
-	line-height:0.54rem;
+	line-height:0.74rem;
 	font-size:0.44rem;
 	color:#333;
 	margin:0;
@@ -226,6 +230,7 @@
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
+	margin-top:0.24rem;
 }
 .fourpicture-box{
 	width:100%;

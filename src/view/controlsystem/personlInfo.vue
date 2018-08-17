@@ -168,7 +168,8 @@ export default{
 	background-image:url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover;
 	width:100%;
-	height:4.7rem;
+	height:5.3rem;
+	padding-top:0.6rem;
 }
 .personlInfo-wrap-head{
 	padding:0 0.5rem;

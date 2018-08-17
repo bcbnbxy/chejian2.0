@@ -2,7 +2,6 @@
 	<div class="personal-wrap">
 		<div class="personal-top">
 			<header>
-				<span></span>
 				<span>我的</span>
 				<router-link to="/mymessage" tag="span"><i class="iconfont icon-youjian"></i><b v-show="showmsg"></b></router-link>
 			</header>
@@ -121,25 +120,26 @@ export default{
 	background-size: cover;
 }
 .personal-top header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	line-height:1.32rem;
+	text-align: center;
 	color:#fff;
 	font-size:0.56rem;
+	position: relative;
 }
 .personal-top header i{
-	font-size:0.56rem;
+	font-size:0.6rem;
 }
 .personal-top header span:last-child{
-	position: relative;
+	position:absolute;
+	right:0.5rem;
 }
 .personal-top header span:last-child b{
 	position: absolute;
 	right:-0.03rem;
-	top:-0.03rem;
+	top:0.36rem;
 	width:0.25rem;
 	height:0.25rem;
 	display: block;
@@ -253,6 +253,6 @@ export default{
 	border-bottom: none;
 }
 .icon-zuihoudinggao-,.icon-nanxing,.icon-xiugaimima,.icon-arrow-right-copy-copy-copy{
-	font-size:0.44rem;
+	font-size:0.6rem;
 }
 </style>

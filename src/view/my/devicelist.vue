@@ -50,18 +50,21 @@ export default{
 	flex-direction: column;
 }
 .chosecar-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	padding:0 0.5rem;
 	text-align: center;
 	line-height:1.32rem;
+	padding-top:0.6rem;
 	font-size:0.56rem;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
 	color:#fff;
+	position: relative;
 }
 .chosecar-wrap-head .icon-fanhui{
-	float:left;
+	position: absolute;
+	left:0.5rem;
 	font-size:0.6rem;
 }
 .chosecar-wrap-contaire{

@@ -88,7 +88,7 @@ export default{
 }
 .msgcontent-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	text-align: center;
 	line-height:1.32rem;
 	font-size:0.56rem;
@@ -97,6 +97,7 @@ export default{
 	position: relative;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;	
+	padding-top:0.6rem;
 }
 .msgcontent-wrap-head .icon-fanhui{
 	position: absolute;

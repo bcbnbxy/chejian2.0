@@ -6,11 +6,11 @@
 		</div>
 		<div class="upload-container">
 			<div class="upload-container-top">
-				<textarea placeholder="文字不能超过120个" v-model="content" maxlength="120" @input="descInput"></textarea>
+				<textarea placeholder="文字不能超过120个" v-model="content" maxlength="120" @input="descInput" ref="textareaed"></textarea>
 			</div>
 			<div class="upload-container-bottom">
 				<div class="picturelist">
-					<img :src="poster" v-if="poster"/>
+					<img :src="poster" v-if="poster" style="width:3.48rem;height:3.48rem;"/>
 					<div class="upload-button imglist" :class="videoflag?'':'upload-button-hidden'">
 						<p  @click="actionSheetpic"></p>
 						<mt-actionsheet :actions="actionpic"  v-model="sheetVisible" cancelText="取消"></mt-actionsheet>
@@ -48,6 +48,7 @@ export default{
 	},
 	methods:{
 		actionSheetpic(){
+		  this.$refs.textareaed.blur();
 	      this.sheetVisible = true;  
 	    },  
 	    pickervideo(){//选择视频
@@ -61,8 +62,10 @@ export default{
 				        duration: 1500
 		            });
 		      	    return ;
-		        }else{
-		      	    that.testUploadVodAli(result)
+		       }else{		      	    
+		      	    setTimeout(function(){
+						that.testUploadVodAli(result)
+					},50)
 		        }	
 	    	},function(code,error){
 	    		 that.$toast({
@@ -88,8 +91,10 @@ export default{
 						  duration: 1500
 				        });
 			      		return ;
-					}else{
-						that.testUploadVodAli(result);
+					}else{						
+						setTimeout(function(){
+							that.testUploadVodAli(result);
+						},50)
 					}
 		        },function(code, err){
 		          that.$toast({
@@ -101,12 +106,16 @@ export default{
 		},
 		testUploadVodAli(filename){
 			var str="";
+			var that=this;
 			str=filename.split('/')[filename.split('/').length-1];
 			var params='{"localfile":"'+filename+'","title":"'+str+(new Date()).getTime()+'"}';
 			var ret = window.aliUpload.doUploadVideo(params);
 			if(ret){
 				this.videoflag=false;
 				this.videoid=ret;
+				setTimeout(function(){
+					that.getVideoPlayInfo(ret);
+				},5000)
 			}else{
 				this.videoflag=true;	
 				this.$toast({
@@ -117,17 +126,21 @@ export default{
 	   		}
 		},
 		publish:function(){//发表动态
-			if(!this.content&&!this.videoid){
-				this.$toast({
-					message:'发布内容不能为空!',
-					position:'bottom',
-					duration:1500
-				})
-			}else if(this.content&&!this.videoid){
+			if(!this.videoid){
+				if(!this.content){
+					this.$toast({
+						message:'发布内容不能为空!',
+						position:'bottom',
+						duration:1500
+					})
+				}else{
 					this.params.mediatype='0';
-					this.senddongtai()			
+					this.senddongtai();		
+				}
 			}else{
-				this.getVideoPlayInfo(this.videoid);
+				if(this.poster){
+					this.senddongtai();
+				}				
 			}
 		},
 		getVideoPlayInfo(videoid){
@@ -142,7 +155,6 @@ export default{
 			        if(r.data.getVideoPlayInfo.coverURL){
 			       	    that.poster=r.data.getVideoPlayInfo.coverURL;
 			       	    that.params.videocover=that.poster;
-			       	    that.senddongtai()
 			        }else{
 			        	that.getVideoPlayInfo(that.videoid);
 			        }
@@ -200,15 +212,20 @@ export default{
 	flex-direction: column;
 }
 .upload-head{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	background:url(../../assets/img/faxianimg/headbg.png) center repeat;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	background-image:url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover;
+	text-align: center;
 	font-size:0.44rem;
+	line-height: 1.32rem;
+	position: relative;
 	color:#fff;
+}
+.upload-head span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .upload-container{
 	width:100%;

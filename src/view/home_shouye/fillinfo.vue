@@ -129,8 +129,9 @@ export default{
 }
 .fillinfo-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	text-align: center;
 	line-height:1.32rem;
 	color:#fff;

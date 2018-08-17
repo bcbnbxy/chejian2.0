@@ -11,16 +11,16 @@
 				</div>
 				<div class="fourpicture-content">
 					<div class="fourpicture-box" v-if="data.images&&data.images.length==1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images"/>
+						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images" @click="bigImg(data.images)"/>
 					</div>
 					<div class="fourpicture-box-moreimg" v-else-if="data.images&&data.images.length>1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data.images" :key="index"/>
+						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data.images" :key="index" @click="bigImg(item)"/>
 					</div>
 					<p>{{data.content}}</p>
 				</div>
-				<div class="pic-detail-zan" @click="togglepraise">
+				<div class="pic-detail-zan" @click="blogPraisers.length>0&&togglepraise()">
 					<ul class="avatar-list">
-						<li v-for="(item,index) in data.praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/></li>
+						<li v-for="(item,index) in blogPraisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/></li>
 					</ul>
 					<div class="dianzan-renshu">
 						<p>{{data.praisecount}}人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
@@ -43,12 +43,17 @@
 				<p @click="goTop"><i class="iconfont icon-xiaoxi1"></i><span>{{$route.params.datalist.refcount}}</span></p>
 			</div>
 			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
-				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
+				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content" v-on:focus="focusIpt"/><span @click="Send">发送</span>
 			</div>
 		</div>
 		<div class="praise-contaire" :class="praiseflag?'praise-contaire-show':'praise-contaire-hidden'">
-			<Praise v-on:praiseshow="togglepraise" :praisers="data.praisers"></Praise>
+			<Praise v-on:praiseshow="togglepraise" :praisers="blogPraiserssum"></Praise>
 		</div>
+		<div :class="showBigImg?'imgMask':'imgMaskhidden'" @click.stop="showBigImg=!showBigImg">
+            <div class="showImg" >
+                <img class="bigImg" :src="bigImgs?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+bigImgs:''">
+            </div>
+        </div>
 	</div>
 </template>
 
@@ -58,11 +63,9 @@ import Praise from '@/components/faxian/praise'
 import { MessageBox } from 'mint-ui'
 let stop = false;                                   // 全局变量,坑处
 let timer = null;
-export default{
-	created(){
-		this.getblogReviews(0,5);
-	},	
+export default{	
 	mounted() {
+		this.getblogReviews(0,5)
         this.$nextTick(function () {
             window.addEventListener('scroll', this.needToTop);  //滚动事件监听
         });
@@ -79,14 +82,15 @@ export default{
 	        pageSize:5,
 	        allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
 	        sendflag:false,
+	        showBigImg:false,
+	        bigImgs:'',
+	        blogPraisers:[],
+	        blogPraiserssum:[],
+	        timer:null
 		}
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
 	methods:{
-//		share(){
-//			this.$store.commit('changeshare');
-//			this.$store.commit('changepopupmean');
-//		},
 		formatDate(seconds){//时间转换函数
 			seconds=new Date().getTime()-parseInt(seconds);
 			seconds= seconds / 1000;
@@ -109,6 +113,27 @@ export default{
 				return "刚刚"
 			}				
 		},
+		getblogPraiser(){//获取点赞列表
+			var that=this;
+			this.$api('/Execute.do',{action:'blog.blogPraisers',blogseq:this.$route.params.datalist.blogseq,minvalue:0,pageSize:this.$route.params.datalist.praisecount}).then(function(r){
+				if(r.errorCode==0&&r.data.blogPraisers.length!=0){
+					if(r.data.blogPraisers.length<=5){
+						that.blogPraisers=r.data.blogPraisers;
+					}else{						
+						for(let i=0;i<5;i++){
+							that.blogPraisers.push(r.data.blogPraisers[i])
+						}
+					}
+					that.blogPraiserssum=r.data.blogPraisers;
+				}else{
+					that.$toast({
+		          		message:r.errorMessage,
+			            position: 'bottom',
+	  				    duration: 1500
+	                });
+				}
+			})
+		},
 		togglepraise(){
 			this.praiseflag=!this.praiseflag;
 		},
@@ -119,8 +144,17 @@ export default{
 		blurFn(){
 			this.detailinput=false;
 			this.$refs.send.blur();
+			clearInterval(this.timer)
 		},
+		focusIpt() { // 解决输入框被激活时被键盘遮住问题
+	      this.timer = setInterval(function() {
+	          document.body.scrollTop = document.body.scrollHeight
+	       }, 100)
+	    },
 		goTop(){
+			if(this.replylist.length==0){
+				return ;
+			};
 			var scroll=document.getElementById('scroll');
 			clearInterval(timer);
 	        timer = setInterval(function() {
@@ -166,10 +200,10 @@ export default{
 					           that.getblogReviews(0,5)
 			    			}else{
 			    				that.$toast({
-				          		message:r.errorMessage,
-					            position: 'bottom',
-			  				    duration: 1500
-				           });
+					          		message:r.errorMessage,
+						            position: 'bottom',
+				  				    duration: 1500
+				                });
 			    			}
 			    		})
 			    	}
@@ -191,6 +225,10 @@ export default{
 		        });
 	    	}
 	    },
+	     bigImg(index){
+            this.showBigImg = true;
+            this.bigImgs = index;
+        },
 	    getblogReviews(minvalue,pageSize){//获取评论列表
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'blog.blogReviews',blogseq:this.data.blogseq,minvalue:minvalue,pageSize:pageSize}).then(function(r){
@@ -224,7 +262,9 @@ export default{
 	    				duration:1500
 	    			})
 	    		}
-	    	})
+	    	}).then(function(){
+				that.getblogPraiser();
+			})
 	    },
 	    loadTop(){ //组件提供的下拉触发方法
 	        //下拉刷新
@@ -251,6 +291,8 @@ export default{
 			  				    duration: 1500
 				            });
 						}
+					}).then(function(){
+						that.getblogPraiser();
 					})
 				}else{//点赞
 					this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
@@ -264,6 +306,8 @@ export default{
 			  				    duration: 1500
 				            });
 						}
+					}).then(function(){
+						that.getblogPraiser();
 					})
 				}
 			}else{
@@ -316,10 +360,11 @@ export default{
 }
 .detail-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover ;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	text-align: center;
 	line-height:1.32rem;
 	position:relative;
@@ -393,8 +438,8 @@ export default{
 	border-radius: 15px;
 }
 .fourpicture-content p{
-	line-height:0.54rem;
-	font-size:0.36rem;
+	line-height:0.74rem;
+	font-size:0.44rem;
 	color:#333;
 	margin:0;
 	padding:0;
@@ -403,6 +448,7 @@ export default{
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
+	margin-top:0.24rem;
 }
 .fourpicture-box{
 	width:100%;
@@ -546,5 +592,39 @@ export default{
 }
 .icon-arrow-right-copy-copy-copy{
 	font-size:0.44rem;
+}
+.imgMask{
+    position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:0;
+    z-index: 100;
+    background:rgba(0,0,0,.8); 
+    transform: scale(1);
+    transition: all 0.3s;
+}
+.imgMaskhidden{
+	position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:0;
+    z-index: 100;
+    background:rgba(0,0,0,.8);
+    transform: scale(0);
+    transition: all 0.3s;
+}
+.showImg{
+    width:100%;
+    padding:0 0.5rem;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+.bigImg{
+    max-width:100%;
+    height:auto;
 }
 </style>

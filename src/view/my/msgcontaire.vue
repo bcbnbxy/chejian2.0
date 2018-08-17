@@ -234,22 +234,26 @@ export default{
 }
 .msgcontaire-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
+	line-height:1.32rem;
+	text-align: center;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
 	font-size:0.56rem;
 	color:#fff;
+	position: relative;
 }
 .msgcontaire-wrap-head .icon-fanhui{
 	font-size:0.6rem;
+	position: absolute;
+	left:0.5rem;
 }
 .msgcontaire-wrap-head span:last-child{
 	font-size:0.44rem;
+	position: absolute;
+	right:0.5rem;
 }
 .msgcontaire-wrap-main{
 	flex:1;

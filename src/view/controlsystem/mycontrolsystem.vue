@@ -112,7 +112,8 @@ export default{
 }
 .mycontrolsystem-wrap-top{
 	width:100%;
-	height:6.4rem;
+	height:7rem;
+	padding-top:0.6rem;
 	background-image:url(../../assets/img/shouye/bg.png) ;
 	background-size:cover ;
 }

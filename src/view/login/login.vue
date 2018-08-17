@@ -26,9 +26,9 @@ export default{
 	data(){
 		return{
 			ismingwen:false,
-			loginname: '',
+			loginname:'',
 			loginnametrue:false,
-	        password: '',
+	        password:'',
 	        passwordtrue:false
 		}
 	},
@@ -92,7 +92,7 @@ export default{
 			          message: '登录成功',
 			          position: 'bottom',
   					  duration: 1500
-			      });
+			       });
 			       window.action.registerPush(r.data.login.mobileno);
 			       that.$store.commit('getloginInfo',r.data.login);
 			       that.$router.push('/home');
@@ -130,22 +130,26 @@ export default{
 	background: #fff;
 }
 .login-wrap-head{
-	display: flex;
-	display: -webkit-flex;
-	height:1.32rem;
-	justify-content: space-between;
-	align-items: center;
+	height:1.92rem;
+	line-height:1.32rem;
+	text-align: center;	
 	border-bottom:1px solid #ddd;
 	font-size:0.56rem;
 	color:#000;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
+	position: relative;
 }
 .login-wrap-head .icon-fanhui{
 	font-size:0.6rem;
 	color:#a0a0a0;
+	position: absolute;
+	left:0.5rem;
 }
 .login-wrap-head span:last-child{
 	font-size:0.44rem;
+	position: absolute;
+	right:0.5rem;
 }
 .login-wrap-contaire{
 	padding:0 1rem;

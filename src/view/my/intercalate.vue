@@ -1,9 +1,8 @@
 <template>
 	<div class="intercalate-wrap">
 		<header>
-			<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
+			<span @click="$router.go(-1)"><i class="iconfont icon-fanhui" style="font-size:0.6rem;"></i></span>
 			<span>设置</span>
-			<span></span>
 		</header>
 		<router-link to="/accountandsecurity" tag="div" class="scan-bind">
 			<span>账号与安全</span>
@@ -11,8 +10,9 @@
 		</router-link>
 		<ul class="intercalate-list">
 			<!--<router-link to="/newmessage" tag="li"><span>新消息通知</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>-->
-			<li><span>关于我们</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></li>		
-			<li><span>免责声明</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></li>		
+			<router-link tag="li" to="/aboutus"><span>关于我们</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>		
+			<router-link tag="li" to="/disclaimer"><span>免责声明</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>	
+			<li @click="ClearCache"><span>清除缓存</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></li>
 		</ul>
 		<div class="submit">
 			<button @click="loginOut" v-show="loginout">退出登录</button>
@@ -60,6 +60,7 @@ export default{
 				       that.login=true;
 				       that.loginout=false;
 				       localStorage.removeItem('loginInfo');
+				       that.$store.commit('setblog_userseq');
 					}else{
 						that.$toast({
 				          message: r.errorMessage,
@@ -77,6 +78,14 @@ export default{
 		},
 		Login:function(){
 			this.$router.push('/bootPage')
+		},
+		ClearCache(){//清理缓存函数
+			window.device.cleanCache();
+			this.$toast({
+	          message: '清理缓存成功',
+	          position: 'bottom',
+			  duration: 1500
+	       });
 		}
 	}
 }
@@ -92,16 +101,20 @@ export default{
 	flex-direction: column;	
 }
 .intercalate-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	line-height:1.32rem;
+	position: relative;
+	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+}
+.intercalate-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .scan-bind{
 	height:1.6rem;

@@ -74,8 +74,9 @@ export default{
 	flex-direction: column;
 }
 .managecustomers-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	line-height:1.32rem;
 	text-align: center;
 	font-size:0.56rem;

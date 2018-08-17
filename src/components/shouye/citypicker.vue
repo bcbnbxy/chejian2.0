@@ -80,9 +80,10 @@ export default{
 
 <style>
 .citypicker-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;

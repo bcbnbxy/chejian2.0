@@ -12,8 +12,8 @@
 					   	<span class='twoimg'><img @click="gohomepage(item.senderseq,true)" :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
 					   	<span class='twox'></span>
 					   	<span class='chattwo'>{{item.content}}</span>
-				   </li>
-				   <li v-else>
+				    </li>
+				    <li v-else>
 					   	<span class='oneimg'><img :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
 					   	<span class='onex'></span>
 					   	<span class='chatone'>{{item.content}}</span>
@@ -51,26 +51,25 @@ export default{
 					if(r.data.chats==null||r.data.chats==undefined||r.data.chats==''){
 						return ;
 					}else{
-						that.chats=r.data.chats;
+						that.chats=r.data.chats.reverse().concat(that.chats);
 						if(r.data.chats.length<10){
 							that.allLoaded=true;
 						}else{
 							that.allLoaded=false;
-							that.num=r.data.chats[r.data.chats.length-1].chatseq
+							that.pnum=r.data.chats[0].chatseq
 						}
 					}
 				}
-				
 			})			
 		},
-		loadTop(){//下拉刷新
-			this.chats=[],
-			this.getchats(0,this.psize);
-			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
-		},
-		loadBottom(){//上拉加载
+		loadTop(){//下拉加载
 			this.getchats(this.pnum,this.psize);
 	    	this.$refs.loadmore.onBottomLoaded();
+		},
+		loadBottom(){//上拉刷新			
+	    	this.chats=[],
+			this.getchats(0,this.psize);
+			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
 		},
 		send(){//发送消息
 			var that=this;
@@ -124,7 +123,7 @@ export default{
 	position: relative;
 }
 .chat-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover ;
@@ -134,6 +133,7 @@ export default{
 	color:#fff;
 	position: relative;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 }
 .chat-wrap-head .icon-fanhui{
 	position: absolute;

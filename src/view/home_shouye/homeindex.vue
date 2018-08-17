@@ -92,7 +92,7 @@ export default{
 				       });
 					}else{
 						that.devices=r.data.devices;
-						that.selected=r.data.devices[0];
+						that.selected=r.data.devices[that.$store.state.common.selectedcar];
 					}					
 				}else{
 					that.$toast({
@@ -134,6 +134,7 @@ export default{
 			this.devicesflag=!this.devicesflag;
 		},
 		select(item,index){
+			this.$store.commit('selectedcar',index);
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
 		},
@@ -202,7 +203,8 @@ export default{
 }
 .homeindex-wrap-head{
 	width:100%;
-	height:6.63rem;
+	height:7.23rem;
+	padding-top:0.6rem;
 	background-image:url(../../assets/img/shouye/bg.png);
 	background-size:cover ;
 }
@@ -245,13 +247,14 @@ export default{
 .devices-list li {
 	height:1.6rem;
 	width:100%;
+	padding-left:0.5rem;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
 	border-bottom:1px solid #ddd;
 }
 .devices-list li:last-child{
-	border-bottom:none;
+	border-bottom:none;	
 }
 .devices-list li img{
 	width:1.1rem;
@@ -262,6 +265,9 @@ export default{
 .devices-list li span{
 	font-size:0.38rem;
 	color:#222;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .homeindex-wrap-head-top-left>i{
 	font-size:0.5rem;

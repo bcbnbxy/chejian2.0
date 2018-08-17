@@ -102,7 +102,6 @@ export default{
 	    getmessages(minvalue,pageSize){//获取消息列表
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'messages',kind:this.$route.params.kind,minvalue:minvalue,pageSize:pageSize}).then(function(r){
-	    		console.log(JSON.stringify(r));
 	    		if(r.errorCode==0){
 	    			that.msglist=that.msglist.concat(r.data.messages);
 					if(r.data.messages.length<7){

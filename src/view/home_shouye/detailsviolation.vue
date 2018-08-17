@@ -66,7 +66,7 @@
 	background: #f7f7f7;
 }
 .detailsviolation-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	line-height:1.32rem;
 	text-align: center;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
@@ -74,6 +74,7 @@
 	font-size:0.56rem;
 	color:#fff;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 }
 .detailsviolation-wrap-head .icon-fanhui{
 	font-size:0.6rem;

@@ -96,22 +96,26 @@ export default{
 }
 .department-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size: cover;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	position: relative;
+	line-height:1.32rem;
+	text-align: center;
 	color:#fff;
 	font-size:0.56rem;
 }
 .department-wrap-head span:last-child{
 	font-size:0.44rem;
+	position:absolute;
+	right:0.5rem;
 }
 .department-wrap-head .icon-fanhui{
 	font-size:0.6rem;
+	position:absolute;
+	left:0.5rem;
 }
 .department-wrap-contaire{
 	flex:1;

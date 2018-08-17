@@ -72,7 +72,7 @@ export default{
 	flex-direction: column;
 }
 .workshop-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover;
@@ -82,6 +82,7 @@ export default{
 	color:#fff;
 	font-size:0.56rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 }
 .workshop-wrap-head .icon-fanhui{
 	position: absolute;

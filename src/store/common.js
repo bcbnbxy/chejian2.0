@@ -7,7 +7,9 @@ export default {
  		    __version__:'1.0.0',
  		    __timestamp__:new Date().getTime()
 		},
-		searchstatus:false
+		searchstatus:false,
+		selectedcar:0,
+		consumer:{},
 	},
 	mutations: {
 		getversion(state,version){
@@ -21,6 +23,12 @@ export default {
 		},
 		toggleSearchStatus(state, status) {
 	        state.searchstatus = status;
-	  }
+	   },
+	   selectedcar(state,index){
+	   	    state.selectedcar=index;
+	   },
+	   setconsumer(state,consumer){
+	   		state.consumer=consumer;
+	   }
 	}
 }

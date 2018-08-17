@@ -6,8 +6,8 @@
 				<span>客户</span>
 			</div>
 			<div class="consumer-wrap-head-bottom">
-				<img :src="$store.state.common.consumer.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$store.state.common.consumer.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
-				<p>{{$store.state.common.consumer.userInfo.nickname}}</p>
+				<img :src="this.$route.params.consumer.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+this.$route.params.consumer.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+				<p>{{this.$route.params.consumer.userInfo.nickname}}</p>
 			</div>
 			<div class="consumer-wrap-choosecar">
 				<div class="consumer-wrap-choosecar-contaire">
@@ -32,10 +32,11 @@
 					<span @click="navactive(2)" :style="index==2?'color:#1989f5':''" >本周</span>
 					<span @click="navactive(3)" :style="index==3?'color:#1989f5':''">本月</span>
 				</div>
-				<div @click="consumerguzhang" class="consumer-wrap-foot-contaire-guzhangma"><span>故障码</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></div>
 				<div class="consumer-wrap-foot-contaire-main">
-					<div class="nodata" v-if="warnslist.length==0">暂时没有数据</div>
-					<Mycarstate :warnCounts="warnslist" v-else></Mycarstate>
+					<div class="nodata" v-show="faultCodes.length==0">暂时没有数据</div>
+					<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">
+			     		<div class="breakdown-wrap-contaire-main-guzhang-item" v-for="(item,index) in faultCodes"><span>{{item.faultcode}}</span><span>{{item.descript}}</span><span>{{item.happentime | getdate}}&nbsp;&nbsp;{{item.happentime | gettime}}</span></div>
+			    	</mt-loadmore>
 				</div>
 			</div>			
 		</div>
@@ -47,12 +48,16 @@ import Mycarstate from '@/components/controlsystem/mycarstate'
 export default{
 	components:{Mycarstate},
 	data(){
-		return {			
+		return {
 			showlist:false,
 			index:1,
 			carlist:[],			
 			selected:[],
-			warnslist:[],			
+			faultCodes:[{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'},{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'},{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'}],
+			psize:0,
+			pnum:8,
+			mindate:'',
+			allLoaded1:false,
 		}
 	},
 	methods:{
@@ -72,14 +77,11 @@ export default{
 				 endtime=nowdate-2592000000; 
 				 device=this.selected.device
 			}
-			this.getwarnCounts(device,nowdate,endtime)
-		},
-		consumerguzhang(){
-			this.$router.push({name:'consumerguzhang','params':{consumer:this.$store.state.common.consumer}})
+			this.getwarnCounts(device,0,8,endtime)
 		},
 		getcustomerdevice(){//获取用户设备列表
 			var that=this;
-			this.$api('/Execute.do',{action:'device.customerDevices',customerseq:this.$store.state.common.consumer.userseq}).then(function(r){
+			this.$api('/Execute.do',{action:'device.customerDevices',customerseq:this.$route.params.consumer.userseq}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.customerDevices==null||r.data.customerDevices==undefined||r.data.customerDevices==''){
 						return ;
@@ -88,7 +90,8 @@ export default{
 					that.selected=that.carlist[0];
 					var nowdate=new Date().getTime();
 					var endtime=nowdate-86400000;
-					that.getwarnCounts(that.selected.device,nowdate,endtime);
+					that.mindate=endtime;
+					that.getwarnCounts(that.selected.device,0,8,endtime);
 				}else{
 					that.$toast({
 						message:r.errorMessage,
@@ -105,36 +108,72 @@ export default{
 			if(this.index==1){
 				 nowdate=new Date().getTime();
 				 endtime=nowdate-86400000; 
+				 this.mindate=endtime;
 				 device=this.selected.device
 			}else if(this.index==2){
 				 nowdate=new Date().getTime();
-				 endtime=nowdate-604800000; 
+				 endtime=nowdate-604800000;
+				 this.mindate=endtime;
 				 device=this.selected.device
 			}else if(this.index=3){
 				 nowdate=new Date().getTime();
 				 endtime=nowdate-2592000000; 
+				 this.mindate=endtime;
 				 device=this.selected.device
 			}
-			this.getwarnCounts(device,nowdate,endtime)
-			
+			this.getwarnCounts(device,0,8,endtime)			
 		},
-		getwarnCounts(device,begindate,enddate){//获取警告列表
+		getwarnCounts(device,psize,pnum,enddate){//获取故障列表
 			var that=this;
-			this.$api('/Execute.do',{action:'device.warnCounts',device:device,begindate:begindate,enddate}).then(function(r){
-				if(r.errorMessage==0){
-					if(r.data.warnCounts==null||r.data.warnCounts==undefined||r.data.warnCounts==""){
+			this.$api('/Execute.do',{action:'device.faultCodes',device:device,mindate:enddate,minvalue:pnum,pageSize:psize}).then(function(r){
+				if(r.errorCode==0){
+					that.faultCodes=that.faultCodes.concat(r.data.faultCodes);
+					if(r.data.faultCodes.length<10){
+						that.allLoaded1=true;
 						return;
+					}else{
+						that.allLoaded1=false;
 					}
-					that.warnslist=r.data.warnCounts;
+					that.pnum=r.data.faultCodes[r.data.faultCodes.length-1].faultseq;
 				}else{
 					that.$toast({
-						message:r.errorMessage,
-						position:'bottom',
-						duration:1500
-					})
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
 				}
 			})
-		}
+		},
+		loadTop1(){//组件提供的下拉触发方法
+			 //下拉刷新
+			this.faultCodes=[];
+	        this.getwarnCounts(this.selected.device,0,this.psize,this.mindate);
+	        this.$refs.loadmore1.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		},
+		loadBottom1(){//组件提供的上拉加载触发方法
+	    	this.getwarnCounts(this.selected.device,this.pnum,this.psize,this.mindate);
+	    	this.$refs.loadmore1.onBottomLoaded();	    	
+	   },
+	},
+	filters:{
+		getdate:function(seconds){			
+			var myDate = new Date(parseInt(seconds));
+			var month=myDate.getMonth()+1;
+			var day=myDate.getDate();
+			return month+'/'+day;
+		},
+		gettime:function(seconds){
+			var myDate = new Date(parseInt(seconds));
+			var hours=myDate.getHours()
+			if(hours<10){
+				hours='0'+hours;
+			}
+			var minutes=myDate.getMinutes();
+			if(minutes=='0'){
+				minutes='00'
+			}
+			return hours+':'+minutes;
+		},
 	},
 	created(){
 		this.getcustomerdevice();
@@ -315,23 +354,23 @@ export default{
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 }
-.consumer-wrap-foot-contaire-guzhangma{
-	height:1.6rem;
-	padding:0 0.5rem;
-	border-bottom:1px solid #ddd;
-	background: #fff;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
-	font-size:0.38rem;
-	color:#222;
-}
 .nodata{
 	width:100%;
 	padding-top:3rem;
 	font-size:0.44rem;
 	color:#999;
 	text-align: center;
+}
+.breakdown-wrap-contaire-main-guzhang-item{
+	width:100%;
+	height:1.6rem;
+	padding:0 0.5rem;
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	border-bottom:1px solid #ddd;
+	justify-content: space-between;
+	font-size:0.44rem;
+	color:#222;
 }
 </style>

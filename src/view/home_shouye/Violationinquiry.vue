@@ -33,11 +33,12 @@
 	flex-direction: column;
 }
 .Violationinquiry-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	text-align: center;
 	line-height:1.32rem;
 	color:#fff;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	font-size:0.56rem;
 	width:100%;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;

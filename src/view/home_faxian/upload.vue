@@ -6,7 +6,7 @@
 		</div>
 		<div class="upload-container">
 			<div class="upload-container-top">
-				<textarea placeholder="文字不能超过120个" v-model="content" maxlength="120" @input="descInput"></textarea>
+				<textarea placeholder="文字不能超过120个" v-model="content" maxlength="120" @input="descInput" ref="textareaed"></textarea>
 			</div>
 			<div class="upload-container-bottom">
 				<div class="picturelist">
@@ -73,7 +73,8 @@ export default{
 			}		
 		},
 		actionSheetpic: function(){
-	      this.sheetVisible = true;  
+		  this.$refs.textareaed.blur();
+	      this.sheetVisible = true;
 	   },  
 	    getLibrary: function(){ //从相册选择视频或图片
 	    	var that=this;
@@ -87,8 +88,10 @@ export default{
 						  duration: 1500
 				        });
 			      		return ;
-					}else{
-						that.testUploadAli(result);
+					}else{						
+						setTimeout(function(){
+							that.testUploadAli(result);
+						},50)
 					}
 		        },function(code, err){
 		          that.$toast({
@@ -115,7 +118,9 @@ export default{
 				        });
 			      		return ;
 					}else{
-						that.testUploadAli(result);
+						setTimeout(function(){
+							that.testUploadAli(result);
+						},50)						
 					}
 		        },function(code, err){
 		          that.$toast({
@@ -170,15 +175,21 @@ export default{
 	flex-direction: column;
 }
 .upload-head{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	background:url(../../assets/img/faxianimg/headbg.png) center repeat;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	background-image:url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover;
+	text-align: center;
+	line-height:1.32rem;
+	padding-top:0.6rem;
+	text-align: center;
 	font-size:0.44rem;
 	color:#fff;
+	position: relative;
+}
+.upload-head span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .upload-container{
 	width:100%;

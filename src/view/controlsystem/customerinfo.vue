@@ -117,11 +117,12 @@ export default{
 }
 .personlInfo-wrap-head{
 	padding:0 0.5rem;
-	height:1.32rem;	
+	height:1.92rem;	
 	color:#fff;
 	font-size:0.56rem;
 	width:100%;
 	line-height:1.32rem;
+	padding-top:0.6rem;
 	text-align: center;
 	position: relative;
 }

@@ -3,7 +3,6 @@
 	<header>
 		<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
 		<span>新消息通知</span>
-		<span></span>
 	</header>
 	<router-link tag="div" to="/systemmessage" class="scan-bind">
 		<span>系统与活动消息</span>
@@ -34,16 +33,20 @@
 	flex-direction: column;	
 }
 .newmessage-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	text-align: center;
+	padding-top:0.6rem;
 	font-size:0.56rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+	position:relative;
+}
+.newmessage-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .scan-bind{
 	height:1.6rem;

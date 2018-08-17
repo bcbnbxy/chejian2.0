@@ -119,7 +119,7 @@ export default{
 	padding-top:0.3rem;
 }
 .reply-avatar{
-	height:1rem;
+	height:1.2rem;
 	overflow: hidden;
 }
 .reply-avatar-left{
@@ -138,13 +138,12 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#222;
-	font-weight: 500;
 	justify-content: space-around;
 }
 .reply-avatar-left p span{
-	font-size:0.3rem;
+	font-size:0.4rem;
 	color:#666;
 }
 .reply-avatar-right{
@@ -158,7 +157,7 @@ export default{
 	margin-right:0.3rem;
 }
 .reply-avatar-right span{
-	font-size:0.3rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .reply-list-container{

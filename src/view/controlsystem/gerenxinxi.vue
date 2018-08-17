@@ -135,12 +135,13 @@ export default{
 	background-size:cover ;
 }
 .gerenxinxi-wrap-head-top{
-	height:1.32rem;
+	height:1.92rem;
 	font-size:0.56rem;
 	color:#fff;
 	line-height:1.32rem;
 	text-align: center;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 }
 .gerenxinxi-wrap-head-top i{
 	float: left;

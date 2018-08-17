@@ -7,11 +7,11 @@
 	<div class="faxianlist">
 		<div class="faxian-dynamicslist">			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-		     		<dynamicslist :callbackdata="datalist"></dynamicslist>
+		     		<dynamicslist :callbackdata="datalist" v-on:listendel="deltrends"></dynamicslist>
 		    </mt-loadmore>
 		</div>
 	</div>
-	<div class="vmint-poup" v-show="popupVisible">
+	<div class="vmint-poup" v-show="popupVisible" @click="popupVisible=!popupVisible">
     	<div class="pic-text-video">
 			<router-link to="/upload" tag="p">文图</router-link>
 			<router-link to="/uploadvideo" tag="p">视频</router-link>
@@ -56,6 +56,28 @@ export default{
 			    });
 			}
 			
+		},
+		deltrends(obj){
+			var that=this;
+			MessageBox.confirm('', {
+			    message: '确定要删除此条动态码？',
+			    showConfirmButton:true,
+			    showCancelButton:true,
+			    confirmButtonText:'确定',
+			    cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            	that.$api('Execute.do',{action:'blog.removeBlog',blogseq:obj.blogseq}).then(function(r){
+		            		if(r.errorCode==0){
+		            			that.datalist.splice(obj.index,1);
+		            		}
+		            	})
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		    });
 		},
 		gettrends:function(minvalue,pageSize){//获取动态列表
 			var that=this;
@@ -119,11 +141,12 @@ export default{
 	-webkit-overflow-scrolling: touch;
 }
 .faxianhead{
-	height:1.32rem;
+	height:1.92rem;
 	font-size:0.56rem;
 	color:#fff;
 	width:100%;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	text-align: center;
 	line-height:1.32rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png);

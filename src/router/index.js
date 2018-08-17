@@ -36,6 +36,8 @@ import EditProfile from '@/view/my/editprofile'
 import ManageAddress from '@/view/my/manageaddress'
 import Editaddress from '@/view/my/editaddress'
 import Mymessage from '@/view/my/mymessage'
+import AboutUs from '@/view/my/aboutus'
+import Disclaimer from '@/view/my/disclaimer'
 import Msgcontaire from '@/view/my/msgcontaire'
 import Sysmsg from '@/view/my/sysmsg'
 import Devicelist from '@/view/my/devicelist'
@@ -43,6 +45,7 @@ import Mycontrolsystem from '@/view/controlsystem/mycontrolsystem'
 import controlsystem_My from '@/view/controlsystem/controlsystem_my'
 import Adduser from '@/view/controlsystem/adduser'
 import Consumer from '@/view/controlsystem/consumer'
+import Consumerguzhang from '@/view/controlsystem/consumerguzhang'
 import Workshop from '@/view/controlsystem/workshop'
 import Department from '@/view/controlsystem/department'
 import PersonlInfo from '@/view/controlsystem/personlInfo'
@@ -143,6 +146,12 @@ export default new Router({
 		path:'/newmessage',
 		component:Newmessage
 	},{
+		path:'/aboutus',
+		component:AboutUs
+	},{
+		path:'/disclaimer',
+		component:Disclaimer
+	},{
 		path:'/systemmessage',
 		component:SystemMessage
 	},{
@@ -182,6 +191,10 @@ export default new Router({
 		path:'/consumer',
 		name:'consumer',
 		component:Consumer
+	},{
+		path:'/consumerguzhang',
+		name:'consumerguzhang',
+		component:Consumerguzhang
 	},{
 		path:'/workshop',
 		component:Workshop

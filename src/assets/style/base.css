@@ -1,4 +1,8 @@
-*{box-sizing: border-box;-webkit-overflow-scrolling: touch;-webkit-user-select: none;-webkit-tap-highlight-color: rgba(0,0,0,0);}
+*{box-sizing: border-box;-webkit-overflow-scrolling: touch;-webkit-tap-highlight-color: transparent;outline: none}
+*:not(input,textarea,button) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+} 
 html{font-family:"Helvetica Neue", Helvetica, STHeiTi, sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
 html,body{-webkit-user-select:none;user-select:none;width:100%;height:100%;color:#263a55;}
 html,body,div,object,iframe,applet,object,h1,h2,h3,h4,h5,h6,p,blockquote,pre,address,dl,dt,dd,ol,ul,li,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,menu,nav,output,ruby,section,summary,time,mark,audio,video,progress{margin:0;padding:0;border:0;vertical-align:baseline}
@@ -10,7 +14,7 @@ audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 a:active,a:hover{outline:0}
 abbr[title]{border-bottom:1px dotted}
-b,strong{font-weight:bold}
+b,strong{font-weight:500}
 dfn{font-style:italic}
 h1{font-size:2em;margin:.67em 0}
 small{font-size:80%}
@@ -41,6 +45,7 @@ textarea{overflow:auto}
 optgroup{font-weight:bold}
 table{border-collapse:collapse;border-spacing:0}
 td,th{padding:0}
+input,textarea{-webkit-appearance: none;}
 /*****************************************以上是重置样式部分***********************************************/
 .mint-button--default{
 	width:100%;
@@ -80,4 +85,7 @@ td,th{padding:0}
 }
 .mint-loadmore-text{
 	font-size:0.56rem;
+}
+.icon-fanhui{
+	font-size:0.6rem !important;
 }

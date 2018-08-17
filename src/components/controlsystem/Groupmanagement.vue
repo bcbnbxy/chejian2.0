@@ -1,9 +1,8 @@
 <template>
 <div class="Groupmanagement-wrap">
 	<div class="Groupmanagement-wrap-head">
-		<span @click="onfilter">取消</span>
+		<i class="iconfont icon-fanhui" @click="onfilter"></i>
 		<span>部门编辑</span>
-		<span></span>
 	</div>
 	<dl>
 		<dt @click="addgroup"><i class="iconfont icon-jia"></i><span>添加部门名称</span></dt>
@@ -122,20 +121,25 @@ export default{
 	position: relative;
 }
 .Groupmanagement-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover;
 	font-size:0.44rem;
 	color:#fff;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	text-align: center;
+	position: relative;
 }
 .Groupmanagement-wrap-head span:nth-child(2){
 	font-size:0.56rem;
+}
+.Groupmanagement-wrap-head i:nth-child(1){
+	position:absolute;
+	left:0.5rem;
+	font-size:0.6rem;
 }
 .Groupmanagement-wrap dl{
 	background: #fff;

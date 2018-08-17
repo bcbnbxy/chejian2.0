@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
     	'/customer': {
-	      target: 'http://192.168.31.193:8080 ',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
+	      target: 'https://m.chehaode.com',  // 测试环境服务器http://192.168.31.193:8080 生产环境服务器https://m.chehaode.com
 	      changeOrigin: true,
 	      pathRewrite: {
           '^/customer': '/customer'   //需要rewrite重写的,
@@ -33,7 +33,6 @@ module.exports = {
 
     // https://webpack.js.org/configuration/devtool/#development
     devtool: 'cheap-module-eval-source-map',
-
     // If you have problems debugging vue-files in devtools,
     // set this to false - it *may* help
     // https://vue-loader.vuejs.org/en/options.html#cachebusting

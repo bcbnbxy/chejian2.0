@@ -3,14 +3,13 @@
 		<div class="praise-head">
 			<i class="iconfont icon-fanhui" @click="praisehidden"></i>
 			<span>他们也点赞了</span>
-			<span></span>
 		</div>
 		<div class="praise-list">
 			<ul>
 				<li v-for="(item,index) in praisers">
 					<img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/>
 					<span>{{item.user.nickname}}</span>
-					<p v-show="userseq!=item.userseq&&!item.user.friend" @click="addfriend(item.userseq)">加好友</p>					
+					<p v-show="userseq!=item.user.userseq&&!item.user.friend" @click="addfriend(item.user.userseq)">加好友</p>					
 				</li>
 			</ul>
 		</div>
@@ -36,41 +35,41 @@ export default {
 			this.$emit('praiseshow')
 		},
 		addfriend(userseq){//添加好友
-				var that=this;
-				if(localStorage.getItem('loginInfo')){
-					this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
-						if(r.errorCode==0){
-							that.$toast({
-				          		message:'消息已发送',
-					            position: 'bottom',
-			  				    duration: 1500
-				            });
-						}else{
-							that.$toast({
-				          		message:r.errorMessage,
-					            position: 'bottom',
-			  				    duration: 1500
-				            });
-						}
-					})
-				}else{
-					MessageBox.confirm('', {
-				        message: '您还没有登陆，去登陆',
-				        showConfirmButton:true,
-				        showCancelButton:true,
-				        confirmButtonText:'确定',
-				        cancelButtonText:'取消'
-			        }).then(action => {
-			          if (action == 'confirm') {
-			            that.$router.push('/bootPage')
-			          }
-			        }).catch(err => {
-			          if (err == 'cancel') {
-			            console.log('123');
-			          }
-			        });
-				}
+			var that=this;
+			if(localStorage.getItem('loginInfo')){
+				this.$api('/Execute.do',{action:'sendFriendMessage',userseq:userseq}).then(function(r){
+					if(r.errorCode==0){
+						that.$toast({
+			          		message:'消息已发送',
+				            position: 'bottom',
+		  				    duration: 1500
+			            });
+					}else{
+						that.$toast({
+			          		message:r.errorMessage,
+				            position: 'bottom',
+		  				    duration: 1500
+			            });
+					}
+				})
+			}else{
+				MessageBox.confirm('', {
+			        message: '您还没有登陆，去登陆',
+			        showConfirmButton:true,
+			        showCancelButton:true,
+			        confirmButtonText:'确定',
+			        cancelButtonText:'取消'
+		        }).then(action => {
+		          if (action == 'confirm') {
+		            that.$router.push('/bootPage')
+		          }
+		        }).catch(err => {
+		          if (err == 'cancel') {
+		            console.log('123');
+		          }
+		        });
 			}
+		}
 	}
 }
 </script>
@@ -86,22 +85,21 @@ export default {
 }
 .praise-head{
 	width: 100%;
-	height:1.32rem;
+	height:1.92rem;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover ;
-	padding:0.21rem 0.5rem;
+	padding:0 0.5rem;
 	font-size:0.56rem;
 	color:#fff;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
-}
-.praise-head span:last-child{
-	font-size:0.44rem;
+	line-height:1.32rem;
+	text-align: center;
+	position: relative;
+	padding-top:0.6rem;
 }
 .praise-head i{
 	font-size:0.6rem;
+	position: absolute;
+	left:0.5rem;
 }
 .praise-list{
 	flex:1;

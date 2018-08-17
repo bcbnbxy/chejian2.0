@@ -18,10 +18,10 @@
 		</div>
 		<div class="breakdown-wrap-contaire-main">
 			<div v-show="yijiindex==1" class="breakdown-wrap-contaire-main-guzhang">
-				<div class="breakdown-wrap-contaire-main-guzhang-title"><i></i><span>故障码</span><b>原因</b></div>
+				<div class="breakdown-wrap-contaire-main-guzhang-title"><i></i><span>故障码</span><b>时间</b></div>
 				<div style="flex:1;overflow-y: scroll;-webkit-overflow-scrolling: touch;">
 					<mt-loadmore :top-method="loadTop1" :bottom-method="loadBottom1" :bottom-all-loaded="allLoaded1" :auto-fill="false" ref="loadmore1" bottom-pull-text="上拉加载">
-			     		<div class="breakdown-wrap-contaire-main-guzhang-item" v-for="(item,index) in faultCodes"><span>{{item.faultcode}}</span><p><span>{{item.descript}}</span><span><b>{{item.happentime | getdate}}</b><i>{{item.happentime | gettime}}</i></span></p></div>
+			     		<div class="breakdown-wrap-contaire-main-guzhang-item" v-for="(item,index) in faultCodes"><span>{{item.faultcode}}</span><span>{{item.descript}}</span><span>{{item.happentime | getdate}}&nbsp;&nbsp;{{item.happentime | gettime}}</span></div>
 			    	</mt-loadmore>
 				</div>				
 			</div>
@@ -136,7 +136,13 @@ export default{
 		gettime:function(seconds){
 			var myDate = new Date(parseInt(seconds));
 			var hours=myDate.getHours()
+			if(hours<10){
+				hours='0'+hours;
+			}
 			var minutes=myDate.getMinutes();
+			if(minutes=='0'){
+				minutes='00'
+			}
 			return hours+':'+minutes;
 		},
 		getwarnsInfo:function(value){
@@ -194,8 +200,8 @@ export default{
 	overflow: hidden;
 }
 .breakdown-wrap-head{
-	width:1005;
-	height:1.32rem;
+	width:100%;
+	height:1.92rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover;
 	text-align: center;
@@ -203,9 +209,12 @@ export default{
 	color:#fff;
 	font-size:0.56rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
+	position: relative;
 }
 .breakdown-wrap-head .icon-fanhui{
-	float:left;
+	position: absolute;
+	left:0.5rem;
 	font-size:0.6rem;
 }
 .breakdown-wrap-contaire{
@@ -295,34 +304,8 @@ export default{
 	align-items: center;
 	border-bottom:1px solid #ddd;
 	justify-content: space-between;
-}
-.breakdown-wrap-contaire-main-guzhang-item>span{
 	font-size:0.44rem;
 	color:#222;
-}
-.breakdown-wrap-contaire-main-guzhang-item>p{
-	height:100%;
-	padding:0.3rem 0;
-	display: flex;
-	display: -webkit-flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(1){
-	font-size:0.38rem;
-	color:#222;
-}
-.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2){
-	font-size:0.34rem;
-	color:#222;
-	text-align: right;
-}
-.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2) b{
-	font-weight: 400;
-	margin-right:0.3rem;
-}
-.breakdown-wrap-contaire-main-guzhang-item>p span:nth-child(2) i{
-	font-style:normal;
 }
 .breakdown-wrap-jinggao{
 	background: #fff;
@@ -338,7 +321,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#222;
 	justify-content: space-between;
 	border-bottom:1px solid #ddd;

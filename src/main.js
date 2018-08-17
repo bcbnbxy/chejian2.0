@@ -7,12 +7,14 @@ import '@/assets/style/base.css'
 import '@/assets/style/font/iconfont.css'
 import '@/assets/style/font/iconfont.js'
 import store from './store/index.js'
+//import fastclick from 'fastclick'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import Es6Promise from 'es6-promise'
 Es6Promise.polyfill();
 //import Vconsole from 'vconsole'
-//let vconsole = new Vconsole() 
+//let vconsole = new Vconsole()
+//fastclick.attach(document.body)
 Vue.use(MintUI);
 // 引用API文件
 import api from './api/index.js'

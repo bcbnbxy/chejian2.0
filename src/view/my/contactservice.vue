@@ -3,7 +3,6 @@
 	<header>
 		<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
 		<span>意见反馈</span>
-		<span></span>
 	</header>
 	<div class="contactservice-wrap-title">
 		您有什么问题可以随时联系我们:
@@ -54,16 +53,20 @@ export default{
 	font-size:0.44rem;
 }
 .contactservice-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	line-height:1.32rem;
+	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+	position: relative;
+}
+.contactservice-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .contactservice-wrap-title{
 	height:1.6rem;

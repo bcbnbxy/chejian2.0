@@ -3,7 +3,6 @@
 	<header>
 		<span @click="$router.go(-1)"><i class="iconfont icon-fanhui"></i></span>
 		<span>修改密码</span>
-		<span></span>
 	</header>
 	<ul class="changepassword-list">
 		<li>
@@ -153,16 +152,20 @@ export default {
 	flex-direction: column;	
 }
 .changepassword-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	padding-top:0.6rem;
+	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+	position: relative;
+}
+.changepassword-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .changepassword-list{
 	background: #fff;

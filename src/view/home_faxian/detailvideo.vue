@@ -3,7 +3,6 @@
 		<div class="detail-head">
 			<i class="iconfont icon-fanhui" @click="$router.go(-1)" style="font-size:0.6rem"></i>
 			<span>详情</span>
-			<!--<span @click="share">分享</span>-->
 		</div>
 		<div class="detail-wrap">
 			<div class="pic-detail">
@@ -16,9 +15,9 @@
 					</div>					
 					<p>{{data.content}}</p>
 				</div>
-				<div class="pic-detail-zan" @click="togglepraise">
+				<div class="pic-detail-zan" @click="blogPraisers.length>0&&togglepraise()">
 					<ul class="avatar-list">
-						<li v-for="(item,index) in data.praisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/></li>
+						<li v-for="(item,index) in blogPraisers"><img :src="item.user.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.user.headphoto:require ('../../assets/img/shouye/defaultavatar.png')"/></li>
 					</ul>
 					<div class="dianzan-renshu">
 						<p>{{data.praisecount}}人觉得很赞</p><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
@@ -41,11 +40,11 @@
 				<p @click="goTop"><i class="iconfont icon-xiaoxi1"></i><span>{{$route.params.datalist.refcount}}</span></p>
 			</div>
 			<div class="detail-input" :class="detailinput?'detail-input-show':'detail-input-hidden'">
-				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content"/><span @click="Send">发送</span>
+				<input type="text" ref="send" @blur.prevent="blurFn" v-model="content" v-on:focus="focusIpt"/><span @click="Send">发送</span>
 			</div>
 		</div>
 		<div class="praise-contaire" :class="praiseflag?'praise-contaire-show':'praise-contaire-hidden'">
-			<Praise v-on:praiseshow="togglepraise" :praisers="data.praisers"></Praise>
+			<Praise v-on:praiseshow="togglepraise" :praisers="blogPraiserssum"></Praise>
 		</div>
 	</div>
 </template>
@@ -72,6 +71,9 @@ export default{
 	        videocover:this.$route.params.datalist.videocover,
 	        videoid:this.$route.params.datalist.video,
 	        playauth:'',
+	        blogPraisers:[],
+	        blogPraiserssum:[],
+	        timer:null
 		}
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
@@ -82,10 +84,6 @@ export default{
         });
     },
 	methods:{
-//		share(){
-//			this.$store.commit('changeshare');
-//			this.$store.commit('changepopupmean');
-//		},
 		formatDate(seconds){//时间转换函数
 			seconds=new Date().getTime()-parseInt(seconds);
 			seconds= seconds / 1000;
@@ -108,6 +106,27 @@ export default{
 				return "刚刚"
 			}				
 		},
+		getblogPraiser(){//获取点赞列表
+			var that=this;
+			this.$api('/Execute.do',{action:'blog.blogPraisers',blogseq:this.$route.params.datalist.blogseq,minvalue:0,pageSize:this.$route.params.datalist.praisecount}).then(function(r){
+				if(r.errorCode==0&&r.data.blogPraisers.length!=0){
+					if(r.data.blogPraisers.length<=5){
+						that.blogPraisers=r.data.blogPraisers;
+					}else{						
+						for(let i=0;i<5;i++){
+							that.blogPraisers.push(r.data.blogPraisers[i])
+						}
+					}
+					that.blogPraiserssum=r.data.blogPraisers;
+				}else{
+					that.$toast({
+		          		message:r.errorMessage,
+			            position: 'bottom',
+	  				    duration: 1500
+	                });
+				}
+			})
+		},
 		togglepraise(){
 			this.praiseflag=!this.praiseflag;
 		},
@@ -118,7 +137,13 @@ export default{
 		blurFn(){
 			this.detailinput=false;
 			this.$refs.send.blur();
+			clearInterval(this.timer);
 		},
+		focusIpt() { // 解决输入框被激活时被键盘遮住问题
+	      this.timer = setInterval(function() {
+	          document.body.scrollTop = document.body.scrollHeight
+	       }, 100)
+	    },
 		goTop(){
 			var scroll=document.getElementById('scroll');
 			clearInterval(timer);
@@ -233,7 +258,7 @@ export default{
 	    },
 	    getVideoPlayAuth(){
 	    	var that=this;
-	    	this.$api('/Execute.do',{action:'blog.getVideoPlayAuth',videoId:this.$route.params.datalist.video}).then(function(r){
+	    	this.$api('/Execute.do',{action:'blog.getVideoPlayAuth;blog.blogPraisers',videoId:this.$route.params.datalist.video,blogseq:this.$route.params.datalist.blogseq,minvalue:0,pageSize:this.$route.params.datalist.praisecount}).then(function(r){
 	    		if(r.errorCode==0){
 	    			that.playauth=r.data.getVideoPlayAuth.playAuth;
 					var player = new Aliplayer({
@@ -281,6 +306,14 @@ export default{
 				            ]
 				        }]
 			        });
+			        if(r.data.blogPraisers.length<=5){
+						that.blogPraisers=r.data.blogPraisers;
+					}else{						
+						for(let i=0;i<5;i++){
+							that.blogPraisers.push(r.data.blogPraisers[i])
+						}
+					}
+					that.blogPraiserssum=r.data.blogPraisers;
 	    		}else{
 	    			that.$toast({
 	    				message:r.errorMessage,
@@ -312,7 +345,7 @@ export default{
 							}else{
 								that.allLoaded=false;
 							}
-		    			}	    			
+		    			}
 		    		}else{
 		    			that.$toast({
 		    				message:r.errorMessage,
@@ -342,6 +375,8 @@ export default{
 			  				    duration: 1500
 				            });
 						}
+					}).then(function(){
+						that.getblogPraiser();
 					})
 				}else{//点赞
 					this.$api('/Execute.do',{action:'blog.praiseBlog',blogseq:blogseq}).then(function(r){
@@ -355,6 +390,8 @@ export default{
 			  				    duration: 1500
 				            });
 						}
+					}).then(function(){
+						that.getblogPraiser();
 					})
 				}
 			}else{
@@ -408,10 +445,11 @@ export default{
 }
 .detail-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size:cover;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	text-align: center;
 	line-height:1.32rem;
 	color:#fff;
@@ -470,7 +508,7 @@ export default{
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -485,8 +523,8 @@ export default{
 	border-radius: 15px;
 }
 .fourpicture-content p{
-	line-height:0.54rem;
-	font-size:0.36rem;
+	line-height:0.74rem;
+	font-size:0.44rem;
 	color:#333;
 	margin:0;
 	padding:0;
@@ -495,6 +533,7 @@ export default{
 	display:-webkit-box;
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:2;
+	margin-top:0.24rem;
 }
 
 .pic-detail-zan{

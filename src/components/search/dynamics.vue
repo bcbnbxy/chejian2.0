@@ -1,8 +1,8 @@
 <template>
 	<div class="dynamics">
-		<div v-for="(list,index) in callbackdata">
-		    <Video  v-if="list.mediatype=='1'" :data="list" :index="index"></video>				
-		    <Fourpicture  v-if="list.mediatype=='0'" :data="list" :index="index"></Fourpicture>
+		<div v-for="(list,index) in data">
+		    <Video  v-if="list.mediatype=='1'" :data="list" :index="index" v-on:listendel="delindex"></video>				
+		    <Fourpicture  v-if="list.mediatype=='0'" :data="list" :index="index" v-on:listendel="delindex"></Fourpicture>
 	    </div>
 	</div>
 </template>
@@ -17,9 +17,24 @@ import Fourpicture from '@/components/faxian/fourpicture'
 	        }
 	      }
 	    },
+	    data(){
+	    	return {
+	    		data:[],
+	    	}
+	    },
 		components:{Video,Fourpicture},
 		created(){
 			this.$store.commit('changepopupmean_more',-1);
+		},
+		methods:{
+			delindex(obj){
+				this.$emit('listendel',obj)
+			}
+		},
+		watch:{
+			callbackdata:function(){
+				this.data=this.callbackdata;
+			}
 		}
 	}
 	

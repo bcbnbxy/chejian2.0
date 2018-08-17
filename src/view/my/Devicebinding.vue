@@ -3,7 +3,6 @@
 		<header>
 			<span><i class="iconfont icon-fanhui"  @click="$router.go(-1)"></i></span>
 			<span>设备绑定</span>
-			<span></span>
 		</header>
 		<div class="scan-bind" @click="startRecognize()">
 			<span>扫描绑定</span>
@@ -84,16 +83,20 @@ export default {
 	flex-direction: column;
 }
 .devicebind-wrap>header{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	line-height:1.32rem;
+	padding-top:0.6rem;
 	font-size:0.56rem;
 	color:#fff;
+	text-align: center;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+	position: relative;
+}
+.devicebind-wrap>header span:nth-child(1){
+	position: absolute;
+	left:0.5rem;
 }
 .scan-bind{
 	height:1.6rem;

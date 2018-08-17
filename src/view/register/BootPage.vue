@@ -20,7 +20,8 @@
 }
 .bootpage-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;
+	padding-top:0.6rem;
 	line-height:1.32rem;
 	text-align: center;
 	font-size:0.56rem;

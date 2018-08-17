@@ -12,7 +12,7 @@
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="text" placeholder="请输入短信验证码" v-model="code" @keyup="Code"/>
-				<p @click="mobilenoflag&&getcode()"><span v-show="!$store.state.register.yzmtrue" :style="mobilenoflag?'color:#1989F5;':'color:#ddd'">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.register.sendcodetime}} s</span></p>
+				<p @click="mobilenoflag&&getcode()"><span v-show="!$store.state.register.yzmtrue" :style="mobilenoflag?'color:#222;':'color:#ddd'">{{$store.state.register.sendmessage}}</span><span v-show="$store.state.register.yzmtrue">{{$store.state.register.sendcodetime}} s</span></p>
 			</div>
 			<div class="register-wrap--contaire-item">
 				<input type="password" placeholder="请设置密码" v-model="password" @keyup="Password"/>
@@ -23,12 +23,16 @@
 		</div>
 		<div class="register-wrap-footer">
 			<mt-button type="default" :disabled='isdisabled' @click="register">注册</mt-button>
-			<p>用户注册代表同意《服务条款》和《车间隐私政策》</p>
+			<p @click="registerprotocol">用户注册代表同意《免责声明》和《车尖隐私政策》</p>
+		</div>
+		<div :class="registerprotocolshow?'protocolshow':'protocolhidden'">
+			<Registerprotocol v-on:listenprotocol="registerprotocol"></Registerprotocol>
 		</div>
 	</div>	
 </template>
 <script>
 import {regExs} from '../../assets/script/until.js'
+import Registerprotocol from '@/components/regsiter_login/registerprotocol'
 let lodash = require('lodash')
 export default{
 	data(){
@@ -41,9 +45,11 @@ export default{
 			nicknameflag:false,
 			code:'',
 			codeflag:false,
-			getcheckcode:false
+			getcheckcode:false,
+			registerprotocolshow:false
 		}
 	},
+	components:{Registerprotocol},
 	computed:{
 		isdisabled:function(){
 			if(this.mobilenoflag&&this.passwordflag&&this.nicknameflag&&this.codeflag){
@@ -58,13 +64,13 @@ export default{
 			if(this.mobileno.trim()<1){
 				this.$toast({
 		          message: '账号不能为空!',
-		          position: 'bottom',
+		          position: 'top',
   			      duration: 1500
 		      });
 				this.mobilenoflag=false;
 			}else if(!regExs.mobile.test(this.mobileno)){
 				this.$toast({
-		          message: '手机号格式不正确!',
+		          message: 'top',
 		          position: 'bottom',
   			      duration: 1500
 		       });
@@ -79,7 +85,7 @@ export default{
 				     	}else{
 				     		that.$toast({
 					          message: '您的手机号已经被注册，请更换手机号!',
-					          position: 'bottom',
+					          position: 'top',
   			                  duration: 1500
 					        });
 					       that.mobilenoflag=false;
@@ -87,7 +93,7 @@ export default{
 				     }else{
 				     	that.$toast({
 				          message: r.errorMessage,
-				          position: 'bottom',
+				          position: 'top',
   			              duration: 1500
 				        });
 				        that.mobilenoflag=false;
@@ -99,14 +105,14 @@ export default{
 			if(this.password.trim()<1){
 				this.$toast({
 		          message: '密码不能为空',
-		          position: 'bottom',
+		          position: 'top',
 				  duration: 1500
 				});
 				this.passwordflag=false;
 			}else if(!regExs.password.test(this.$data.password)){
 				this.$toast({
 		          message: '密码格式不正确',
-		          position: 'bottom',
+		          position: 'top',
 				  duration: 1500
 				});
 				this.passwordflag=false;
@@ -118,14 +124,14 @@ export default{
 			if(this.nickname.trim().length<1){
 	    		this.$toast({
 		          message: '昵称不能为空！',
-		          position: 'bottom',
+		          position: 'top',
 	  			  duration: 1500
 		        });
 		       this.nicknameflag=false;
 	    	}else if(!regExs.nickname.test(this.nickname)){
 	    		this.$toast({
 		          message: '输入的昵称格式不正确,请重新输入',
-		          position: 'bottom',
+		          position: 'top',
 	  			  duration: 1500
 		       });
 		       this.nicknameflag=false;
@@ -138,7 +144,7 @@ export default{
 	    				}else{
 	    					that.$toast({
 					          message: '该昵称已经被注册,请重新输入',
-					          position: 'bottom',
+					          position: 'top',
 	  			              duration: 1500
 					       });
 					        that.nicknameflag=false;
@@ -146,7 +152,7 @@ export default{
 	    			}else{
 						that.$toast({
 				          message: r.errorMessage,
-				          position: 'bottom',
+				          position: 'top',
 	  			          duration: 1500
 				       });
 				       that.nicknameflag=false;
@@ -158,7 +164,7 @@ export default{
 			if(this.code.trim()<1){
 				this.$toast({
 		          message: '验证码不能为空',
-		          position: 'bottom',
+		          position: 'top',
 	  			  duration: 1500
 		        });
 		       this.codeflag=false;
@@ -177,14 +183,13 @@ export default{
 					}else{
 						self.$toast({
 				          message: r.errorMessage,
-				          position: 'bottom',
+				          position: 'top',
 					      duration: 1500
 				       });
 					}
 				})				
 			}
 			function getTotelNumber() {
-				console.log(1111)
 		       	self.$store.commit('regsendcodedjs');
 	        }
 		},
@@ -195,18 +200,21 @@ export default{
 				if(r.errorCode=='0'){
 					that.$toast({
 			          message: '注册成功',
-			          position: 'bottom',
+			          position: 'top',
 		  			  duration: 1500
 			        });
 			        that.$router.push({name:'restsuccess',params:{msg:'注册成功'}})
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
-			          position: 'bottom',
+			          position: 'top',
 		  			  duration: 1500
 			        });
 				}
 			})
+		},
+		registerprotocol(){
+			this.registerprotocolshow=!this.registerprotocolshow;
 		}
 	}
 }
@@ -217,26 +225,32 @@ export default{
 	width:100%;
 	height:100%;
 	background:#fff;
+	overflow: hidden;
+	position: relative;
 }
 .register-wrap-head{
 	width:100%;
-	height:1.32rem;
+	height:1.92rem;	
 	padding:0 0.5rem;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: space-between;
-	align-items: center;
+	padding-top:0.6rem;
+	line-height:1.32rem;
 	font-size:0.56rem;
 	color:#000;
 	border-bottom:1px solid #ddd;
 	font-weight: 600;
+	text-align: center;
+	position: relative;
 }
 .register-wrap-head .icon-fanhui{
 	font-size:0.6rem;
 	color:#a0a0a0;
+	position: absolute;
+	left:0.5rem;
 }
 .register-wrap-head span:last-child{
 	font-size:0.44rem;
+	position: absolute;
+	right:0.5rem;
 }
 .register-wrap--contaire{	
 	padding:0 1rem;
@@ -262,11 +276,11 @@ export default{
 }
 .register-wrap--contaire-item p{
 	width:2.4rem;
-	height:0.62rem;
-	line-height: 0.62rem;
-	border-radius: 3px;
+	height:0.82rem;
+	line-height: 0.82rem;
+	border-radius: 15px;
 	font-size:0.34rem;
-	border:1px solid #999;
+	border:1px solid #ddd;
 	color:#999;
 	text-align: center;
 }
@@ -282,5 +296,27 @@ export default{
 	color:#1989f5;
 	line-height:0.94rem;
 	text-align: center;
+}
+.protocolshow{
+	position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:0;
+    z-index: 100;
+    transition: all 0.3s;
+    background: #fff;
+    overflow: hidden;
+}
+.protocolhidden{
+	position: absolute;
+    height: 100%;
+    width:100%;
+    top:0;
+    left:100%;
+    z-index: 100;
+    transition: all 0.3s;
+    overflow: hidden;
+    background: #fff;
 }
 </style>

@@ -73,13 +73,14 @@ export default{
 	flex-direction: column;
 }
 .adduser-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	line-height:1.32rem;
 	width:100%;
 	text-align: center;
 	font-size:0.56rem;
 	color:#fff;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
 }

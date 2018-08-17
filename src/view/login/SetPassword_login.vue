@@ -140,8 +140,9 @@ export default{
 	background: #fff;
 }
 .restpassword-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	border-bottom:1px solid #ddd;
 	font-size:0.56rem;
 	color:#000;
