@@ -84,6 +84,21 @@ export default{
 	padding:0 0.5rem;
 	padding-top:0.6rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.workshop-wrap-head{
+		height:2.64rem;
+		width:100%;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		text-align: center;
+		line-height:1.32rem;
+		position: relative;
+		color:#fff;
+		font-size:0.56rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+	}
+}
 .workshop-wrap-head .icon-fanhui{
 	position: absolute;
 	left:0.5rem;

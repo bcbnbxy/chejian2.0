@@ -7,7 +7,7 @@
 		<router-link tag="div" class="fourpicture-content" :to="{name:'detailvideo',params:{datalist}}">
 			<p>{{datalist.content}}</p>
 			<div class="fourpicture-content-video">
-				<img :src="datalist.videocover" class="videoposter"/>
+				<img  v-lazy="datalist.videocover"  class="videoposter"/>
 				<img src="../../assets/img/faxianimg/playbtn.png" class="playbtn"/>
 			</div>			
 		</router-link>

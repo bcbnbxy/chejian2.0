@@ -93,7 +93,7 @@ export default{
 			          position: 'bottom',
   					  duration: 1500
 			       });
-			       window.action.registerPush(r.data.login.mobileno);
+//			       window.action.registerPush(r.data.login.mobileno);
 			       that.$store.commit('getloginInfo',r.data.login);
 			       that.$router.push('/home');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));
@@ -139,6 +139,19 @@ export default{
 	padding:0 0.5rem;
 	padding-top:0.6rem;
 	position: relative;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.login-wrap-head{
+		height:2.64rem;
+		line-height:1.32rem;
+		text-align: center;	
+		border-bottom:1px solid #ddd;
+		font-size:0.56rem;
+		color:#000;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		position: relative;
+	}
 }
 .login-wrap-head .icon-fanhui{
 	font-size:0.6rem;

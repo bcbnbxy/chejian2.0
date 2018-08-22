@@ -157,7 +157,7 @@ export default{
 }
 </script>
 
-<style scoped>
+<style>
 .sysmsg-wrap{
 	width:100%;
 	height:100%;
@@ -169,9 +169,10 @@ export default{
 	position: relative;
 }
 .sysmsg-wrap-head{
-	height:1.32rem;
+	height:1.92rem;
 	width:100%;
 	padding:0 0.5rem;
+	padding-top:0.6rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;
@@ -180,6 +181,22 @@ export default{
 	color:#fff;
 	background-image: url(../../assets/img/faxianimg/headbg.png);
 	background-size: cover;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.sysmsg-wrap-head{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size:0.56rem;
+		color:#fff;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size: cover;
+	}
 }
 .sysmsg-wrap-head .icon-fanhui{
 	font-size:0.6rem;

@@ -62,7 +62,6 @@ export default{
 	        }
 		},
 		checkcode:lodash.debounce(function(){
-			console.log(this.yzm);
 				if(this.yzm.trim().length<1){
 					this.$toast({
 			          message: '验证码不能为空',
@@ -135,6 +134,19 @@ export default{
 	text-align: center;
 	line-height:1.32rem;
 	position: relative;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.restpassword-wrap-head{
+		height:2.64rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		border-bottom:1px solid #ddd;
+		font-size:0.56rem;
+		color:#000;
+		text-align: center;
+		line-height:1.32rem;
+		position: relative;
+	}
 }
 .restpassword-wrap-head .icon-fanhui{
 	font-size:0.6rem;

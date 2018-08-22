@@ -190,6 +190,21 @@ export default{
 	background-size:cover ;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.friends-wrap-head{
+		height:2.64rem;
+		width:100%;
+		text-align: center;
+		line-height:1.32rem;
+		font-size:0.56rem;
+		color:#fff;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover ;
+		position: relative;
+	}
+}
 .friends-wrap-head span:last-child{
 	position: absolute;
 	right:0.5rem;

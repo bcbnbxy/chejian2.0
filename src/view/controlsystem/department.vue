@@ -107,6 +107,21 @@ export default{
 	color:#fff;
 	font-size:0.56rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.department-wrap-head{
+		width:100%;
+		height:2.64rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size: cover;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		position: relative;
+		line-height:1.32rem;
+		text-align: center;
+		color:#fff;
+		font-size:0.56rem;
+	}
+}
 .department-wrap-head span:last-child{
 	font-size:0.44rem;
 	position:absolute;

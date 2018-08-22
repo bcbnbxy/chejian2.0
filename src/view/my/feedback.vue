@@ -74,6 +74,20 @@ export default{
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.feedback-wrap>header{
+		height:2.64rem;
+		padding:0 0.5rem;
+		line-height:1.32rem;
+		text-align: center;
+		position: relative;
+		font-size:0.56rem;
+		padding-top:1.32rem;
+		color:#fff;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover ;
+	}
+}
 .feedback-wrap>header span:nth-child(1){
 	position: absolute;
 	left:0.5rem;

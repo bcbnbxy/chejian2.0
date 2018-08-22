@@ -195,6 +195,18 @@ export default{
 		text-align: center;
 		position: relative;
 	}
+	@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+		.regissterprotocol-wrap-head{
+			height:2.64rem;
+			line-height:1.32rem;
+			font-size:0.56rem;
+			color:#222;
+			padding:0 0.5rem;
+			padding-top:1.32rem;
+			text-align: center;
+			position: relative;
+		}
+	}
 	.regissterprotocol-wrap-head i{
 		font-size:0.6rem;
 		position: absolute;

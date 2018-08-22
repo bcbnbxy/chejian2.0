@@ -456,6 +456,21 @@ export default{
 	font-size:0.56rem;
 	position:relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.detail-head{
+		width:100%;
+		height:2.64rem;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		text-align: center;
+		line-height:1.32rem;
+		color:#fff;
+		font-size:0.56rem;
+		position:relative;
+	}
+}
 .detail-head i{
 	font-size:0.6rem;
 	position: absolute;

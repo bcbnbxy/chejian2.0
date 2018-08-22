@@ -90,6 +90,18 @@ export default {
 	color:#fff;
 	font-size:0.56rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.mycontrolsystem-wrap-header{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		line-height:1.32rem;
+		text-align: center;
+		color:#fff;
+		font-size:0.56rem;
+	}
+}
 .mycontrolsystem-wrap-header .icon-fanhui{
 	font-size:0.6rem;
 	float: left;

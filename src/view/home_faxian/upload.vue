@@ -187,9 +187,28 @@ export default{
 	color:#fff;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.upload-head{
+		height:2.64rem;
+		padding:0 0.5rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		text-align: center;
+		line-height:1.32rem;
+		padding-top:1.32rem;
+		text-align: center;
+		font-size:0.44rem;
+		color:#fff;
+		position: relative;
+	}
+}
 .upload-head span:nth-child(1){
 	position: absolute;
 	left:0.5rem;
+}
+.upload-head span:nth-child(2){
+	position: absolute;
+	right:0.5rem;
 }
 .upload-container{
 	width:100%;

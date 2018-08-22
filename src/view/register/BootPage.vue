@@ -28,6 +28,18 @@
 	color:#000;
 	font-weight:600;	
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.bootpage-wrap-head{
+		width:100%;
+		height:2.64rem;
+		padding-top:1.32rem;
+		line-height:1.32rem;
+		text-align: center;
+		font-size:0.56rem;
+		color:#000;
+		font-weight:600;	
+	}
+}
 .bootpage-wrap-container{
 	width:100%;
 	padding-top:4.1rem;

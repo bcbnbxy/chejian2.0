@@ -133,6 +133,21 @@ export default{
 	text-align: center;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.Groupmanagement-wrap-head{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover;
+		font-size:0.44rem;
+		color:#fff;
+		line-height:1.32rem;
+		text-align: center;
+		position: relative;
+	}
+}
 .Groupmanagement-wrap-head span:nth-child(2){
 	font-size:0.56rem;
 }

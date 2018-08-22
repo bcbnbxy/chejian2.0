@@ -111,7 +111,7 @@ export default{
 }
 </script>
 
-<style scoped>
+<style>
 .chat-wrap{
 	width:100%;
 	height:100%;
@@ -134,6 +134,28 @@ export default{
 	position: relative;
 	padding:0 0.5rem;
 	padding-top:0.6rem;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.chat-wrap-head{
+		height:2.64rem;
+		width:100%;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover ;
+		text-align: center;
+		line-height:1.32rem;
+		font-size:0.56rem;
+		color:#fff;
+		position: relative;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+	}
+	.chat-wrap{
+		overflow: visible;
+	}
+	.chat-wrap-footer{
+		bottom:-1.02rem !important;
+		padding-bottom:1.02rem;
+	}
 }
 .chat-wrap-head .icon-fanhui{
 	position: absolute;
@@ -233,7 +255,6 @@ export default{
 .boxinput{
 	overflow:hidden;
 	height:1.6rem;
-	border-bottom:1px solid #ddd;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: space-between;

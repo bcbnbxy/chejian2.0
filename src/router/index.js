@@ -1,61 +1,58 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import BootPage from '@/view/register/BootPage'
-import Register from '@/view/register/register'
-import Login from '@/view/login/login'
-import Restpassword from '@/view/login/restpassword'
-import Setpassword_login from '@/view/login/SetPassword_login'
-import RestSuccess from '@/view/login/restsuccess'
-import Home from '@/view/home/home'
-import Nonetwork from '@/view/home/nonetwork'
-import Nologin from '@/view/home/nologin'
-import Homeindex from '@/view/home_shouye/homeindex'
-import Friends from '@/view/friends/friendslist'
+//import BootPage from '@/view/register/BootPage'
+//import Register from '@/view/register/register'
+//import Login from '@/view/login/login'
+//import Restpassword from '@/view/login/restpassword'
+//import Setpassword_login from '@/view/login/SetPassword_login'
+//import RestSuccess from '@/view/login/restsuccess'
+//import Home from '@/view/home/home'
+//import Nonetwork from '@/view/home/nonetwork'
+//import Nologin from '@/view/home/nologin'
+//import Homeindex from '@/view/home_shouye/homeindex'
+//import Friends from '@/view/friends/friendslist'
 import Chat from '@/view/friends/chat'
-import Breakdown from '@/view/home_shouye/breakdown'
-import Violationinquiry from '@/view/home_shouye/Violationinquiry'
-import Chosecar from '@/view/home_shouye/chosecar'
-import Fillinfo from '@/view/home_shouye/fillinfo'
-import Detailsviolation from '@/view/home_shouye/detailsviolation'
-import Faxian from '@/view/home_faxian/faxian'
-import Detailpage from '@/view/home_faxian/detailpage'
-import Detailvideo from '@/view/home_faxian/detailvideo'
-import Homepage from '@/view/home/homepage'
-import Upload from '@/view/home_faxian/upload'
-import Uploadvideo from '@/view/home_faxian/uploadvideo'
-import Personal from '@/view/my/personal'
-import Devicebind from '@/view/my/Devicebinding'
-import ContactService from '@/view/my/contactservice'
-import Feedback from '@/view/my/feedback'
-import Intercalate from '@/view/my/intercalate'
-import Accountandsecurity from '@/view/my/accountandsecurity'
-import Changepassword from '@/view/my/changepassword'
-import Newmessage from '@/view/my/newmessage'
-import SystemMessage from '@/view/my/systemmessage'
-import EditProfile from '@/view/my/editprofile'
-import ManageAddress from '@/view/my/manageaddress'
-import Editaddress from '@/view/my/editaddress'
-import Mymessage from '@/view/my/mymessage'
-import AboutUs from '@/view/my/aboutus'
-import Disclaimer from '@/view/my/disclaimer'
-import Msgcontaire from '@/view/my/msgcontaire'
-import Sysmsg from '@/view/my/sysmsg'
-import Devicelist from '@/view/my/devicelist'
-import Mycontrolsystem from '@/view/controlsystem/mycontrolsystem'
-import controlsystem_My from '@/view/controlsystem/controlsystem_my'
-import Adduser from '@/view/controlsystem/adduser'
-import Consumer from '@/view/controlsystem/consumer'
-import Consumerguzhang from '@/view/controlsystem/consumerguzhang'
-import Workshop from '@/view/controlsystem/workshop'
-import Department from '@/view/controlsystem/department'
-import PersonlInfo from '@/view/controlsystem/personlInfo'
-import Controlsearch from '@/view/controlsystem/controlsearch'
-import Gerenxinxi from '@/view/controlsystem/gerenxinxi'
-import Managecustomers from '@/view/controlsystem/managecustomers'
-import Manageupgrade from '@/view/controlsystem/manageupgrade'
-import Infoaudit from '@/view/controlsystem/infoaudit'
-import Customerinfo from '@/view/controlsystem/customerinfo'
-import Data from '@/view/data/data'
+//import Breakdown from '@/view/home_shouye/breakdown'
+//import Violationinquiry from '@/view/home_shouye/Violationinquiry'
+//import Chosecar from '@/view/home_shouye/chosecar'
+//import Fillinfo from '@/view/home_shouye/fillinfo'
+//import Detailsviolation from '@/view/home_shouye/detailsviolation'
+//import Faxian from '@/view/home_faxian/faxian'
+//import Detailpage from '@/view/home_faxian/detailpage'
+//import Detailvideo from '@/view/home_faxian/detailvideo'
+//import Homepage from '@/view/home/homepage'
+//import Upload from '@/view/home_faxian/upload'
+//import Uploadvideo from '@/view/home_faxian/uploadvideo'
+//import Personal from '@/view/my/personal'
+//import Devicebind from '@/view/my/Devicebinding'
+//import ContactService from '@/view/my/contactservice'
+//import Feedback from '@/view/my/feedback'
+//import Intercalate from '@/view/my/intercalate'
+//import Accountandsecurity from '@/view/my/accountandsecurity'
+//import Changepassword from '@/view/my/changepassword'
+//import Newmessage from '@/view/my/newmessage'
+//import EditProfile from '@/view/my/editprofile'
+//import Mymessage from '@/view/my/mymessage'
+//import AboutUs from '@/view/my/aboutus'
+//import Disclaimer from '@/view/my/disclaimer'
+//import Msgcontaire from '@/view/my/msgcontaire'
+//import Sysmsg from '@/view/my/sysmsg'
+//import Devicelist from '@/view/my/devicelist'
+//import Mycontrolsystem from '@/view/controlsystem/mycontrolsystem'
+//import controlsystem_My from '@/view/controlsystem/controlsystem_my'
+//import Adduser from '@/view/controlsystem/adduser'
+//import Consumer from '@/view/controlsystem/consumer'
+//import Consumerguzhang from '@/view/controlsystem/consumerguzhang'
+//import Workshop from '@/view/controlsystem/workshop'
+//import Department from '@/view/controlsystem/department'
+//import PersonlInfo from '@/view/controlsystem/personlInfo'
+//import Controlsearch from '@/view/controlsystem/controlsearch'
+//import Gerenxinxi from '@/view/controlsystem/gerenxinxi'
+//import Managecustomers from '@/view/controlsystem/managecustomers'
+//import Manageupgrade from '@/view/controlsystem/manageupgrade'
+//import Infoaudit from '@/view/controlsystem/infoaudit'
+//import Customerinfo from '@/view/controlsystem/customerinfo'
+//import Data from '@/view/data/data'
 Vue.use(Router)
 export default new Router({
 	linkActiveClass:'v-link-active',
@@ -65,198 +62,189 @@ export default new Router({
         redirect:'/home' 
     },{
       path: '/bootPage',
-      component:BootPage
+      component:resolve => require(['@/view/register/BootPage'],resolve)
     },{
       path: '/register',
-      component: Register,
+      component: resolve => require(['@/view/register/register'],resolve)
     },{
       path: '/login',
-      component: Login
+      component: resolve => require(['@/view/login/login'],resolve)
     },{
       	path: '/login/SetPassword_login',
-      	component: Setpassword_login
+      	component: resolve => require(['@/view/login/SetPassword_login'],resolve)
     },{
       	path: '/login/restpassword',
-      	component: Restpassword
+      	component: resolve => require(['@/view/login/restpassword'],resolve)
     },{
       	name:'restsuccess',
       	path: '/login/restsuccess',
-      	component: RestSuccess
+      	component: resolve => require(['@/view/login/restsuccess'],resolve)
     },{    
     	path:'/home',
-    	component:Home,
+    	component:resolve => require(['@/view/home/home'],resolve),
     	children:[{
     		path:'/homeindex',
-    		component:Homeindex
+    		component:resolve => require(['@/view/home_shouye/homeindex'],resolve)
     	},{
     		path:'/',
-    		component:Faxian
+    		component:resolve => require(['@/view/home_faxian/faxian'],resolve)   
     	},{
     		path:'/friends',
-    		component:Friends
+    		component:resolve => require(['@/view/friends/friendslist'],resolve)   
     	},{
     		path:'/nologin',
-    		component:Nologin
+    		component:resolve => require(['@/view/home/nologin'],resolve)
     	},{
     		path:'/personal',
-    		component:Personal
+    		component:resolve => require(['@/view/my/personal'],resolve)
     	},{
     		path:'/nonetwork',
-    		component:Nonetwork
+    		component:resolve => require(['@/view/home/nonetwork'],resolve)
     	}]
     },{
 		path:'/homepage',
 		name:'homepage',
-		component:Homepage
+		component:resolve => require(['@/view/home/homepage'],resolve)
 	},{
 		path:'/detailpage',
 		name:'detailpage',
-		component:Detailpage
+		component:resolve => require(['@/view/home_faxian/detailpage'],resolve)
     },{
 		path:'/detailvideo',
 		name:'detailvideo',
-		component:Detailvideo
+		component:resolve => require(['@/view/home_faxian/detailvideo'],resolve)
     },{
 		path:'/upload',
 		name:"upload",
-		component:Upload
+		component:resolve => require(['@/view/home_faxian/upload'],resolve)
 	},{
 		path:'/uploadvideo',
 		name:"uploadvideo",
-		component:Uploadvideo
+		component:resolve => require(['@/view/home_faxian/uploadvideo'],resolve)
 	},{
 		path:'/devicebinding',
-		component:Devicebind
+		component:resolve => require(['@/view/my/Devicebinding'],resolve)
 	},{
 		path:'/contactservice',
-		component:ContactService
+		component:resolve => require(['@/view/my/contactservice'],resolve)
 	},{
 		path:'/feedback',
-		component:Feedback
+		component:resolve => require(['@/view/my/feedback'],resolve)
 	},{
 		path:'/intercalate',
-		component:Intercalate
+		component:resolve => require(['@/view/my/intercalate'],resolve)
 	},{
 		path:'/accountandsecurity',
-		component:Accountandsecurity
+		component:resolve => require(['@/view/my/accountandsecurity'],resolve)
 	},{
 		path:'/changepassword',
-		component:Changepassword
+		component:resolve => require(['@/view/my/changepassword'],resolve)
 	},{
 		path:'/newmessage',
-		component:Newmessage
+		component:resolve => require(['@/view/my/newmessage'],resolve)
 	},{
 		path:'/aboutus',
-		component:AboutUs
+		component:resolve => require(['@/view/my/aboutus'],resolve)
 	},{
 		path:'/disclaimer',
-		component:Disclaimer
-	},{
-		path:'/systemmessage',
-		component:SystemMessage
+		component:resolve => require(['@/view/my/disclaimer'],resolve)
 	},{
 		path:'/editprofile',
 		name:'editprofile',
-		component:EditProfile
-	},{
-		path:'/manageaddress',
-		component:ManageAddress
-	},{
-		path:'/editaddress',
-		component:Editaddress
+		component:resolve => require(['@/view/my/editprofile'],resolve)
 	},{
 		path:'/mymessage',
-		component:Mymessage
+		component:resolve => require(['@/view/my/mymessage'],resolve)
 	},{
 		path:'/msgcontaire',
 		name:'msgcontaire',
-		component:Msgcontaire
+		component:resolve => require(['@/view/my/msgcontaire'],resolve)
 	},{
 		name:'mycontrolsystem',
 		path:'/mycontrolsystem',
-		component:Mycontrolsystem
+		component:resolve => require(['@/view/controlsystem/mycontrolsystem'],resolve)
 	},{
 		name:'sysmsg',
 		path:'/sysmsg',
-		component:Sysmsg
+		component:resolve => require(['@/view/my/sysmsg'],resolve)
 	},{
 		path:'/controlsystem_my',
 		name:'controlsystem_my',
-		component:controlsystem_My
+		component:resolve => require(['@/view/controlsystem/controlsystem_my'],resolve)
 	},{	
 		name:'adduser',
 		path:'/adduser',
-		component:Adduser
+		component:resolve => require(['@/view/controlsystem/adduser'],resolve)
 	},{
 		path:'/consumer',
 		name:'consumer',
-		component:Consumer
+		component:resolve => require(['@/view/controlsystem/consumer'],resolve)
 	},{
 		path:'/consumerguzhang',
 		name:'consumerguzhang',
-		component:Consumerguzhang
+		component:resolve => require(['@/view/controlsystem/consumerguzhang'],resolve)
 	},{
 		path:'/workshop',
-		component:Workshop
+		component:resolve => require(['@/view/controlsystem/workshop'],resolve)
 	},{
 		path:'/department',
-		component:Department
+		component:resolve => require(['@/view/controlsystem/department'],resolve)
 	},{
 		path:'/personlInfo',
 		name:'personlInfo',
-		component:PersonlInfo
+		component:resolve => require(['@/view/controlsystem/personlInfo'],resolve)
 	},{
 		path:'/controlsearch',
-		component:Controlsearch
+		component:resolve => require(['@/view/controlsystem/controlsearch'],resolve)
 	},{
 		name:'gerenxinxi',
 		path:'/gerenxinxi',
-		component:Gerenxinxi
+		component:resolve => require(['@/view/controlsystem/gerenxinxi'],resolve)
 	},{
 		path:'/managecustomers',
-		component:Managecustomers
+		component:resolve => require(['@/view/controlsystem/managecustomers'],resolve)
 	},{
 		name:'manageupgrade',
 		path:'/manageupgrade',
-		component:Manageupgrade
+		component:resolve => require(['@/view/controlsystem/manageupgrade'],resolve)
 	},{
 		name:'infoaudit',
 		path:'/infoaudit',
-		component:Infoaudit
+		component:resolve => require(['@/view/controlsystem/infoaudit'],resolve)
 	},{
 		path:'/customerinfo',
 		name:'customerinfo',
-		component:Customerinfo
+		component:resolve => require(['@/view/controlsystem/customerinfo'],resolve)
 	},{
 		path:'/data',
-		component:Data
+		component:resolve => require(['@/view/data/data'],resolve)
 	},{
 		path:'/breakdown',
 		name:'breakdown',
-		component:Breakdown
+		component:resolve => require(['@/view/home_shouye/breakdown'],resolve)
 	},{
 		path:'/violationinquiry',
 		name:'violationinquiry',
-		component:Violationinquiry
+		component:resolve => require(['@/view/home_shouye/Violationinquiry'],resolve)
 	},{
 		path:'/chosecar',
 		name:'chosecar',
-		component:Chosecar
+		component:resolve => require(['@/view/home_shouye/chosecar'],resolve)
 	},{
 		path:'/fillinfo',
 		name:'fillinfo',
-		component:Fillinfo
+		component:resolve => require(['@/view/home_shouye/fillinfo'],resolve)
 	},{
 		path:'/detailsviolation',
 		name:'detailsviolation',
-		component:Detailsviolation
+		component:resolve => require(['@/view/home_shouye/detailsviolation'],resolve)
 	},{
 		path:'/devicelist',
-		component:Devicelist
+		component:resolve => require(['@/view/my/devicelist'],resolve)
 	},{
 		path:'/friends/chat',
 		name:'chat',
-		component:Chat
+		component:resolve => require(['@/view/friends/chat'],resolve)
 	}
   ]
 })

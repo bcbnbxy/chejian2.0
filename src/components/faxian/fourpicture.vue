@@ -7,10 +7,10 @@
 		<router-link tag="div" class="fourpicture-content" :to="{name:'detailpage',params:{datalist}}">
 			<p>{{datalist.content}}</p>
 			<div class="fourpicture-box" v-if="datalist.images&&datalist.images.length==1">
-				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
+				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<div class="fourpicture-box-moreimg" v-else-if="datalist.images&&datalist.images.length>1">
-				<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in datalist.images" :key="index"/>
+				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in datalist.images" :key="index"/>
 			</div>
 		</router-link>
 		<div class="fourpicture-title">

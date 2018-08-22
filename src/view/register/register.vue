@@ -241,6 +241,21 @@ export default{
 	text-align: center;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.register-wrap-head{
+		width:100%;
+		height:2.64rem;	
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		line-height:1.32rem;
+		font-size:0.56rem;
+		color:#000;
+		border-bottom:1px solid #ddd;
+		font-weight: 600;
+		text-align: center;
+		position: relative;
+	}
+}
 .register-wrap-head .icon-fanhui{
 	font-size:0.6rem;
 	color:#a0a0a0;

@@ -114,7 +114,7 @@ export default{
 	background:#f7f7f7;
 }
 .personal-top{
-	height:4.7rem;
+	height:5.42rem;
 	width:100%;
 	background-image: url(../../assets/img/shouye/bg.png);
 	background-size: cover;
@@ -128,6 +128,18 @@ export default{
 	color:#fff;
 	font-size:0.56rem;
 	position: relative;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.personal-top header{
+		height:2.64rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		line-height:1.32rem;
+		text-align: center;
+		color:#fff;
+		font-size:0.56rem;
+		position: relative;
+	}
 }
 .personal-top header i{
 	font-size:0.6rem;

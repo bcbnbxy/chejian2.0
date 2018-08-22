@@ -126,6 +126,19 @@ export default{
 	text-align: center;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.personlInfo-wrap-head{
+		padding:0 0.5rem;
+		height:2.64rem;	
+		color:#fff;
+		font-size:0.56rem;
+		width:100%;
+		line-height:1.32rem;
+		padding-top:1.32rem;
+		text-align: center;
+		position: relative;
+	}
+}
 .personlInfo-wrap-head i{
 	font-size:0.6rem;
 	position: absolute;

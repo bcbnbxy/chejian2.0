@@ -61,6 +61,20 @@ export default{
 	background-size: cover;
 	color:#fff;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.chosecar-wrap-head{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		text-align: center;
+		line-height:1.32rem;
+		font-size:0.56rem;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size: cover;
+		color:#fff;
+	}
+}
 .chosecar-wrap-head .icon-fanhui{
 	float:left;
 	font-size:0.6rem;

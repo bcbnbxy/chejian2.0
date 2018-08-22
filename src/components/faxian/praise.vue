@@ -96,6 +96,21 @@ export default {
 	position: relative;
 	padding-top:0.6rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.praise-head{
+		width: 100%;
+		height:2.64rem;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover ;
+		padding:0 0.5rem;
+		font-size:0.56rem;
+		color:#fff;
+		line-height:1.32rem;
+		text-align: center;
+		position: relative;
+		padding-top:1.32rem;
+	}
+}
 .praise-head i{
 	font-size:0.6rem;
 	position: absolute;

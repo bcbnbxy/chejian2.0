@@ -85,8 +85,12 @@ export default{
 	      this.active = i
 	      this.currentView = v
 	      if(this.currentView=='picture'){
+	      		this.picturelist=[];
+	      		this.videolist=[];
 	      		this. getblogs(0,5);
 	      }else if(this.currentView=='video'){
+	      	this.picturelist=[];
+	      	this.videolist=[];
 	      	this.getblogsvideo(0,5);
 	      }
 	  },
@@ -194,6 +198,7 @@ export default{
 	    	}).then(function(r){
 	    		that.$api('/Execute.do',{action:'blog.blogs',userseq:that.ownerseq,mediatype:0,minvalue:0,pageSize:5}).then(function(r){
 		    		if(r.errorCode==0){
+		    			console.log(JSON.stringify(r));
 		    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 		    				that.$toast({
 			    				message:"没有数据",
@@ -262,10 +267,11 @@ export default{
 	    	this.getblogs(this.pnum,5);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
 	    },
-	    getblogsvideo(pnum,psize){//获取动态列表
+	    getblogsvideo(pnum,psize){//获取视频动态列表
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'blog.blogs',userseq:this.ownerseq,mediatype:1,minvalue:pnum,pageSize:psize}).then(function(r){
 	    		if(r.errorCode==0){
+	    			console.log(JSON.stringify(r));
 	    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 	    				that.$toast({
 		    				message:"没有数据",
@@ -363,6 +369,18 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.homepage-wrap-head{
+		width:100%;
+		height:5.67rem;
+		background-image:url(../../assets/img/shouye/bg.png) ;
+		padding-top:1.32rem;
+		background-size:cover;
+		display: flex;
+		display: -webkit-flex;
+		flex-direction: column;
+	}
 }
 .homepage-wrap-headtop{
 	width:100%;

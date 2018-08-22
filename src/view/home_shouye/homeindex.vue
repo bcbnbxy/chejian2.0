@@ -208,6 +208,15 @@ export default{
 	background-image:url(../../assets/img/shouye/bg.png);
 	background-size:cover ;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.homeindex-wrap-head{
+		width:100%;
+		height:7.95rem;
+		padding-top:1.32rem;
+		background-image:url(../../assets/img/shouye/bg.png);
+		background-size:cover ;
+	}
+}
 .homeindex-wrap-head>.icon-scan{
 	font-size:0.6rem;
 }

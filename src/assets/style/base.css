@@ -46,6 +46,13 @@ optgroup{font-weight:bold}
 table{border-collapse:collapse;border-spacing:0}
 td,th{padding:0}
 input,textarea{-webkit-appearance: none;}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){ 
+   body{
+      padding-bottom: 1.02rem;
+      padding-bottom: env(safe-area-inset-bottom);
+      background:#fff;
+   }
+}
 /*****************************************以上是重置样式部分***********************************************/
 .mint-button--default{
 	width:100%;

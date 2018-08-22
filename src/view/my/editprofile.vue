@@ -212,7 +212,7 @@ export default {
 				params.gender=this.param;
 			};
 			if(this.birthday){
-				params.birthday=new Date(this.birthday).getTime();
+				params.birthday=new Date(this.birthday.replace(/\s+/g,"/")).getTime();
 			};
 			if(this.provinces){
 				params.province=this.provinces;
@@ -228,6 +228,7 @@ export default {
 						  duration: 1500
 				       });
 					localStorage.setItem("loginInfo",JSON.stringify(r.data.updateUserInfo));
+					that.$router.go(-1)
 				}else{
 					that.$toast({
 				          message: r.errorMessage,
@@ -258,6 +259,16 @@ export default {
 	color:#fff;
 	background-image:url(../../assets/img/faxianimg/headbg.png) ;
 	background-size:cover ;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.editprofile-wrap>header{
+		height:2.64rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		color:#fff;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover ;
+	}
 }
 .editprofile-wrap .mint-button--default{
 	background: none !important;

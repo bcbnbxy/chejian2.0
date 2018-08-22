@@ -85,6 +85,20 @@ export default{
 	background-size:cover;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.managecustomers-wrap-head{
+		height:2.64rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		line-height:1.32rem;
+		text-align: center;
+		font-size:0.56rem;
+		color:#fff;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover;
+		position: relative;
+	}
+}
 .managecustomers-wrap-head i{
 	position:absolute;
 	left:0.5rem;

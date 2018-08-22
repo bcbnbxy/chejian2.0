@@ -164,6 +164,20 @@ export default{
 	flex-direction: column;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.consumer-wrap-head{
+		height:8.12rem;
+		padding-top:1.32rem;
+		width:100%;
+		background-image: url(../../assets/img/shouye/bg.png);
+		background-size:cover ;
+		color:#fff;
+		display: flex;
+		display: -webkit-flex;
+		flex-direction: column;
+		position: relative;
+	}
+}
 .consumer-wrap-head-top{
 	height:1.32rem;
 	width:100%;

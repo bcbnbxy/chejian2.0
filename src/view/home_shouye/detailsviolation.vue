@@ -76,6 +76,19 @@
 	padding:0 0.5rem;
 	padding-top:0.6rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.detailsviolation-wrap-head{
+		height:2.64rem;
+		line-height:1.32rem;
+		text-align: center;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size: cover;
+		font-size:0.56rem;
+		color:#fff;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+	}
+}
 .detailsviolation-wrap-head .icon-fanhui{
 	font-size:0.6rem;
 	float:left;

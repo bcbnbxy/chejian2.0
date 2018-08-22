@@ -319,6 +319,21 @@ export default{
 	color:#fff;
 	position: relative;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.submissionupgrades-wrap-head{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		line-height:1.32rem;
+		text-align: center;
+		font-size:0.56rem;
+		color:#fff;
+		position: relative;
+	}
+}
 .submissionupgrades-wrap-head .icon-fanhui{
 	font-size:0.6rem;
 	position: absolute;

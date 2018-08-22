@@ -57,10 +57,29 @@ export default {
 	bottom:0;
 	width:100%;
 	height:1.45rem;
-	background: #fff;
 	padding:0 0.48rem 0 0.48rem;
 	background:#f8f8f8;
 	border-top:1px solid #dcdcdc;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){ 
+   .home-wrap{
+		width:100%;
+		height:100%;
+		overflow: visible;
+		background: #f8f8f8;
+		padding-bottom:1.45rem;
+	}
+   .footer{
+		position:absolute;
+		left:0;
+		bottom:-1.02rem;
+		width:100%;
+		height:2.47rem;
+		padding:0 0.48rem 0 0.48rem;
+		padding-bottom:1.02rem;
+		background:#f8f8f8;
+		border-top:1px solid #dcdcdc;
+	}
 }
 .footer>div{
 	float: left;

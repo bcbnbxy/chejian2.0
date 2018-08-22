@@ -89,6 +89,20 @@ export default{
 		background-image: url(../../assets/img/faxianimg/headbg.png);
 		background-size:cover;
 	}
+	@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.addfriend-head{
+		height:2.64rem;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		color:#fff;
+		background-image: url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+	}
+}
 	.addfriend-head .icon-fanhui{
 		font-size:0.6rem;
 		margin-right:0.3rem;

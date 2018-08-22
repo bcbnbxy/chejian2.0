@@ -53,6 +53,21 @@
 	font-size:0.56rem;
 	color:#fff;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.aboutus-wrap-head{
+		height:2.64rem;
+		width:100%;
+		text-align: center;
+		line-height:1.32rem;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover ;
+		position: relative;
+		font-size:0.56rem;
+		color:#fff;
+	}
+}
 .aboutus-wrap-head i{
 	font-size:0.6rem;
 	position: absolute;

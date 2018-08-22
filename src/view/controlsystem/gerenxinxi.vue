@@ -143,6 +143,17 @@ export default{
 	padding:0 0.5rem;
 	padding-top:0.6rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.gerenxinxi-wrap-head-top{
+		height:2.64rem;
+		font-size:0.56rem;
+		color:#fff;
+		line-height:1.32rem;
+		text-align: center;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+	}
+}
 .gerenxinxi-wrap-head-top i{
 	float: left;
 	font-size:0.6rem;

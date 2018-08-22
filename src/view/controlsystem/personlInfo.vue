@@ -171,6 +171,15 @@ export default{
 	height:5.3rem;
 	padding-top:0.6rem;
 }
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.personlInfo-wrap-top{
+		background-image:url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		width:100%;
+		height:6.02rem;
+		padding-top:1.32rem;
+	}
+}
 .personlInfo-wrap-head{
 	padding:0 0.5rem;
 	height:1.32rem;	
