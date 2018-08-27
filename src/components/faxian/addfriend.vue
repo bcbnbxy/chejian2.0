@@ -68,13 +68,13 @@ export default{
 }
 </script>
 
-<style scoped>
+<style>
 	.addfriend-wrap{
 		width:100%;
 		height:100%;
 		background: #f7f7f7;
 		display: flex;
-		display: -webkit-box;
+		display: -webkit-flex;
 		flex-direction: column;
 	}
 	.addfriend-head{

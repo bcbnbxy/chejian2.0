@@ -55,6 +55,9 @@ export default{
 			allLoaded:false
 		}
 	},
+	mounted(){
+		this.getmessages(this.pnum,this.psize);
+	},
 	methods:{
 		checkedAll () {
       		this.isCheckedAll = !this.isCheckedAll
@@ -101,7 +104,7 @@ export default{
 	    },
 	    getmessages(minvalue,pageSize){//获取消息列表
 	    	var that=this;
-	    	this.$api('/Execute.do',{action:'messages',kind:this.$route.params.kind,minvalue:minvalue,pageSize:pageSize}).then(function(r){
+	    	this.$api('/Execute.do',{action:'sysMessages',minvalue:minvalue,pageSize:pageSize}).then(function(r){
 	    		if(r.errorCode==0){
 	    			that.msglist=that.msglist.concat(r.data.messages);
 					if(r.data.messages.length<7){

@@ -382,7 +382,6 @@ export default{
 	height:100%;
 	position: fixed;
 	top:0;
-	background: tan;
 	z-index: 1000;	
 }
 .addfriend-show{

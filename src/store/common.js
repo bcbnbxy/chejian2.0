@@ -5,7 +5,6 @@ export default {
 			__uuid__:'',
 	        __platform__:'',
  		    __version__:'1.0.0',
- 		    __timestamp__:new Date().getTime()
 		},
 		searchstatus:false,
 		selectedcar:0,

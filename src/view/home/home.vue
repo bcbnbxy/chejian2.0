@@ -1,13 +1,13 @@
 <template>
 	<div class="home-wrap">
-		<div class="home-main">
+		<div class="home-main">						
 			<transition :name="transitionName">
-			<router-view></router-view>
+				<router-view></router-view>
 			</transition>
 		</div>
 		<footer class="footer">
 			<router-link to="/homeindex" tag="div" ><p class="bghome"></p><span>首页</span></router-link>
-			<router-link to="/home" tag="div"><p class="bgfaxian"></p><span>发现</span></router-link>
+			<router-link to="/faxian" tag="div"><p class="bgfaxian"></p><span>发现</span></router-link>
 			<router-link to="/friends" tag="div"><p class="bgcheyou"></p><span>车友</span></router-link>
 			<router-link to="/personal" tag="div"><p class="bgmy"></p><span>我的</span></router-link>
 		</footer>

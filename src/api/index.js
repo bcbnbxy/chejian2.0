@@ -4,6 +4,8 @@ var axios = require('axios')
 import store from '../store'
 import qs from 'qs'
 import {buildSign} from '../assets/script/until.js'
+import router from '../router/index.js'
+import { Toast } from 'mint-ui';
 var root='/customer'
 /*
   接口处理函数
@@ -19,6 +21,7 @@ axios.defaults.baseURL =root;
 axios.interceptors.request.use(config => {
 			if(config.url.indexOf('Execute.do') != -1){
 				let publicOPtion=store.state.common.publicOption
+				publicOPtion.__timestamp__=new Date().getTime()
 				if(localStorage.getItem("loginInfo")){				
 						publicOPtion.__mobileno__=JSON.parse(localStorage.getItem("loginInfo")).mobileno;
 				}else{
@@ -34,6 +37,39 @@ axios.interceptors.request.use(config => {
       return config
 }, error => {
     return Promise.reject(error)
+})
+axios.interceptors.response.use((response) => {
+	return response;
+}, (error) => {
+	if(!error.response){
+		Toast({
+		  message: '网络开小差了⊙﹏⊙!',
+		  position: 'bottom',
+		  duration: 1500
+		});
+		router.replace('/nonetwork')
+	}else{
+		if (error.response.status == 504||err.response.status == 404) {
+		    Toast({
+				  message: '服务器被吃了⊙﹏⊙∥',
+				  position: 'bottom',
+				  duration: 1500
+				});
+		} else if (error.response.status == 403) {
+		    Toast({
+				  message: '权限不足,请联系管理员!',
+				  position: 'bottom',
+				  duration: 1500
+				});
+		}else {
+		   Toast({
+				  message: '未知错误',
+				  position: 'bottom',
+				  duration: 1500
+				});
+		}
+	}	
+return Promise.resolve(error);
 })
 
 /**

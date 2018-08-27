@@ -1,13 +1,25 @@
 <template>
 	<div class="nonetwork">
 		<div class="nonetwork-box">
-			<img src="../../assets/img/faxianimg/nonetwork.png"/>
 			<p>网络开小差了，请检查网络连接情况</p>
+			<button @click="restload">点击重新加载</button>
 		</div>
 	</div>
 </template>
 
 <script>
+export default {
+	methods:{
+		restload(){
+			var that=this;
+			this.$api('/Execute.do',{action:'areaCodes'}).then(function(r){
+				if(r.errorCode==0){
+					that.$router.go(-1)
+				}
+			})
+		}
+	}
+}
 </script>
 
 <style>
@@ -20,15 +32,17 @@
 	justify-content: center;
   	align-items: center;
 }
-.nonetwork img{
-	width:5rem;
-	height:4.9rem;
-	display: block;
-	margin:0 auto;
-}
 .nonetwork p{
-	font-size:0.38rem;
+	font-size:0.44rem;
 	text-align: center;
 	color:#a0a0a0;
+}
+.nonetwork button{
+	background: #ddd;
+	display: block;
+	margin:0.5rem auto;
+	font-size:0.44rem;
+	border-radius: 5px;
+	border:none;
 }
 </style>

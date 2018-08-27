@@ -250,6 +250,9 @@
 .fourpicture-box-moreimg img{
 	width:32%;
 	height:3.48rem;
+	margin:0.1rem 0;
+}
+.fourpicture-box-moreimg img:nth-child(3n-1){
 	margin:0.1rem 2%;
 }
 .fourpicture-title{

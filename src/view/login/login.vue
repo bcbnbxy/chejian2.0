@@ -95,7 +95,7 @@ export default{
 			       });
 //			       window.action.registerPush(r.data.login.mobileno);
 			       that.$store.commit('getloginInfo',r.data.login);
-			       that.$router.push('/home');
+			       that.$router.push('/faxian');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));
 			       that.$store.commit('setblog_userseq');
 			       that.$store.commit('setblog_touserseq',null);

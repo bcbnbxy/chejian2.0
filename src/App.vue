@@ -1,8 +1,8 @@
 <template>
 <div id="app">
-		 <transition :name="transitionName">
-			<router-view></router-view>
-			</transition>
+	<transition :name="transitionName">
+		<router-view></router-view>
+	</transition>			
 </div>
 </template>
 <script>
@@ -27,7 +27,7 @@ export default {
 			this.$store.commit('getplatform','iOS');
 		}
 		this.$store.commit('getuuid',window.device.getUUID());
-	  	//localStorage.removeItem('loginInfo');
+//	  	localStorage.removeItem('loginInfo');
     },
 	watch: {//使用watch 监听$router的变化
 	    $route(to, from) {

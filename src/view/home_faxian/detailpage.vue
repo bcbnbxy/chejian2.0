@@ -1,7 +1,7 @@
 <template>
 	<div class="detail">
 		<div class="detail-head">
-			<i class="iconfont icon-fanhui" @click="$router.go(-1)" style="font-size:0.6rem"></i>
+			<i class="iconfont icon-fanhui" @click="$router.back(-1)" style="font-size:0.6rem"></i>
 			<span>详情</span>
 		</div>
 		<div class="detail-wrap">
@@ -328,7 +328,12 @@ export default{
 		        });
 			}
 	    }
-	}
+	},
+	beforeRouteLeave(to, from, next) {   
+   // 设置下一个路由的 meta
+    to.meta.keepAlive = true; // B 跳转到 A 时，让 A 缓存，即不刷新（代码写在B页面）
+    next();
+   }
 }
 </script>
 
@@ -482,6 +487,9 @@ export default{
 .fourpicture-box-moreimg img{
 	width:32%;
 	height:3.48rem;
+	margin:0.1rem 0;
+}
+.fourpicture-box-moreimg img:nth-child(3n-1){
 	margin:0.1rem 2%;
 }
 .pic-detail-zan{

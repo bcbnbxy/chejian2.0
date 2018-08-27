@@ -126,7 +126,6 @@ export default{
     }
 }
 </script>
-
 <style>
 .faxian-wrap{
 	height:100%;

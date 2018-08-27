@@ -80,6 +80,7 @@ export default{
 		getcustomerdevice(){//获取用户设备列表
 			var that=this;
 			this.$api('/Execute.do',{action:'device.customerDevices',customerseq:this.$store.state.common.consumer.userseq}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					if(r.data.customerDevices==null||r.data.customerDevices==undefined||r.data.customerDevices==''){
 						return ;
@@ -121,6 +122,7 @@ export default{
 		getwarnCounts(device,begindate,enddate){//获取警告列表
 			var that=this;
 			this.$api('/Execute.do',{action:'device.warnCounts',device:device,begindate:begindate,enddate}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorMessage==0){
 					if(r.data.warnCounts==null||r.data.warnCounts==undefined||r.data.warnCounts==""){
 						return;

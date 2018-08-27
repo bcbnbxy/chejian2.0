@@ -26,7 +26,7 @@
 		<div class="boxinput">
 	    	<input type="text" v-model="content"/>
 	    	<button :style="content?'':'color:#ccc;'" @click="content&&send()">发送</button>
-	   </div>
+	    </div>
 	</div>
 </div>
 </template>

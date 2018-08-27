@@ -53,7 +53,7 @@ export default{
 			index:1,
 			carlist:[],			
 			selected:[],
-			faultCodes:[{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'},{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'},{faultseq:1000,faultcode:"001",descript:'碰撞',happentime:'1534151963925'}],
+			faultCodes:[],
 			psize:0,
 			pnum:8,
 			mindate:'',
