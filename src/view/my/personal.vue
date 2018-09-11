@@ -22,9 +22,6 @@
 				<svg class="icon" aria-hidden="true"><use xlink:href="#icon-bangding1"></use></svg><span>设备绑定</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 			</router-link>
 			<ul class="personal-bottom-shezhi">
-				<!--<router-link to="/manageaddress" tag="li">
-					<i class="iconfont icon-dizhi"></i><span>收货地址</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
-				</router-link>-->
 				<router-link to="/contactservice" tag="li">
 					<svg class="icon" aria-hidden="true"><use xlink:href="#icon-kefu2"></use></svg><span>联系客服</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i>
 				</router-link>

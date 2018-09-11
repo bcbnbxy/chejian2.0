@@ -1,5 +1,8 @@
 <template>
 	<div class="nologin-wrap">
+		<div class="nologin-head">
+			<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+		</div>
 		<div class="nologin">
 			<p>登陆后发现你感兴趣的动态奥</p>
 			<router-link tag="button" to="/login">去登陆</router-link>
@@ -36,5 +39,40 @@
 	color:#999;
 	text-align: center;
 	margin-bottom:1.42rem;
+}
+.nologin-head{
+	height:1.92rem;
+	font-size:0.6rem;
+	color:#fff;
+	width:100%;
+	padding:0 0.5rem;
+	padding-top:0.6rem;
+	text-align: center;
+	line-height:1.32rem;
+	background-image:url(../../assets/img/faxianimg/headbg.png);
+	background-size:cover;
+	position: absolute;
+	top:0;
+	left:0;
+}
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3){
+	.nologin-head{
+		height:2.64rem;
+		font-size:0.6rem;
+		color:#fff;
+		width:100%;
+		padding:0 0.5rem;
+		padding-top:1.32rem;
+		text-align: center;
+		line-height:1.32rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		position: absolute;
+		top:0;
+		left:0;
+	}
+}
+.nologin-head .icon-fanhui{
+	float:left;
 }
 </style>

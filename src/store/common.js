@@ -9,6 +9,7 @@ export default {
 		searchstatus:false,
 		selectedcar:0,
 		consumer:{},
+		catchPages: "faxian"
 	},
 	mutations: {
 		getversion(state,version){
@@ -28,6 +29,9 @@ export default {
 	   },
 	   setconsumer(state,consumer){
 	   		state.consumer=consumer;
-	   }
+	   },
+	   add(state, item) {        
+            state.catchPages=item;
+	   },
 	}
 }

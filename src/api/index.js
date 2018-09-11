@@ -1,11 +1,11 @@
 
 // 引用axios
 var axios = require('axios')
+import router from '../router'
 import store from '../store'
 import qs from 'qs'
 import {buildSign} from '../assets/script/until.js'
-import router from '../router/index.js'
-import { Toast } from 'mint-ui';
+import { Toast,MessageBox } from 'mint-ui';
 var root='/customer'
 /*
   接口处理函数
@@ -39,6 +39,25 @@ axios.interceptors.request.use(config => {
     return Promise.reject(error)
 })
 axios.interceptors.response.use((response) => {
+	if(response.status===200&&response.data.errorCode=="you.must.relogin"){
+			MessageBox.confirm('', {
+		        message: '请重新登陆',
+		        showConfirmButton:true,
+		        showCancelButton:true,
+		        confirmButtonText:'确定',
+		        cancelButtonText:'取消'
+	        }).then(action => {
+	          if (action == 'confirm') {	
+			        localStorage.removeItem('loginInfo');
+			        store.commit('setblog_userseq');
+			        router.push('/bootPage')
+	          }
+	        }).catch(err => {
+	          if (err == 'cancel') {
+	            console.log('123');
+	          }
+	        });	
+	}
 	return response;
 }, (error) => {
 	if(!error.response){

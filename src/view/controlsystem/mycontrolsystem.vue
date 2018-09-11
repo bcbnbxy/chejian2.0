@@ -51,7 +51,10 @@ export default{
 	methods:{
 		goworkshop(){			
 			if(this.identity===1){
-				this.$router.push({name:'controlsystem_my',params:{headphoto:this.headphoto,company:this.company,deviceCount:this.deviceCount,staffCount:this.staffCount}})
+//				this.$router.push({name:'controlsystem_my',params:{headphoto:this.headphoto,company:this.company,deviceCount:this.deviceCount,staffCount:this.staffCount}})
+				this.$router.push('/controlsystem_my');
+				var params={headphoto:this.headphoto,company:this.company,deviceCount:this.deviceCount,staffCount:this.staffCount}
+				this.$store.commit('setcontrolsystem_my',params)
 			}else if(this.identity===2){
 				this.$router.push('/workshop')
 			}

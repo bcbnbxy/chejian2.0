@@ -153,6 +153,12 @@ export default{
 		padding:0 0.5rem;
 		padding-top:1.32rem;
 	}
+	.gerenxinxi-wrap-head{
+		width:100%;
+		height:6.02rem;
+		background-image:url(../../assets/img/faxianimg/headbg.png) ;
+		background-size:cover ;
+	}
 }
 .gerenxinxi-wrap-head-top i{
 	float: left;

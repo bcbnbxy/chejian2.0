@@ -190,7 +190,7 @@ export default{
 	watch:{
 		content:function(){
 			if(this.content.length>0){
-				this.params.content=this.content;
+				this.params.content=this.content.replace(/[\r\n]/g,"");
 			}			
 		},
 		videoid:function(){

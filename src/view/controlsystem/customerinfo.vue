@@ -138,6 +138,12 @@ export default{
 		text-align: center;
 		position: relative;
 	}
+	.personlInfo-wrap-top{
+		background-image:url(../../assets/img/faxianimg/headbg.png);
+		background-size:cover;
+		width:100%;
+		height:6.02rem;
+	}
 }
 .personlInfo-wrap-head i{
 	font-size:0.6rem;

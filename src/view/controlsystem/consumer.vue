@@ -33,6 +33,7 @@
 					<span @click="navactive(3)" :style="index==3?'color:#1989f5':''">本月</span>
 				</div>
 				<div @click="consumerguzhang" class="consumer-wrap-foot-contaire-guzhangma"><span>故障码</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></div>
+				<router-link class="consumer-wrap-foot-contaire-guzhangma"  tag="div" :to="{name:'cardetailinfo',params:{selected,carlist}}" v-if="selected&&selected.deviceVehicle"><span>车辆详细信息</span><i class="iconfont icon-arrow-right-copy-copy-copy"></i></router-link>
 				<div class="consumer-wrap-foot-contaire-main">
 					<div class="nodata" v-if="warnslist.length==0">暂时没有数据</div>
 					<Mycarstate :warnCounts="warnslist" v-else></Mycarstate>
@@ -80,7 +81,6 @@ export default{
 		getcustomerdevice(){//获取用户设备列表
 			var that=this;
 			this.$api('/Execute.do',{action:'device.customerDevices',customerseq:this.$store.state.common.consumer.userseq}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					if(r.data.customerDevices==null||r.data.customerDevices==undefined||r.data.customerDevices==''){
 						return ;
@@ -122,7 +122,6 @@ export default{
 		getwarnCounts(device,begindate,enddate){//获取警告列表
 			var that=this;
 			this.$api('/Execute.do',{action:'device.warnCounts',device:device,begindate:begindate,enddate}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorMessage==0){
 					if(r.data.warnCounts==null||r.data.warnCounts==undefined||r.data.warnCounts==""){
 						return;

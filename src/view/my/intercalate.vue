@@ -56,11 +56,7 @@ export default{
 				          message: '退出登录成功!',
 				          position: 'bottom',
 						  duration: 1500
-				       });
-				       that.login=true;
-				       that.loginout=false;
-				       localStorage.removeItem('loginInfo');
-				       that.$store.commit('setblog_userseq');
+				      });
 					}else{
 						that.$toast({
 				          message: r.errorMessage,
@@ -68,6 +64,10 @@ export default{
 						  duration: 1500
 				       });
 					}
+					that.login=true;
+			        that.loginout=false;
+			        localStorage.removeItem('loginInfo');
+			        that.$store.commit('setblog_userseq');
 				})
 	          }
 	        }).catch(err => {

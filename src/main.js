@@ -13,6 +13,8 @@ import fastclick from 'fastclick'
 import 'mint-ui/lib/style.css'
 import Es6Promise from 'es6-promise'
 import VueLazyload from 'vue-lazyload'
+//import Vconsole from 'vconsole'
+//let vConsole = new Vconsole()
 Es6Promise.polyfill();
 Vue.use(VueLazyload, {
 preLoad: 1,    //预加载高度的比例

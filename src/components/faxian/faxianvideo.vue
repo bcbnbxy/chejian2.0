@@ -4,16 +4,16 @@
 			<div class="fourpicture-avatar-left"><img :src="datalist.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.owner.headphoto:defaultImg" @click="gohomepage(datalist.userseq,datalist.owner.friend)"/><p><b>{{datalist.owner.nickname}}</b><span>{{formatDate(datalist.createtime)}}</span></p></div>
 			<div class="fourpicture-avatar-right" v-show="($store.state.faxian.blogs.userseq!=datalist.userseq)&&(!datalist.owner.friend)"><button @click="addfriend(datalist.userseq)">加好友</button></div>
 		</div>
-		<router-link tag="div" class="fourpicture-content" :to="{name:'detailvideo',params:{datalist}}">
+		<div class="fourpicture-content" @click="godeatilpage(datalist)">
 			<p>{{datalist.content}}</p>
 			<div class="fourpicture-content-video">
 				<img  v-lazy="datalist.videocover"  class="videoposter"/>
 				<img src="../../assets/img/faxianimg/playbtn.png" class="playbtn"/>
 			</div>			
-		</router-link>
+		</div>
 		<div class="fourpicture-title">
 			<p><i class="iconfont icon-dianzan" :style="datalist.praised?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,datalist.praisecount)"></i><span>{{datalist.praisecount}}</span></p>
-			<router-link :to="{name:'detailvideo',params:{datalist}}" tag="p"><i class="iconfont icon-xiaoxi1"></i><span>{{data.refcount}}</span></router-link>
+			<p @click="godeatilpage(datalist)"><i class="iconfont icon-xiaoxi1"></i><span>{{data.refcount}}</span></p>
 			<p @click="deltrends(index,datalist.blogseq)" style="vertical-align: middle;" v-show="$store.state.faxian.blogs.userseq==datalist.userseq"><i class="iconfont icon-shanchu" style="font-size:0.46rem;"></i></p>
 		</div>
 	</div>
@@ -153,6 +153,9 @@
 				this.$store.commit('setblog_touserseq',touserseq);
 				this.$store.commit('setblog_friend',friend);
 				this.$store.commit('setblog_remark',null);
+			},
+			godeatilpage(datalist){
+				this.$router.push({name:'detailvideo',params:{datalist:datalist}})
 			}
 		},
 		watch:{
@@ -276,9 +279,12 @@
 	height:6.2rem;
 	position: relative;
 	margin-top:0.24rem;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
 }
 .fourpicture-content-video>.videoposter{
-	width:100%;
+	max-width:100%;
 	height:100%;
 }
 .fourpicture-content-video>.playbtn{

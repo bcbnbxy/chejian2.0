@@ -4,7 +4,8 @@ export default {
 		departmentname:'',
 		departseq:'',
 		department:[],
-		customerinfo:null
+		customerinfo:null,
+		controlsystem_my:{}
 	},
 	mutations: {
 		setstaffinfo(state,staffinfo){
@@ -21,6 +22,9 @@ export default {
 		},
 		setcustomerinfo(state,customerinfo){
 			state.customerinfo=customerinfo;
+		},
+		setcontrolsystem_my(state,controlsystem_my){
+			state.controlsystem_my=controlsystem_my;
 		}
 	}
 }

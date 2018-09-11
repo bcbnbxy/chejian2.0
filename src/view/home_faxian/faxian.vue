@@ -4,9 +4,9 @@
 		<span>动态</span>
 		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>		
 	</div>
-	<div class="faxianlist">
+	<div class="faxianlist" id="scrollTop">
 		<div class="faxian-dynamicslist">			
-			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载" :bottom-distance="50">
 		     		<dynamicslist :callbackdata="datalist" v-on:listendel="deltrends"></dynamicslist>
 		    </mt-loadmore>
 		</div>
@@ -23,6 +23,7 @@
 import Dynamicslist from '@/components/search/dynamics'
 import { MessageBox } from 'mint-ui'
 export default{
+	name:'faxian',
 	components:{Dynamicslist},
 	data(){
 		return {
@@ -84,11 +85,6 @@ export default{
 			this.$api('/Execute.do',{minvalue:minvalue,pageSize:pageSize,action:'blog.blogs',userseq:0}).then(function(r){
 				if(r.errorCode=="0"){
 					if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
-						that.$toast({
-				            message:'暂无数据',
-				            position: 'bottom',
-		  				    duration: 1500
-				        });
 				        that.allLoaded=true;
 						return ;
 					}else{
@@ -123,6 +119,27 @@ export default{
 	},
 	created(){
 		this.gettrends(0,5)
+    },
+    beforeRouteLeave(to, from, next) {
+    	if(to.path=='/detailpage' || to.path=='/detailvideo' || to.path=='/homepage'){
+    		localStorage.setItem('ScrollTop',document.getElementById('scrollTop').scrollTop)
+    		from.meta.keepAlive = true;
+    		this.$store.commit('add','faxian');
+    		next();
+    	}else{    		
+    		from.meta.keepAlive = false;
+    		localStorage.removeItem('ScrollTop')
+    		this.$store.commit('add','');
+    		next();
+    	} 
+    },
+    beforeRouteEnter(to, from, next) {
+        next(setTimeout(()=>{ 
+        	if(to.meta.keepAlive){
+		        document.getElementById('scrollTop').scrollTop=parseInt(localStorage.getItem('ScrollTop'));
+		    }
+	       },300) 
+        );
     }
 }
 </script>
@@ -133,6 +150,7 @@ export default{
 	display: -webkit-flex;
 	flex-direction: column;
 	overflow: hidden;
+	padding-bottom: 1.45rem;
 }
 .faxianlist{
 	flex:1;

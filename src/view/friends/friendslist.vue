@@ -9,7 +9,10 @@
 		<div class="friends-cotaire-chatlist" v-if="index==2">
 			<ul>
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-					<router-link tag="li" :to="{name:'chat',params:{nickname:item.target.nickname,userseq:item.target.userseq,chatgroup:item.chatgroup}}" v-for="(item,index) in chatlist" :key="index" ><p><img :src="item.target.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.target.headphoto:require('../../assets/img/shouye/defaultavatar.png')"></p><p><span><b>{{item.target.nickname}}</b><i>{{item.lastChat.createtime | formatDate}}</i></span><span>{{item.lastChat.content}}</span></p></router-link>		    		
+					<router-link tag="li" :to="{name:'chat',params:{nickname:item.target.nickname,userseq:item.target.userseq,chatgroup:item.chatgroup}}" v-for="(item,index) in chatlist" :key="index" >
+						<p><img :src="item.target.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.target.headphoto:require('../../assets/img/shouye/defaultavatar.png')"></p>
+						<p><span><b>{{item.target.nickname}}</b><i>{{item.lastChat.createtime | formatDate}}</i></span><span><b>{{item.lastChat.content}}</b><i style="float:right;padding:0.05rem 0.15rem;font-style:normal;border-radius:50%;color:#fff;background:#ff0000;" v-if="item.aggregate.unreadcount>0">{{item.aggregate.unreadcount}}</i></span></p>
+					</router-link>		    		
 				</mt-loadmore>
 			</ul>
 		</div>
@@ -52,17 +55,11 @@ export default{
 		
 	},
 	methods:{
-		getchatlist(minseq,psize){//获取私信列表
-			
+		getchatlist(minseq,psize){//获取私信列表			
 			var that=this;
 			this.$api('/Execute.do',{action:'chating.talkers;messageCounts',minvalue:minseq,pageSize:psize}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.talkers==null||r.data.talkers==undefined||r.data.talkers==''){
-						that.$toast({
-							message:'没有数据',
-							position:'bottom',
-							duration:1500
-						})
 						return ;
 					}else{
 						that.chatlist=r.data.talkers;
@@ -107,11 +104,6 @@ export default{
 			this.$api('/Execute.do',{action:'friends;messageCounts'}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.friends==null||r.data.friends==undefined||r.data.friends==""){
-						that.$toast({
-							message:'没有数据',
-							position:'bottom',
-							duration:1500
-						})
 						return ;
 					}else{
 						that.friends=r.data.friends;

@@ -70,8 +70,8 @@ export default{
 				this.mobilenoflag=false;
 			}else if(!regExs.mobile.test(this.mobileno)){
 				this.$toast({
-		          message: 'top',
-		          position: 'bottom',
+		          message: '手机号格式不正确!',
+		          position: 'top',
   			      duration: 1500
 		       });
 		       this.mobilenoflag=false;

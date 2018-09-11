@@ -4,9 +4,9 @@
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
 		<span>{{this.$route.params.nickname}}</span>
 	</div>
-	<div class="chat-wrap-chatlist">
+	<div class="chat-wrap-chatlist" id="viewBox">
 		<div class="chat-wrap-chatlist-contaire">
-			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+			<mt-loadmore :top-method="loadBottom" :bottom-method="loadTop"  :auto-fill="false" top-pull-text="下拉加载" top-drop-text="释放更新" :top-loading-text="!allLoaded?'没有更多数据了':'加载中'" @top-status-change="handleTopChange" ref="loadmore" bottom-pull-text="上拉刷新">
 				<ul v-for="(item,index) in chats" :key="index">
 					<li v-if="userseq!=item.senderseq">
 					   	<span class='twoimg'><img @click="gohomepage(item.senderseq,true)" :src="item.sender.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.sender.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/></span>
@@ -18,7 +18,7 @@
 					   	<span class='onex'></span>
 					   	<span class='chatone'>{{item.content}}</span>
 				    </li>
-			   </ul>
+			  </ul>
 		   </mt-loadmore>
 		</div>
 	</div>
@@ -39,8 +39,13 @@ export default{
 			chats:[],
 			psize:15,
 			pnum:0,
-			allLoaded:false,
 			content:'',
+			allLoaded:false,
+			box:'',
+			topStatus:'',
+			scroll:true,
+			lastchatseq:'',
+			lastchatseqflag:true,
 		}
 	},
 	methods:{
@@ -51,25 +56,46 @@ export default{
 					if(r.data.chats==null||r.data.chats==undefined||r.data.chats==''){
 						return ;
 					}else{
+						that.lastchatseq=r.data.chats[0].chatseq;
 						that.chats=r.data.chats.reverse().concat(that.chats);
-						if(r.data.chats.length<10){
-							that.allLoaded=true;
-						}else{
+						if(r.data.chats.length<15){
 							that.allLoaded=false;
+						}else{
+							that.allLoaded=true;
 							that.pnum=r.data.chats[0].chatseq
-						}
+						}						
+						that.$nextTick(function(){
+							if(this.scroll){
+								document.getElementById('viewBox').scrollTop=document.getElementById('viewBox').scrollHeight;
+							}else{
+								document.getElementById('viewBox').scrollTop=document.getElementById('viewBox').offsetHeight/2;
+							};
+							if(that.lastchatseqflag){
+								this.$api('/Execute.do',{action:'chating.updateChatgroupRead',chatgroup:that.$route.params.chatgroup,lastchatseq:that.lastchatseq}).then(function(r){									
+									if(r.errorCode==0){
+										that.lastchatseqflag=false;
+									}
+								})
+							}
+						})
 					}
 				}
-			})			
+			})	
 		},
 		loadTop(){//下拉加载
-			this.getchats(this.pnum,this.psize);
-	    	this.$refs.loadmore.onBottomLoaded();
+			this.chats=[],
+	    	this.getchats(0,this.psize);	    	
+	    	this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位	
 		},
-		loadBottom(){//上拉刷新			
-	    	this.chats=[],
-			this.getchats(0,this.psize);
-			this.$refs.loadmore.onTopLoaded();// 固定方法，查询完要调用一次，用于重新定位
+		loadBottom(){//上拉刷新
+			this.scroll=false;
+			if(this.allLoaded){
+				this.getchats(this.pnum,this.psize);
+				this.$refs.loadmore.onTopLoaded();	
+			}
+		},
+		handleTopChange(status){
+			this.topStatus=status;
 		},
 		send(){//发送消息
 			var that=this;
@@ -80,15 +106,12 @@ export default{
 						position:'bottom',
 						duration:1500
 					})
-					let obj={};
-					obj.sender={};
-					obj.senderseq=that.userseq;
-					obj.content=that.content;
-					obj.createtime=new Date().getTime();
-					obj.sender.headphoto=JSON.parse(localStorage.getItem('loginInfo')).headphoto;
-					obj.sender.nickname=JSON.parse(localStorage.getItem('loginInfo')).nickname;
-					that.chats.push(obj);
 					that.content="";
+					that.chats=[],
+					that.getchats(0,that.psize);
+					that.$nextTick(function(){						
+						document.getElementById('viewBox').scrollTop=document.getElementById('viewBox').scrollHeight;
+					})
 				}else{
 					that.$toast({
 						message:r.errorCode,
@@ -103,10 +126,10 @@ export default{
 			this.$store.commit('setblog_touserseq',touserseq);
 			this.$store.commit('setblog_friend',friend);
 			this.$store.commit('setblog_remark',null);
-		}
+		},
 	},
 	created(){
-		this.getchats(this.pnum,this.psize);
+		this.getchats(0,this.psize);
 	}
 }
 </script>
@@ -162,6 +185,11 @@ export default{
 	left:0.5rem;
 	font-size:0.6rem;
 }
+.mint-loadmore-top span.is-rotate {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg)
+}
+
 .chat-wrap-chatlist{
 	flex: 1;
 	overflow-y:scroll; 

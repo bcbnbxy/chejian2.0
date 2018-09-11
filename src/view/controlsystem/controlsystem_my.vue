@@ -6,15 +6,15 @@
 			<span>我的</span>
 		</div>
 		<div class="mycontrolsystem-wrap--top-contaire">
-			<img :src="$route.params.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$route.params.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
-			<h3>{{$route.params.company}}</h3>
-			<p><span>设备 {{$route.params.deviceCount}}</span><span>客户 {{$route.params.staffCount}}</span></p>
+			<img :src="$store.state.controls.controlsystem_my.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+$store.state.controls.controlsystem_my.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/>
+			<h3>{{$store.state.controls.controlsystem_my.company}}</h3>
+			<p><span>设备 {{$store.state.controls.controlsystem_my.deviceCount}}</span><span>客户 {{$store.state.controls.controlsystem_my.staffCount}}</span></p>
 		</div>
 	</div>
 	<div class="controlsystem_my-wrap-bottom">
 		<ul>			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-	     		<router-link tag="li" :to="{name:'consumer',params:{consumer:item}}" v-for="(item,index) in customerlist" :key="index"><p><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></p><p><!--<img src="../../assets/img/my/tishi.png"/>--></p></router-link>
+	     		<li @click="goconsumer(item)" v-for="(item,index) in customerlist" :key="index"><p><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"/><span>{{item.remark?item.remark:item.userInfo.nickname}}</span></p><p><!--<img src="../../assets/img/my/tishi.png"/>--></p></li>
 	   		</mt-loadmore>			
 		</ul>
 	</div>
@@ -58,6 +58,10 @@ export default {
 		loadBottom(){//上拉加载
 			this.getcustomers(this.pnum,this.psize);
 	    	this.$refs.loadmore.onBottomLoaded();	 
+		},
+		goconsumer(params){
+			this.$router.push('/consumer');
+			this.$store.commit('setconsumer',params)
 		}
 	},
 	mounted(){
@@ -100,6 +104,12 @@ export default {
 		text-align: center;
 		color:#fff;
 		font-size:0.56rem;
+	}
+	.mycontrolsystem-wrap-top{
+		width:100%;
+		height:7.72rem;
+		background-image:url(../../assets/img/shouye/bg.png) ;
+		background-size:cover;
 	}
 }
 .mycontrolsystem-wrap-header .icon-fanhui{

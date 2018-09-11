@@ -19,8 +19,7 @@
 				<p v-if="selected&&selected.ranking"><b>{{selected&&selected.ranking}}</b><span>/名</span></p>
 				<p v-else>暂无排名</p>
 				<p>当前排名</p>
-				<p v-if="selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue>=0">车辆安全系数 ： {{selected&&selected.deviceVehicle&&selected.deviceVehicle.assessedvalue}}</p>
-				<p v-else>添加车辆获取安全系数</p>
+				<router-link tag="p" :to="{name:'cardetailinfo',params:{selected,devices}}" v-if="selected&&selected.deviceVehicle">查看车辆详细信息</router-link>
 			</div>
 			<div class="homeindex-wrap-head-bottom-guzhang">
 				<div class="homeindex-wrap-head-bottom-guzhang-contaire">
@@ -43,20 +42,18 @@
 		<div class="homeindex-car-service">
 			<p class="homeindex-car-service-title">车辆服务</p>			
 			<ul>
-				<!--<router-link tag="li" to="/chosecar"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></router-link>-->
 				<li @click="weizhangchaxun"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></li>
 				<li @click="shebeigoumai"><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
 				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
-				<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>
-				<div class="homeindex-car-friends-nodata" v-if="friends.length<=0">暂无数据</div>
-				<div class="homeindex-car-friends-list" v-else>
-					<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-			     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
-			    	</mt-loadmore>
-				</div>
+			<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>
+			<div class="homeindex-car-friends-nodata" v-if="friends.length<=0">暂无数据</div>
+			<div class="homeindex-car-friends-list" v-else>
+				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
+		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
+		    	</mt-loadmore>
 			</div>
 		</div>
 	</div>
@@ -85,11 +82,7 @@ export default{
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.devices==undefined||r.data.devices==null||r.data.devices==""){
-						that.$toast({
-				          message: '没有数据',
-				          position: 'bottom',
-	  					  duration: 1500
-				       });
+						return ;
 					}else{
 						that.devices=r.data.devices;
 						that.selected=r.data.devices[that.$store.state.common.selectedcar];
@@ -105,11 +98,7 @@ export default{
 				that.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:0, pageSize:5}).then(function(r){
 					if(r.errorCode==0){
 						if(r.data.friendDeviceScores.length<=0){
-							that.$toast({
-						        message: '没有数据了',
-						        position: 'bottom',
-								duration: 1500
-						    });
+							return ;
 						}else{
 							that.friends=that.friends.concat(r.data.friendDeviceScores);
 							if(r.data.friendDeviceScores.length<5){
@@ -149,11 +138,7 @@ export default{
 			this.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:minvalue, pageSize:pageSize}).then(function(r){
 				if(r.errorCode==0){
 					if(r.data.friendDeviceScores==null||r.data.friendDeviceScores==undefined||r.data.friendDeviceScores==''){
-						that.$toast({
-					        message: '没有数据了',
-					        position: 'bottom',
-							duration: 1500
-					    });
+						return ;
 					}else{
 						that.friends=that.friends.concat(r.data.friendDeviceScores);
 						if(r.data.friends.length<5){

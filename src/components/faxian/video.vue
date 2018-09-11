@@ -233,10 +233,13 @@
 	width:100%;
 	height:6.2rem;
 	position: relative;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
 	margin-top:0.24rem;
 }
 .fourpicture-content-video>.videoposter{
-	width:100%;
+	max-width:100%;
 	height:100%;
 }
 .fourpicture-content-video>.playbtn{

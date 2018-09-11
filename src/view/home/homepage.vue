@@ -198,7 +198,6 @@ export default{
 	    	}).then(function(r){
 	    		that.$api('/Execute.do',{action:'blog.blogs',userseq:that.ownerseq,mediatype:0,minvalue:0,pageSize:5}).then(function(r){
 		    		if(r.errorCode==0){
-		    			console.log(JSON.stringify(r));
 		    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 		    				that.$toast({
 			    				message:"没有数据",
@@ -271,7 +270,6 @@ export default{
 	    	var that=this;
 	    	this.$api('/Execute.do',{action:'blog.blogs',userseq:this.ownerseq,mediatype:1,minvalue:pnum,pageSize:psize}).then(function(r){
 	    		if(r.errorCode==0){
-	    			console.log(JSON.stringify(r));
 	    			if(r.data.blogs==undefined||r.data.blogs==null||r.data.blogs==""){
 	    				that.$toast({
 		    				message:"没有数据",
@@ -346,7 +344,7 @@ export default{
 	},
 	mounted(){
 		this.getuserInfo();
-	}
+	},
 }
 </script>
 

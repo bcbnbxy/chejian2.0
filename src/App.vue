@@ -1,16 +1,27 @@
 <template>
 <div id="app">
 	<transition :name="transitionName">
-		<router-view></router-view>
-	</transition>			
+	 <keep-alive :include="$store.state.common.catchPages">
+	      <router-view v-if="$route.meta.keepAlive"></router-view>
+	 </keep-alive>
+	</transition>
+	<transition :name="transitionName">
+	  <router-view v-if="!$route.meta.keepAlive"></router-view>
+	</transition>
+	<div class="footer1" v-show="$route.path=='/homeindex'||$route.path=='/faxian'||$route.path=='/friends'||$route.path=='/personal'">
+		<Footer></Footer>
+	</div>
 </div>
 </template>
 <script>
+import Footer from '@/components/common/footer'
 export default {
     name: 'App',
+    components:{Footer},
     data(){
     	return {
-				transitionName:''
+				transitionName:'',
+				showfooter:true,
 			}
     },
     created(){
