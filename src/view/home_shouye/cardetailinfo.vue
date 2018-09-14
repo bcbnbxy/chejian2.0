@@ -7,12 +7,12 @@
 	<div class="cardetailinfo-selectcar">
 		<div class="cardetailinfo-selectcar-top">
 			<img :src="selected.deviceVehicle.logo">
-			<span>{{selected.deviceVehicle.brandname}}{{selected.deviceVehicle.modelname}}</span>
+			<span>{{selected.deviceVehicle.brandname}}  {{selected.deviceVehicle.modelname}} {{selected.deviceVehicle.vehiclelevel}}</span>
 			<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''"  @click="devicesshow"></i>
 			<ul class="cardetailinfo-selectcar-fixed" v-show="devicesflag">
 				<li v-for="(item,index) in devices" @click="select(item,index)">
 					<img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo">
-					<span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}}{{item&&item.deviceVehicle&&item.deviceVehicle.modelname}}</span>
+					<span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}}  {{item&&item.deviceVehicle&&item.deviceVehicle.modelname}} {{item&&item.deviceVehicle&&item.deviceVehicle.vehiclelevel}}</span>
 				</li>
 			</ul>
 		</div>
@@ -123,6 +123,7 @@ export default{
 			this.$store.commit('selectedcar',index);
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
+			this.deviceTrace();
 		},
 		deviceTrace(){//获取车辆详细信息
 			var that=this;

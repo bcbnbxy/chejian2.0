@@ -40,6 +40,7 @@ export default{
 	display: -webkit-flex;
 	flex-direction: column;
 	position: relative;
+	overflow: hidden;
 }
 .manageupgrade-wrap-head{
 	height:1.92rem;

@@ -7,7 +7,7 @@
 	<div class="faxianlist" id="scrollTop">
 		<div class="faxian-dynamicslist">			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载" :bottom-distance="50">
-		     		<dynamicslist :callbackdata="datalist" v-on:listendel="deltrends"></dynamicslist>
+		     	<dynamicslist :callbackdata="datalist" v-on:listendel="deltrends"></dynamicslist>
 		    </mt-loadmore>
 		</div>
 	</div>
@@ -152,11 +152,6 @@ export default{
 	overflow: hidden;
 	padding-bottom: 1.45rem;
 }
-.faxianlist{
-	flex:1;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-}
 .faxianhead{
 	height:1.92rem;
 	font-size:0.56rem;
@@ -224,5 +219,17 @@ export default{
 }
 .mint-loadmore-text{
 	font-size:0.56rem;
+}
+.faxianlist{
+	background: #f7f7f7;
+	overflow: hidden;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction: column;
+}
+.faxian-dynamicslist{
+	flex:1;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 </style>

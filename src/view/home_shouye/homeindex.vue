@@ -4,12 +4,12 @@
 		<div class="homeindex-wrap-head-top">
 			<div class="homeindex-wrap-head-top-left">
 				<img :src="selected&&selected.deviceVehicle&&selected.deviceVehicle.logo" v-if="selected"/>
-				<span v-show="selected">{{selected&&selected.deviceVehicle&&selected.deviceVehicle.brandname}}{{selected&&selected.deviceVehicle&&selected.deviceVehicle.modelname}}</span>
+				<span v-show="selected">{{selected&&selected.deviceVehicle&&selected.deviceVehicle.brandname}}  {{selected&&selected.deviceVehicle&&selected.deviceVehicle.modelname}}  {{selected&&selected.deviceVehicle&&selected.deviceVehicle.vehiclelevel}}</span>
 				<span v-show="!selected">暂无车辆</span>
 				<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''" @click="devicesshow"></i>
 				<ul class="devices-list" v-show="devicesflag">
 					<router-link tag="li" to="/devicebinding" style="color:#666;font-size:0.44rem;padding-left:0.5rem;" v-show="!selected">您还没有车辆，去添加</router-link>
-					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}}{{item&&item.deviceVehicle&&item.deviceVehicle.modelname}}</span></li>
+					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}} {{item&&item.deviceVehicle&&item.deviceVehicle.modelname}} {{selected&&selected.deviceVehicle&&selected.deviceVehicle.vehiclelevel}}</span></li>
 				</ul>
 			</div>
 			<router-link tag="i" to="/devicebinding" class="iconfont icon-scan"></router-link>
@@ -48,11 +48,21 @@
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
-			<p class="homeindex-car-service-title">我的车友<span>车辆评分</span></p>
+			<p class="homeindex-car-service-title" style="padding-top:0.1rem;"><span>我的车友</span><span>车辆评分</span></p>
 			<div class="homeindex-car-friends-nodata" v-if="friends.length<=0">暂无数据</div>
-			<div class="homeindex-car-friends-list" v-else>
+			<div class="homeindex-car-friends-list">
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
-		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends"><img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')"><span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span><i>{{item.deviceVehicle.assessedvalue}}</i></div>
+		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends">
+		     			<img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')">
+		     			<div class="homeindex-car-friends-item-center">
+		     				<span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span>
+		     				<p>
+		     					<img :src="item.deviceVehicle.logo"/>
+		     					<span>{{item.deviceVehicle.modelname}}</span>
+		     				</p>
+		     			</div>
+		     			<i>{{item.deviceVehicle.assessedvalue}}</i>
+		     		</div>
 		    	</mt-loadmore>
 			</div>
 		</div>
@@ -80,6 +90,7 @@ export default{
 		getdevices(){//我的设备查询
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					if(r.data.devices==undefined||r.data.devices==null||r.data.devices==""){
 						return ;
@@ -97,18 +108,18 @@ export default{
 			}).then(function(r){
 				that.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:0, pageSize:5}).then(function(r){
 					if(r.errorCode==0){
-						if(r.data.friendDeviceScores.length<=0){
-							return ;
-						}else{
+						console.log(JSON.stringify(r));
+						if(r.data.friendDeviceScores.length==0){
+							that.allLoaded=true;
+						}else if(r.data.friendDeviceScores.length==5){
+							that.allLoaded=false;
 							that.friends=that.friends.concat(r.data.friendDeviceScores);
-							if(r.data.friendDeviceScores.length<5){
-								that.allLoaded=true;
-								return;
-							}else{
-								that.allLoaded=false;
-								that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;	
-							}						
-						}					
+							that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;					
+						}else{
+							that.allLoaded=true;
+							that.friends=that.friends.concat(r.data.friendDeviceScores);
+							that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;
+						}
 					}else{
 						that.$toast({
 				          message: r.errorMessage,
@@ -137,18 +148,17 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:minvalue, pageSize:pageSize}).then(function(r){
 				if(r.errorCode==0){
-					if(r.data.friendDeviceScores==null||r.data.friendDeviceScores==undefined||r.data.friendDeviceScores==''){
-						return ;
-					}else{
+					if(r.data.friendDeviceScores.length==0){
+						that.allLoaded=true;
+					}else if(r.data.friendDeviceScores.length==5){
+						that.allLoaded=false;
 						that.friends=that.friends.concat(r.data.friendDeviceScores);
-						if(r.data.friends.length<5){
-							that.allLoaded=true;
-							return;
-						}else{
-							that.allLoaded=false;
-							that.pageNo=r.data.friends[r.data.friendDeviceScores.length-1].deviceseq;	
-						}						
-					}					
+						that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;
+					}else{
+						that.allLoaded=true;
+						that.friends=that.friends.concat(r.data.friendDeviceScores);
+						that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;
+					}
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -380,9 +390,11 @@ export default{
 	height:1.17rem;
 	padding-right:0.5rem;
 	padding-left:1rem;
-	text-align: left;
-	line-height:1.17rem;
-	font-size:0.5rem;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size:0.44rem;
 	color:#000;
 	position: relative;
 }
@@ -395,12 +407,6 @@ export default{
 	left:0.5rem;
 	top:0.33rem;
 	background: #1989f5;
-}
-.homeindex-car-service-title span{
-	font-size:0.44rem;
-	color:#2d3461;
-	position: absolute;
-	right:0.5rem
 }
 .homeindex-car-service>ul{
 	padding:0.3rem 1.18rem 0.85rem 1.18rem;
@@ -426,41 +432,57 @@ export default{
 }
 .homeindex-car-friends{
 	flex:1;
+	overflow: hidden;
 	display: flex;
 	display: -webkit-flex;
-	flex-direction: column;
-	overflow: hidden;
+	flex-direction: column;	
+	padding-bottom:1.6rem;
 }
 .homeindex-car-friends-list{
-	flex:1;
+	height:100%;
 	background: #f7f7f7;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 }
 .homeindex-car-friends-item{
-	height:1.6rem;
+	height:2rem;
 	padding:0 0.5rem;
+	font-size:0.44rem;
+	color:#2d3461;
 	display: flex;
 	display: -webkit-flex;
 	align-items: center;
 	background: #fff;
+	border-bottom:1px solid #ddd;
 }
-.homeindex-car-friends-item img{
-	width:1rem;
-	height:1rem;
+.homeindex-car-friends-item:last-child{
+	border-bottom:none;
+}
+.homeindex-car-friends-item>img{
+	width:1.4rem;
+	height:1.4rem;
 	border-radius: 50%;
 	margin-right:0.5rem;
 }
-.homeindex-car-friends-item span{
-	font-size:0.44rem;
-	color:#2d3461;
-}
-.homeindex-car-friends-item i{
+.homeindex-car-friends-item-center{
 	flex:1;
-	font-size:0.44rem;
-	color:#2d3461;
-	font-style: normal;
-	text-align: right;
+	height:100%;
+	display: flex;
+	display: -webkit-flex;
+	flex-direction:column ;
+	justify-content: space-around;
+	padding:0.1rem 0;
+}
+.homeindex-car-friends-item-center p{
+	display: flex;
+	display: -webkit-flex;
+	align-items: center;
+	padding-right:0.5rem;
+}
+.homeindex-car-friends-item-center p>img{
+	width:1rem;
+	height:1rem;
+	border-radius: 50%;
 }
 .homeindex-car-friends-nodata{
 	flex:1;

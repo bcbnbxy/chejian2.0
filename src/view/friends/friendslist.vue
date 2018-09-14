@@ -103,6 +103,7 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{action:'friends;messageCounts'}).then(function(r){
 				if(r.errorCode==0){
+					console.log(JSON.stringify(r));
 					if(r.data.friends==null||r.data.friends==undefined||r.data.friends==""){
 						return ;
 					}else{

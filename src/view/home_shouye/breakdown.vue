@@ -70,7 +70,6 @@ export default{
 					that.warns=that.warns.concat(r.data.warns);
 					if(r.data.warns.length<3){
 						that.allLoaded=true;
-						return;
 					}else{
 						that.allLoaded=false;
 					}

@@ -13,13 +13,13 @@
 				<div class="consumer-wrap-choosecar-contaire">
 					<div class="consumer-wrap-choosecar-contaire-item">
 						<img :src="selected&&selected.deviceVehicle&&selected.deviceVehicle.logo"/>
-						<p><b>{{selected&&selected.deviceVehicle&&selected&&selected.deviceVehicle.brandname}}</b><span>{{selected&&selected.deviceVehicle&&selected.deviceVehicle.modelname}}</span></p>
+						<p><b>{{selected&&selected.deviceVehicle&&selected&&selected.deviceVehicle.brandname}}</b><span>{{selected&&selected.deviceVehicle&&selected.deviceVehicle.modelname}} {{selected&&selected.deviceVehicle&&selected.deviceVehicle.vehiclelevel}}</span></p>
 						<i class="iconfont icon-jiantou-copy-copy" @click="showlist=!showlist" :class="showlist?'iconrotate':'iconrotate0'"></i>
 					</div>
 					<div class="consumer-wrap-choosecar-contaire-list" v-show="showlist">
 						<div class="consumer-wrap-choosecar-contaire-item border-top" v-for="(item,index) in carlist" :key="index" @click="selectcar(item)">
 							<img :src="item.deviceVehicle.logo"/>
-							<p><b>{{item.deviceVehicle.brandname}}</b><span>{{item.deviceVehicle.modelname}}</span></p>
+							<p><b>{{item.deviceVehicle.brandname}}</b><span>{{item.deviceVehicle.modelname}} {{item.deviceVehicle.vehiclelevel}}</span></p>
 						</div>
 					</div>
 				</div>
