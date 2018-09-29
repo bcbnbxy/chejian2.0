@@ -17,9 +17,9 @@
 			<div class="register-wrap--contaire-item">
 				<input type="password" placeholder="请设置密码" v-model="password" @keyup="Password"/>
 			</div>
-			<div class="register-wrap--contaire-item">
+			<!--<div class="register-wrap--contaire-item">
 				<input type="text" placeholder="请输入昵称" v-model="nickname" @keyup="Nickname"/>
-			</div>
+			</div>-->
 		</div>
 		<div class="register-wrap-footer">
 			<mt-button type="default" :disabled='isdisabled' @click="register">注册</mt-button>
@@ -42,7 +42,7 @@ export default{
 			password:'',
 			passwordflag:false,
 			nickname:'',
-			nicknameflag:false,
+//			nicknameflag:false,
 			code:'',
 			codeflag:false,
 			getcheckcode:false,
@@ -52,7 +52,7 @@ export default{
 	components:{Registerprotocol},
 	computed:{
 		isdisabled:function(){
-			if(this.mobilenoflag&&this.passwordflag&&this.nicknameflag&&this.codeflag){
+			if(this.mobilenoflag&&this.passwordflag&&this.codeflag){
 				return false;
 			}else{
 				return true;
@@ -120,46 +120,46 @@ export default{
 				this.passwordflag=true;
 			}
 		},1000),
-		Nickname:lodash.debounce(function(){
-			if(this.nickname.trim().length<1){
-	    		this.$toast({
-		          message: '昵称不能为空！',
-		          position: 'top',
-	  			  duration: 1500
-		        });
-		       this.nicknameflag=false;
-	    	}else if(!regExs.nickname.test(this.nickname)){
-	    		this.$toast({
-		          message: '输入的昵称格式不正确,请重新输入',
-		          position: 'top',
-	  			  duration: 1500
-		       });
-		       this.nicknameflag=false;
-	    	}else if(regExs.nickname.test(this.nickname)){
-	    		var that=this;
-	    		this.$api('/Execute.do',{action:'checkNickname',nickname:this.nickname}).then(function(r){
-	    			if(r.errorCode==='0'){
-	    				if(r.data.checkNickname){
-	    					that.nicknameflag=true;
-	    				}else{
-	    					that.$toast({
-					          message: '该昵称已经被注册,请重新输入',
-					          position: 'top',
-	  			              duration: 1500
-					       });
-					        that.nicknameflag=false;
-	    				}
-	    			}else{
-						that.$toast({
-				          message: r.errorMessage,
-				          position: 'top',
-	  			          duration: 1500
-				       });
-				       that.nicknameflag=false;
-	    			}
-	    		})
-	    	}
-		},1000),
+//		Nickname:lodash.debounce(function(){
+//			if(this.nickname.trim().length<1){
+//	    		this.$toast({
+//		          message: '昵称不能为空！',
+//		          position: 'top',
+//	  			  duration: 1500
+//		        });
+//		       this.nicknameflag=false;
+//	    	}else if(!regExs.nickname.test(this.nickname)){
+//	    		this.$toast({
+//		          message: '输入的昵称格式不正确,请重新输入',
+//		          position: 'top',
+//	  			  duration: 1500
+//		       });
+//		       this.nicknameflag=false;
+//	    	}else if(regExs.nickname.test(this.nickname)){
+//	    		var that=this;
+//	    		this.$api('/Execute.do',{action:'checkNickname',nickname:this.nickname}).then(function(r){
+//	    			if(r.errorCode==='0'){
+//	    				if(r.data.checkNickname){
+//	    					that.nicknameflag=true;
+//	    				}else{
+//	    					that.$toast({
+//					          message: '该昵称已经被注册,请重新输入',
+//					          position: 'top',
+//	  			              duration: 1500
+//					       });
+//					        that.nicknameflag=false;
+//	    				}
+//	    			}else{
+//						that.$toast({
+//				          message: r.errorMessage,
+//				          position: 'top',
+//	  			          duration: 1500
+//				       });
+//				       that.nicknameflag=false;
+//	    			}
+//	    		})
+//	    	}
+//		},1000),
 		Code:lodash.debounce(function(){
 			if(this.code.trim()<1){
 				this.$toast({
@@ -194,7 +194,7 @@ export default{
 	        }
 		},
 		register(){
-			let parm={action:"register",register:'86',mobileno:this.mobileno,password:this.password,checkcode:this.code,nickname:this.nickname,confirmpwd:this.password};
+			let parm={action:"register",register:'86',mobileno:this.mobileno,nickname:this.mobileno,password:this.password,checkcode:this.code,confirmpwd:this.password};
 			var that=this;
 			this.$api('Execute.do',parm).then(function(r){
 				if(r.errorCode=='0'){

@@ -9,12 +9,12 @@
 				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<div class="fourpicture-box-moreimg" v-else-if="datalist.images&&datalist.images.length>1">
-				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in datalist.images" :key="index"/>
+				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item+'?x-oss-process=image/resize,m_fill,h_348,w_364'" v-for="(item,index) in datalist.images" :key="index"/>
 			</div>
 		</router-link>
 		<div class="fourpicture-title">
 			<p><i class="iconfont icon-xin" :style="datalist.praised?'color:#ff0000':''" @click="togglePraise(datalist.blogseq,datalist.praisecount)"></i><span>{{datalist.praisecount}}</span></p>
-			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-pinglun"></i><span>{{data.refcount}}</span></router-link>
+			<router-link :to="{name:'detailpage',params:{datalist}}" tag="p"><i class="iconfont icon-xiaoxi1"></i><span>{{data.refcount}}</span></router-link>
 			<p @click="deltrends(index,datalist.blogseq)" style="vertical-align: middle;" v-show="$store.state.faxian.blogs.userseq==datalist.userseq"><i class="iconfont icon-shanchu" style="font-size:0.46rem;"></i></p>
 		</div>
 	</div>
@@ -122,7 +122,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 .fourpicture{
 	background: #fff;
 	padding:0 0.48rem;
@@ -148,13 +148,13 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -166,7 +166,7 @@
 	padding:0.23rem 0.36rem;
 	background: #ff481d;
 	color:#fff;
-	font-size:0.3rem;
+	font-size:0.52rem;
 	border-radius: 15px;
 }
 .fourpicture-content p{
@@ -187,7 +187,8 @@
 	margin-top:0.24rem;
 }
 .fourpicture-box img{
-	width:30%;
+	max-width:11.4rem;
+	max-height:6.18rem;
 	display: block;
 }
 .fourpicture-box-moreimg{
@@ -198,7 +199,7 @@
 	margin-top:0.24rem;
 }
 .fourpicture-box-moreimg img{
-	width:32%;
+	width:3.64rem;
 	height:3.48rem;
 	margin:0.1rem 0;
 }

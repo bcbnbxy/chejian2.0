@@ -49,9 +49,8 @@ export default {
 		          message: '请输入设备编号',
 		          position: 'bottom',
   			      duration: 1500
-		      	});
-				return
-			}else{
+		      });
+			}else{					
 				this.$api("/Execute.do",{action:"device.bindDevice",device:this.devicenum}).then(function(r){
 					if(r.errorCode==0){
 						that.$toast({
@@ -59,6 +58,7 @@ export default {
 				          position: 'bottom',
 		  			      duration: 1500
 				      	});
+				        that.$router.push('/homeindex')
 					}else{
 						that.$toast({
 				          message: r.errorMessage,

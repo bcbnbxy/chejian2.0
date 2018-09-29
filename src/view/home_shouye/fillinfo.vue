@@ -2,7 +2,7 @@
 <div class="fillinfo-wrap">
 	<div class="fillinfo-wrap-head">
 		<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-		<span>违章查询</span>
+		<span>查询违章信息</span>
 	</div>
 	<div class="fillinfo-wrap-contaire">
 		<div class="fillinfo-wrap-contaire-list">
@@ -14,35 +14,24 @@
 					<li v-for="(item,index) in carnumlist" @click="getvalue(item)">{{item}}</li>
 				</ul>
 			</div>
-			<input type="text" placeholder="请输入车牌号"/>
-		</div>
-		<div class="fillinfo-wrap-contaire-item">
-			<span>牌号类型</span>
-			<input type="text" placeholder="请选择牌号类型" v-model="choseplatevalue" readonly="true" @click="choseplate"/>
-			<i class="iconfont icon-arrow-right-copy-copy-copy"></i>
-		</div>
-		<div class="fillinfo-wrap-contaire-item">
-			<span>查询城市</span>
-			<input type="text" placeholder="请选择查询城市" readonly="true" @click="citypicker" v-model="chosecity"/>
-			<i class="iconfont icon-arrow-right-copy-copy-copy"></i>
+			<input type="text" v-model="platenumber"/>
 		</div>
 		<div class="fillinfo-wrap-contaire-item">
 			<span>发动机号</span>
-			<input type="text" placeholder="请输入完整的发动机号码" />
+			<input type="text" v-model="engineno" />
 		</div>
 		<div class="fillinfo-wrap-contaire-item">
 			<span>车架号</span>
-			<input type="text" :value="$route.params.vin" readonly="true"/>
+			<input type="text" :value="$store.state.homeindex.Violationinquiry.vin" readonly="true"/>
+		</div>
+		<div class="fillinfo-wrap-contaire-item">
+			<span>最后查询时间</span>
+			<input type="text" :value="endtime" readonly="true"/>
 		</div>
 	</div>
 	<div class="fillinfo-footer">
-		<!--<router-link tag="button" to="/violationinquiry">查询</router-link>-->
-		<button @click="inquiry">查询</button>
+		<mt-button type="default" :disabled="isdisabled" @click="inquiry">查询</mt-button>
 	</div>
-	<mt-popup v-model="popupVisible"  position="bottom" style="width:100%;">
- 		<mt-picker :slots="slots" @change="onValuesChange" :visible-item-count="3" ></mt-picker>
-   </mt-popup>
-   <Citypicker :id="'citypicker'" :flag="citypickerflag" v-on:listenTochildEvent="citypicker" v-on:child-say="listenToMyBoy" :cityInfo="citylist"></Citypicker>
 </div>
 </template>
 <script>
@@ -53,18 +42,23 @@ export default{
 		return{
 			carnumflag:false,
 			carnumlist:['京','津','冀','晋','蒙','辽','吉','黑','沪','苏','浙','皖','闵','赣','鲁','豫','鄂','湘','粤','桂','琼','渝','川','黔','滇','藏','陕','甘','青','宁','新','台','港','澳'],
-			carnumcity:'粤',
-			popupVisible:false,
-			citypickerflag:false,
-			choseplatevalue:'',
-			chosecity:'',
-			slots:[{
-				flex:1,
-				className:'slots1',
-				values:['小型汽车(蓝底白字牌)','大型汽车(黄底黑子牌)'],
-				textAlign: 'center',
-			}],
-			citylist:[],
+			carnumcity:this.$store.state.homeindex.Violationinquiry.platenumber?this.$store.state.homeindex.Violationinquiry.platenumber.substring(0,1):'粤',
+			platenumber:this.$store.state.homeindex.Violationinquiry.platenumber?this.$store.state.homeindex.Violationinquiry.platenumber.substring(1,this.$store.state.homeindex.Violationinquiry.platenumber.length):'',
+			engineno:this.$store.state.homeindex.Violationinquiry.engineno?this.$store.state.homeindex.Violationinquiry.engineno:'',
+			endtime:'',
+			endseconds:''
+		}
+	},
+	created(){
+		this.getendtime();
+	},
+	computed:{
+		isdisabled:function(){
+			if(this.platenumber.trim().length>0&&this.engineno.trim().length>0){
+				return false;
+			}else{
+				return true;
+			}
 		}
 	},
 	methods:{
@@ -75,43 +69,95 @@ export default{
 			this.carnumcity=value;
 			this.carnumflag=!this.carnumflag;
 		},
-		choseplate:function(){
-			this.popupVisible=!this.popupVisible;
-		},
-		onValuesChange:function(picker,value){
-			this.choseplatevalue=value[0];
-		},
-		citypicker:function(){
-			this.citypickerflag=!this.citypickerflag;
-		},
-		listenToMyBoy: function (data){
-		    this.chosecity=data;
-		},
 		inquiry(){
-//			this.$router.replace('/violationinquiry')
-			this.$toast({
-				message:'暂未开放，敬请期待!',
-				position:'bottom',
-				duration:1500
-			})
+			var nowtime = new Date().getTime()
+			if(this.endseconds){				
+				var timecha='';
+				timecha=parseInt(nowtime)-parseInt(this.endseconds);
+				if(timecha>86400000){
+					this.getdoPeccancyQuery()
+				}else{
+					this.getlastPeccancyQuery()
+				}
+			}else{
+				this.getdoPeccancyQuery()
+			}
 		},
-		getcity(){//获取省份信息
+		getendtime(){
 			var that=this;
-			this.$api('/Execute.do',{action:'orderProvinces'}).then(function(r){
-				if(r.errorCode==0){					
-					that.citylist=r.data.orderProvinces;
+			this.$api('/Execute.do',{action:'device.lastPeccancyQuery',device:this.$store.state.homeindex.Violationinquiry.deviceseq,platenumber:this.$store.state.homeindex.Violationinquiry.platenumber,vin:this.$store.state.homeindex.Violationinquiry.vin,engineno:this.engineno}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.lastPeccancyQuery){
+						that.platenumber=r.data.lastPeccancyQuery.platenumber?r.data.lastPeccancyQuery.platenumber:'';
+						that.engineno=r.data.lastPeccancyQuery.engineno?r.data.lastPeccancyQuery.engineno:'';
+						that.endtime=that.changetime(r.data.lastPeccancyQuery.createtime);
+						that.endseconds=r.data.lastPeccancyQuery.createtime;
+					}
 				}else{
 					that.$toast({
-						message:r.errorMessage,
-						position:'bottom',
-						duration:1500
-					})
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
+			})
+		},
+		changetime(seconds){
+			var str = "";
+			var year = new Date(seconds).getFullYear();
+			var month = parseInt(new Date(seconds).getMonth())+1;
+			month = month>9?month:'0'+month;
+			var day = new Date(seconds).getDate();
+			day = day > 9 ? day : '0'+day;
+			str += year+'/'+month+'/'+day;
+			return str;			
+		},
+		getlastPeccancyQuery(){//从缓存中查
+			var that=this;
+			var Platenumber=this.carnumcity+this.platenumber;
+			this.$api('/Execute.do',{action:'device.lastPeccancyQuery',device:this.$store.state.homeindex.Violationinquiry.deviceseq,platenumber:Platenumber,vin:this.$store.state.homeindex.Violationinquiry.vin,engineno:this.engineno}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.lastPeccancyQuery){
+						that.$router.push({name:'violationinquiry',param:{Peccancy:r.data.lastPeccancyQuery}})
+					}else{
+						that.$toast({
+				          message: '暂时为查询到您的爱车有违章信息',
+				          position: 'bottom',
+	  					  duration: 1500
+				       });
+					}
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
+				}
+			})
+		},
+		getdoPeccancyQuery(){//从数据库查
+			var that=this;
+			var Platenumber=this.carnumcity+this.platenumber;
+			this.$api('/Execute.do',{action:'device.doPeccancyQuery',device:this.$store.state.homeindex.Violationinquiry.deviceseq,platenumber:Platenumber,vin:this.$store.state.homeindex.Violationinquiry.vin,engineno:this.engineno}).then(function(r){
+				if(r.errorCode==0){
+					if(r.data.lastPeccancyQuery){
+						that.$router.push({name:'violationinquiry',param:{Peccancy:r.data.lastPeccancyQuery}})
+					}else{
+						that.$toast({
+				          message: '暂时为查询到您的爱车有违章信息',
+				          position: 'bottom',
+	  					  duration: 1500
+				       });
+					}
+				}else{
+					that.$toast({
+			          message: r.errorMessage,
+			          position: 'bottom',
+  					  duration: 1500
+			       });
 				}
 			})
 		}
-	},
-	mounted(){
-		this.getcity();
 	}
 }
 </script>

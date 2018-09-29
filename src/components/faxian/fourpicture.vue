@@ -10,7 +10,7 @@
 				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+datalist.images"/>
 			</div>
 			<div class="fourpicture-box-moreimg" v-else-if="datalist.images&&datalist.images.length>1">
-				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in datalist.images" :key="index"/>
+				<img  v-lazy="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item+'?x-oss-process=image/resize,m_fill,h_348,w_364'" v-for="(item,index) in datalist.images" :key="index"/>
 			</div>
 		</div>
 		<div class="fourpicture-title">
@@ -161,7 +161,6 @@
 				this.$store.commit('setblog_remark',null);
 			},
 			godeatilpage(datalist){
-//				:to="{name:'detailpage',params:{datalist}}"
 				this.$router.push({name:'detailpage',params:{datalist:datalist}})
 			}
 		},
@@ -173,7 +172,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 .fourpicture{
 	background: #fff;
 	padding:0 0.48rem;
@@ -199,13 +198,13 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.44rem;
+	font-size:0.52rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -222,10 +221,12 @@
 	font-size:0.4rem;
 	border-radius: 15px;
 	border:none;
+	position: relative;
+	top:-0.3rem;
 }
 .fourpicture-content p{
 	line-height:0.74rem;
-	font-size:0.44rem;
+	font-size:0.52rem;
 	color:#333;
 	margin:0;
 	padding:0;
@@ -241,7 +242,8 @@
 	margin-top:0.24rem;
 }
 .fourpicture-box img{
-	width:30%;
+	max-width:11.4rem;
+	max-height:6.18rem;
 	display: block;
 }
 .fourpicture-box-moreimg{
@@ -252,7 +254,7 @@
 	margin-top:0.24rem;
 }
 .fourpicture-box-moreimg img{
-	width:32%;
+	width:3.64rem;
 	height:3.48rem;
 	margin:0.1rem 0;
 }
@@ -265,7 +267,7 @@
 	text-align: right;
 }
 .fourpicture-title p{
-	font-size:0.38rem;
+	font-size:0.48rem;
 	color:#666;
 	margin-left:0.6rem;
 	display: inline;

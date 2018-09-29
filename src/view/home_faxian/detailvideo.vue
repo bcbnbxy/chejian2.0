@@ -498,7 +498,7 @@ export default{
 	display: -webkit-flex;
 	align-items: center;
 	justify-content: center;
-	font-size:0.36rem;
+	font-size:0.52rem;
 	color:#999;
 }
 .fourpicture-avatar{
@@ -517,7 +517,7 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
@@ -588,7 +588,7 @@ export default{
 	left:2.6rem;
 }
 .dianzan-renshu{
-	font-size:0.36rem;
+	font-size:0.44rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: flex-end;
@@ -608,7 +608,7 @@ export default{
 	display:flex ;
 	display: -webkit-flex;
 	justify-content: flex-end;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	align-items: center;
 }
 .detail-footer>.input{
@@ -672,7 +672,9 @@ export default{
     visibility: hidden;
 }
 .icon-arrow-right-copy-copy-copy{
-	font-size:0.44rem;
+	font-size:0.6rem;
+	position: relative;
+	top:0.06rem;
 }
 .video-wrap{
 	width:100%;

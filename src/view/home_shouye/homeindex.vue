@@ -48,20 +48,20 @@
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
-			<p class="homeindex-car-service-title" style="padding-top:0.1rem;"><span>我的车友</span><span>车辆评分</span></p>
+			<p class="homeindex-car-service-title" ><span>我的车友</span><span>车辆评分</span></p>
 			<div class="homeindex-car-friends-nodata" v-if="friends.length<=0">暂无数据</div>
-			<div class="homeindex-car-friends-list">
+			<div class="homeindex-car-friends-list" v-else>
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载">
 		     		<div class="homeindex-car-friends-item" v-for="(item,index) in friends">
 		     			<img :src="item.userInfo.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item.userInfo.headphoto:require('../../assets/img/shouye/defaultavatar.png')">
 		     			<div class="homeindex-car-friends-item-center">
 		     				<span>{{item.friend.remark?item.friend.remark:item.userInfo.nickname}}</span>
 		     				<p>
-		     					<img :src="item.deviceVehicle.logo"/>
-		     					<span>{{item.deviceVehicle.modelname}}</span>
+		     					<img :src="item.deviceVehicle&&item.deviceVehicle.logo"/>
+		     					<span>{{item.deviceVehicle&&item.deviceVehicle.modelname}}</span>
 		     				</p>
 		     			</div>
-		     			<i>{{item.deviceVehicle.assessedvalue}}</i>
+		     			<i>{{item.deviceVehicle&&item.deviceVehicle.assessedvalue}}</i>
 		     		</div>
 		    	</mt-loadmore>
 			</div>
@@ -90,7 +90,6 @@ export default{
 		getdevices(){//我的设备查询
 			var that=this;
 			this.$api('/Execute.do',{action:"device.devices"}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					if(r.data.devices==undefined||r.data.devices==null||r.data.devices==""){
 						return ;
@@ -108,13 +107,12 @@ export default{
 			}).then(function(r){
 				that.$api('/Execute.do',{action:"device.friendDeviceScores",minvalue:0, pageSize:5}).then(function(r){
 					if(r.errorCode==0){
-						console.log(JSON.stringify(r));
 						if(r.data.friendDeviceScores.length==0){
 							that.allLoaded=true;
 						}else if(r.data.friendDeviceScores.length==5){
 							that.allLoaded=false;
 							that.friends=that.friends.concat(r.data.friendDeviceScores);
-							that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;					
+							that.pageNo=r.data.friendDeviceScores[r.data.friendDeviceScores.length-1].deviceseq;
 						}else{
 							that.allLoaded=true;
 							that.friends=that.friends.concat(r.data.friendDeviceScores);
@@ -142,7 +140,8 @@ export default{
 			MessageBox.alert('暂未开放，敬请期待!')
 		},
 		weizhangchaxun(){
-			MessageBox.alert('暂未开放，敬请期待!')
+//			MessageBox.alert('暂未开放，敬请期待!')
+			this.$router.push('/chosecar')
 		},
 		getfriends(minvalue,pageSize){//获取车友列表
 			var that=this;
@@ -164,7 +163,7 @@ export default{
 			          message: r.errorMessage,
 			          position: 'bottom',
 					  duration: 1500
-			      });
+			        });
 				}
 			})
 		},
@@ -439,7 +438,7 @@ export default{
 	padding-bottom:1.6rem;
 }
 .homeindex-car-friends-list{
-	height:100%;
+	flex:1;
 	background: #f7f7f7;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;

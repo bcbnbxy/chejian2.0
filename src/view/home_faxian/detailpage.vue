@@ -10,11 +10,13 @@
 					<div class="fourpicture-avatar-left"><img :src="data.owner.headphoto?'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.owner.headphoto:defaultImg" width="46" height="46" style="border-radius: 50%;"/><p><b>{{data.owner.nickname}}</b><span>{{formatDate(data.createtime)}}</span></p></div>
 				</div>
 				<div class="fourpicture-content">
-					<div class="fourpicture-box" v-if="data.images&&data.images.length==1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+data.images" @click="bigImg(data.images)"/>
-					</div>
-					<div class="fourpicture-box-moreimg" v-else-if="data.images&&data.images.length>1">
-						<img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item" v-for="(item,index) in data.images" :key="index" @click="bigImg(item)"/>
+					<div class="fourpicture-box">
+						<div class="swiper-container">
+						  <div class="swiper-wrapper">
+						    <div class="swiper-slide" v-for="(item,index) in data.images" :key="index"><img :src="'https://chd-app-img.oss-cn-shenzhen.aliyuncs.com/'+item+'?x-oss-process=image/resize,l_1140'" @click="bigImg(item)"/></div>
+						  </div>
+						  <div class="swiper-pagination"></div>
+						</div>
 					</div>
 					<p>{{data.content}}</p>
 				</div>
@@ -58,6 +60,7 @@
 </template>
 
 <script>
+//import Swiper from "swiper"
 import Reply from '@/components/faxian/replylist'
 import Praise from '@/components/faxian/praise'
 import { MessageBox } from 'mint-ui'
@@ -69,6 +72,7 @@ export default{
         this.$nextTick(function () {
             window.addEventListener('scroll', this.needToTop);  //滚动事件监听
         });
+        this._initSwiper()
    },
 	data(){
 		return {
@@ -91,6 +95,15 @@ export default{
 	},
 	components:{'Reply-list':Reply,'Praise':Praise },
 	methods:{
+		_initSwiper(){
+			var mySwiper = new Swiper('.swiper-container',{
+				direction:'horizontal',
+				pagination: {
+			    el: '.swiper-pagination',
+			    type: 'fraction',
+			  },
+			})
+		},
 		formatDate(seconds){//时间转换函数
 			seconds=new Date().getTime()-parseInt(seconds);
 			seconds= seconds / 1000;
@@ -332,7 +345,7 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
 .detail{
 	width:100%;
 	height:100%;
@@ -409,7 +422,7 @@ export default{
 }
 .detail-noreply{
 	flex:1;
-	font-size:0.36rem;
+	font-size:0.52rem;
 	color:#999;
 	display: flex;
 	display: -webkit-flex;
@@ -432,13 +445,13 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -467,10 +480,11 @@ export default{
 }
 .fourpicture-box{
 	width:100%;
-	padding-bottom:0.24rem;
+	height:6.18rem;
 }
 .fourpicture-box img{
-	width:30%;
+	width:11.4rem;
+	height:6.18rem;
 	display: block;
 }
 .fourpicture-box-moreimg{
@@ -524,7 +538,7 @@ export default{
 	left:2.6rem;
 }
 .dianzan-renshu{
-	font-size:0.36rem;
+	font-size:0.44rem;
 	display: flex;
 	display: -webkit-flex;
 	justify-content: flex-end;
@@ -544,7 +558,7 @@ export default{
 	display:flex ;
 	display: -webkit-flex;
 	justify-content: flex-end;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	align-items: center;
 }
 .detail-footer>.input{
@@ -587,7 +601,7 @@ export default{
 	padding:0 0.3rem;
 }
 .detail-input span{
-	font-size:0.48rem;
+	font-size:0.52rem;
 	padding-left:0.5rem;
 }
 .detail-foot p{
@@ -644,5 +658,12 @@ export default{
 .bigImg{
     max-width:100%;
     height:auto;
+}
+
+.swiper-pagination{
+	text-align: right;
+	color:#fff;
+	font-size:0.6rem;
+	padding-right:0.5rem;
 }
 </style>

@@ -68,7 +68,7 @@
 					</svg>
 					<p>
 						<b v-if="cardetailinfo&&cardetailinfo.faultcodeCount">{{cardetailinfo.faultcodeCount}}个</b>
-						<b v-else>暂无数据</b>
+						<b v-else>0个</b>
 						<span>故障码数量</span>
 					</p>
 				</div>
@@ -128,6 +128,7 @@ export default{
 		deviceTrace(){//获取车辆详细信息
 			var that=this;
 			this.$api('/Execute.do',{action:'device.deviceTrace',device:this.selected.device}).then(function(r){
+				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					that.cardetailinfo=r.data.deviceTrace
 				}else{
@@ -288,15 +289,15 @@ export default{
 }
 .cardetailinfo-main-top-left-item{
 	height:1.2rem;
-	width:100%;
+	width:100%; 
 	display: flex;
-	display: -webkit-flex;
-	justify-content: center;
+	display: -webkit-flex;	
 	align-items: center;
+	padding-left:0.8rem;
 }
 .cardetailinfo-main-top-left-item svg{
 	font-size:0.8rem;
-	margin-right:0.5rem;
+	margin-right:0.8rem;
 }
 .cardetailinfo-main-top-left-item p{
 	height:100%;

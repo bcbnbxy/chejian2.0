@@ -2,7 +2,7 @@
 	<div class="login-wrap">
 		<div class="login-wrap-head">
 			<i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-			<span>手机号登陆</span>
+			<span>手机号登录</span>
 			<router-link tag="span" to="/register">注册</router-link>
 		</div>
 		<div class="login-wrap-contaire">
@@ -93,7 +93,7 @@ export default{
 			          position: 'bottom',
   					  duration: 1500
 			       });
-			       window.action.registerPush(r.data.login.mobileno);
+//			       window.action.registerPush(r.data.login.mobileno);
 			       that.$store.commit('getloginInfo',r.data.login);
 			       that.$router.push('/faxian');
 			       localStorage.setItem("loginInfo",JSON.stringify(r.data.login));

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 //import BootPage from '@/view/register/BootPage'
-//import Register from '@/view/register/register'
+import Register from '@/view/register/register'
 //import Login from '@/view/login/login'
 //import Restpassword from '@/view/login/restpassword'
 //import Setpassword_login from '@/view/login/SetPassword_login'
@@ -64,7 +64,7 @@ export default new Router({
       component:resolve => require(['@/view/register/BootPage'],resolve),
     },{
       path: '/register',
-      component: resolve => require(['@/view/register/register'],resolve),
+      component: Register,
     },{
       path: '/login',
       component: resolve => require(['@/view/login/login'],resolve), 

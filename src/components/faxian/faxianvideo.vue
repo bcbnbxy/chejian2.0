@@ -7,7 +7,7 @@
 		<div class="fourpicture-content" @click="godeatilpage(datalist)">
 			<p>{{datalist.content}}</p>
 			<div class="fourpicture-content-video">
-				<img  v-lazy="datalist.videocover"  class="videoposter"/>
+				<img   v-lazy="datalist.videocover+'?x-oss-process=image/resize,m_pad,h_618,w_1140,color_434040'"  class="videoposter"/>
 				<img src="../../assets/img/faxianimg/playbtn.png" class="playbtn"/>
 			</div>			
 		</div>
@@ -166,7 +166,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 .fourpicture{
 	background: #fff;
 	padding:0 0.48rem;
@@ -192,13 +192,13 @@
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.42rem;
+	font-size:0.52rem;
 	color:#222;
 	font-weight: 500;
 	justify-content: space-around;
 }
 .fourpicture-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.44rem;
 	color:#666;
 }
 .fourpicture-avatar-right{
@@ -212,13 +212,13 @@
 	text-align: center;
 	background:#ff481d;
 	color:#fff;
-	font-size:0.3rem;
+	font-size:0.4rem;
 	border-radius: 15px;
 	border:none;
 }
 .fourpicture-content p{
 	line-height:0.74rem;
-	font-size:0.44rem;
+	font-size:0.52rem;
 	color:#333;
 	margin:0;
 	padding:0;
@@ -235,7 +235,7 @@
 	text-align: right;
 }
 .fourpicture-title p{
-	font-size:0.38rem;
+	font-size:0.48rem;
 	color:#666;
 	margin-left:0.6rem;
 	display: inline;
@@ -276,7 +276,7 @@
 }
 .fourpicture-content-video{
 	width:100%;
-	height:6.2rem;
+	height:6.18rem;
 	position: relative;
 	margin-top:0.24rem;
 	display: flex;
@@ -284,8 +284,8 @@
 	justify-content: center;
 }
 .fourpicture-content-video>.videoposter{
-	max-width:100%;
-	height:100%;
+	width:11.4rem;
+	height:6.18rem;
 }
 .fourpicture-content-video>.playbtn{
 	width:1.6rem;

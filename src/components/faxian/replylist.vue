@@ -138,12 +138,12 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
-	font-size:0.44rem;
+	font-size:0.48rem;
 	color:#222;
 	justify-content: space-around;
 }
 .reply-avatar-left p span{
-	font-size:0.4rem;
+	font-size:0.42rem;
 	color:#666;
 }
 .reply-avatar-right{
@@ -152,18 +152,18 @@ export default{
 	line-height:0.6rem;
 }
 .reply-avatar-right i{
-	font-size:0.5rem;
+	font-size:0.6rem;
 	color:#999;
 	margin-right:0.3rem;
 }
 .reply-avatar-right span{
-	font-size:0.44rem;
+	font-size:0.48rem;
 	color:#666;
 }
 .reply-list-container{
 	padding:0.36rem 0;
 	line-height:0.6rem;
-	font-size:0.38rem;
+	font-size:0.48rem;
 	color:#666;
 }
 .reply-list-container span{

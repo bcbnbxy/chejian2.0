@@ -4,8 +4,8 @@
 		<span>动态</span>
 		<i class="iconfont icon-zhaoxiangji" @click="showpictextvideo"></i>		
 	</div>
-	<div class="faxianlist" id="scrollTop">
-		<div class="faxian-dynamicslist">			
+	<div class="faxianlist">
+		<div class="faxian-dynamicslist" id="scrollTop">			
 			<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" bottom-pull-text="上拉加载" :bottom-distance="50">
 		     	<dynamicslist :callbackdata="datalist" v-on:listendel="deltrends"></dynamicslist>
 		    </mt-loadmore>
@@ -133,7 +133,7 @@ export default{
     		next();
     	} 
     },
-    beforeRouteEnter(to, from, next) {
+     beforeRouteEnter(to, from, next) {
         next(setTimeout(()=>{ 
         	if(to.meta.keepAlive){
 		        document.getElementById('scrollTop').scrollTop=parseInt(localStorage.getItem('ScrollTop'));
@@ -200,7 +200,7 @@ export default{
 	position: absolute;
 	right:0.5rem;
 	top:1.32rem;
-	border-radius: 5px;
+	border-radius: 5px;	
 }
 .pic-text-video p{
 	border-bottom:1px solid #dcdcdc;

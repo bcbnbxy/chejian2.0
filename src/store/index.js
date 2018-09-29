@@ -7,6 +7,7 @@ import common from './common'
 import login from './login'
 import faxian from './faxian'
 import controls from './controls'
+import homeindex from './homeindex'
 //import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     common:common,
     login:login,
     faxian:faxian,
-    controls:controls
+    controls:controls,
+    homeindex:homeindex
   }
 })

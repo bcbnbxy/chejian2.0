@@ -67,13 +67,15 @@ export default{
 			var that=this;
 			this.$api('/Execute.do',{action:'device.warns',device:this.$route.params.devicenum,minvalue:minvalue, pageSize:pageSize}).then(function(r){
 				if(r.errorCode==0){
-					that.warns=that.warns.concat(r.data.warns);
-					if(r.data.warns.length<3){
-						that.allLoaded=true;
-					}else{
-						that.allLoaded=false;
+					if(r.data.warns.length>0){
+						that.warns=that.warns.concat(r.data.warns);
+						if(r.data.warns.length<12){
+							that.allLoaded=true;
+						}else{
+							that.allLoaded=false;
+						}
+						that.pagenum=r.data.warns[r.data.warns.length-1].warnseq;
 					}
-					that.pagenum=r.data.warns[r.data.warns.length-1].warnseq;
 				}else{
 					that.$toast({
 			          message: r.errorMessage,
@@ -92,10 +94,10 @@ export default{
 		loadBottom(){//组件提供的上拉加载触发方法
 	    	this.getwarns(this.pagenum,this.pagesize);
 	    	this.$refs.loadmore.onBottomLoaded();	    	
-	   },
-	   getfaultCodes(minvalue,pageSize){//获取故障信息列表
+	    },
+	    getfaultCodes(minvalue,pageSize){//获取故障信息列表
 	   		var that=this;
-	   		this.$api('/Execute.do',{action:'device.faultCodes',minvalue:minvalue,pageSize:pageSize,device:this.$route.params.devicenum,vin:this.$route.params.vin}).then(function(r){
+	   		this.$api('/Execute.do',{action:'device.faultCodes',minvalue:minvalue,pageSize:pageSize,device:this.$route.params.devicenum}).then(function(r){
 	   			if(r.errorCode==0){
 					that.faultCodes=that.faultCodes.concat(r.data.faultCodes);
 					if(r.data.faultCodes.length<10){
