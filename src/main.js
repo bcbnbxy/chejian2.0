@@ -17,7 +17,7 @@ Es6Promise.polyfill();
 fastclick.attach(document.body);
 Vue.use(VueLazyload, {
 error: require('./assets/img/shouye/imgerror.png'),  //图像的src加载失败
-loading: require('./assets/img/shouye/imgerror.png'), //src的图像加载
+loading: require('./assets/img/shouye/imgerror1.png'), //src的图像加载
 });
 Vue.use(MintUI);
 // 引用API文件

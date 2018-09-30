@@ -16,7 +16,7 @@
 		</ul>
 		<div class="submit">
 			<button @click="loginOut" v-show="loginout">退出登录</button>
-			<button @click="Login" v-show="login">去登陆</button>
+			<button @click="Login" v-show="login">去登录</button>
 		</div>
 	</div>
 </template>

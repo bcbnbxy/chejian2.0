@@ -15,7 +15,7 @@
 	<div class="mycontrolsystem-wrap-bottom">
 		<ul>
 			<li @click="goworkshop">
-				<p><img src="../../assets/img/my/chejian.png"/></p>
+				<p style="position: relative;"><img src="../../assets/img/my/chejian.png"/><b v-if="faultcodecount>0" style="padding:0.1rem;position: absolute;right:-0.1rem;top:-0.1rem;background: #ff0000;font-size:0.38rem;color:#fff;border-radius: 50%;">{{faultcodecount}}</b></p>
 				<span>车间</span>
 			</li>			
 			<li @click="goguanli">
@@ -45,7 +45,8 @@ export default{
 		 	headphoto:'',
 		 	company:'',
 		 	deviceCount:0,
-		 	staffCount:0
+		 	staffCount:0,
+		 	faultcodecount:0,
 		}
 	},
 	methods:{
@@ -85,12 +86,14 @@ export default{
 						that.company=r.data.carshopInfo.userInfo.nickname;
 						that.deviceCount=r.data.carshopInfo.deviceCount;
 						that.staffCount=r.data.carshopInfo.customerCount;
+						that.faultcodecount=r.data.carshopInfo.staff.customerFaultCodeCount
 					}else if(that.identity==2){
 						that.company=r.data.carshopInfo.agent.company;
 						that.headphoto=r.data.carshopInfo.userInfo.headphoto;
 						that.deviceCount=r.data.carshopInfo.deviceCount;
 						that.staffCount=r.data.carshopInfo.customerCount;
-					}					
+						that.faultcodecount=r.data.carshopInfo.agent.customerFaultCodeCount
+					}	
 				}else{
 					that.$toast({
 						message:r.errorMessage,

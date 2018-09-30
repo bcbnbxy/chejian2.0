@@ -42,9 +42,10 @@
 		<div class="homeindex-car-service">
 			<p class="homeindex-car-service-title">车辆服务</p>			
 			<ul>
-				<li @click="weizhangchaxun"><img src="../../assets/img/shouye/wzcx.png"><span>违章查询</span></li>
-				<li @click="shebeigoumai"><img src="../../assets/img/shouye/sbgm.png"><span>设备购买</span></li>
-				<li><img src="../../assets/img/shouye/jqqd.png"><span>敬请期待</span></li>
+				<li @click="weizhangchaxun"><img src="../../assets/img/shouye/wzcx.png" style="width:0.78rem;height:0.91rem;"/><span>违章查询</span></li>
+				<router-link tag="li" to="/emergencyTelephone"><img src="../../assets/img/shouye/telphone.png" style="width:0.96rem;height:0.96rem;"/><span>应急电话</span></router-link>
+				<router-link tag="li" to="/caragency"><img src="../../assets/img/shouye/chewu.png" style="width:0.89rem;height:0.88rem;"/><span>车务代办</span></router-link>
+				<li><img src="../../assets/img/shouye/jqqd.png" style="width:0.74rem;height:0.93rem;"/><span>敬请期待</span></li>
 			</ul>
 		</div>
 		<div class="homeindex-car-friends">
@@ -135,9 +136,6 @@ export default{
 			this.$store.commit('selectedcar',index);
 			this.devicesflag=!this.devicesflag;
 			this.selected=item;
-		},
-		shebeigoumai(){
-			MessageBox.alert('暂未开放，敬请期待!')
 		},
 		weizhangchaxun(){
 //			MessageBox.alert('暂未开放，敬请期待!')
@@ -422,7 +420,7 @@ export default{
 	justify-content: space-between;
 }
 .homeindex-car-service>ul li img{
-	width:0.78rem;
+	/*width:0.78rem;*/
 	display: block;
 }
 .homeindex-car-service>ul li span{

@@ -1,8 +1,9 @@
 <template>
 	<div class="bootpage-wrap">
-		<div class="bootpage-wrap-head"><span>车间</span></div>
+		<div class="bootpage-wrap-head"><span>车尖</span></div>
 		<div class="bootpage-wrap-container">
-			<p>HI,欢迎使用车间</p>
+			<img src="../../assets/img/shouye/111.png" style="width:2.4rem;height:2.4rem;display: block;margin:0 auto;"/>
+			<p>HI,欢迎使用车尖</p>
 			<div class="bootpage-wrap-btngroup">
 				<router-link tag="button" to="/register">注册</router-link>
 				<router-link tag="button"  to="/login">登录</router-link>
@@ -42,7 +43,7 @@
 }
 .bootpage-wrap-container{
 	width:100%;
-	padding-top:4.1rem;
+	padding-top:2.1rem;
 }
 .bootpage-wrap-container>p{
 	line-height:1;
@@ -50,9 +51,10 @@
 	color:#222;
 	width:100%;
 	text-align: center;
+	margin-top:0.8rem;
 }
 .bootpage-wrap-btngroup{
-	margin-top:4.25rem;
+	margin-top:2.25rem;
 	padding:0 0.6rem;
 }
 .bootpage-wrap-btngroup button{

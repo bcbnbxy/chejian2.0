@@ -229,10 +229,6 @@ export default new Router({
 		name:'fillinfo',
 		component:resolve => require(['@/view/home_shouye/fillinfo'],resolve),
 	},{
-		path:'/detailsviolation',
-		name:'detailsviolation',
-		component:resolve => require(['@/view/home_shouye/detailsviolation'],resolve),
-	},{
 		path:'/devicelist',
 		component:resolve => require(['@/view/my/devicelist'],resolve),
 	},{
@@ -249,6 +245,14 @@ export default new Router({
 		path:'/cardetailinfo',
 		name:'cardetailinfo',
 		component:resolve => require(['@/view/home_shouye/cardetailinfo'],resolve), 
+	},{
+		path:'/emergencyTelephone',
+		name:'emergencyTelephone',
+		component:resolve => require(['@/view/home_shouye/emergencyTelephone'],resolve), 
+	},{
+		path:'/caragency',
+		name:'caragency',
+		component:resolve => require(['@/view/home_shouye/caragency'],resolve), 
 	}
   ],
 })

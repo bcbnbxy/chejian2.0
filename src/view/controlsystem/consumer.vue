@@ -18,8 +18,9 @@
 					</div>
 					<div class="consumer-wrap-choosecar-contaire-list" v-show="showlist">
 						<div class="consumer-wrap-choosecar-contaire-item border-top" v-for="(item,index) in carlist" :key="index" @click="selectcar(item)">
-							<img :src="item.deviceVehicle.logo"/>
-							<p><b>{{item.deviceVehicle.brandname}}</b><span>{{item.deviceVehicle.modelname}} {{item.deviceVehicle.vehiclelevel}}</span></p>
+							
+							<img :src="item.deviceVehicle&&item.deviceVehicle.logo"/>
+							<p><b>{{item.deviceVehicle&&item.deviceVehicle.brandname}}</b><span>{{item.deviceVehicle&&item.deviceVehicle.modelname}} {{item.deviceVehicle&&item.deviceVehicle.vehiclelevel}}</span></p>
 						</div>
 					</div>
 				</div>
