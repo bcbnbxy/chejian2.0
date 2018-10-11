@@ -6,6 +6,7 @@
 			<router-link tag="span" to="/register">注册</router-link>
 		</div>
 		<div class="login-wrap-contaire">
+			<img src="../../assets/img/shouye/111.png" style="width:2.4rem;height:2.4rem;display: block;margin:0 auto;margin-bottom:0.8rem;"/>
 			<div class="login-phonenum">
 				  <input placeholder="请输入手机号" type="tel" v-model="loginname" ref="newUsername" @keyup="LoginName"/>	
 			</div>
@@ -166,7 +167,7 @@ export default{
 }
 .login-wrap-contaire{
 	padding:0 1rem;
-	padding-top:4rem;
+	padding-top:2.1rem;
 	width:100%;
 }
 .login-phonenum,.login-password{

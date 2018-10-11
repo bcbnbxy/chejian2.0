@@ -258,7 +258,47 @@ export default{
 	    },
 	    getVideoPlayAuth(){
 	    	var that=this;
-	    	this.$api('/Execute.do',{action:'blog.getVideoPlayAuth;blog.blogPraisers',videoId:this.$route.params.datalist.video,blogseq:this.$route.params.datalist.blogseq,minvalue:0,pageSize:this.$route.params.datalist.praisecount}).then(function(r){
+	    	that.$api('/Execute.do',{action:'blog.blogReviews;blog.blogPraisers',blogseq:that.data.blogseq,minvalue:0,pageSize:5}).then(function(r){
+		    		if(r.errorCode==0){
+		    		if(r.data.blogPraisers.length<=5){
+						that.blogPraisers=r.data.blogPraisers;
+					}else{						
+						for(let i=0;i<5;i++){
+							that.blogPraisers.push(r.data.blogPraisers[i])
+						}
+					}
+					that.blogPraiserssum=r.data.blogPraisers;
+		    			if(r.data.blogReviews.length<1){
+		    				that.$toast({
+			    				message:'没有更评论了',
+			    				position:'bottom',
+			    				duration:1500
+			    			})
+		    			}else{
+		    				if(that.sendflag){
+			    				that.replylist.unshift(r.data.blogReviews[0]);
+			    				that.sendflag=false;
+			    				that.pageNo=that.replylist[that.replylist.length-1].reviewseq;
+			    			}else{
+			    				that.replylist=that.replylist.concat(r.data.blogReviews);
+			    				that.pageNo=r.data.blogReviews[r.data.blogReviews.length-1].reviewseq;
+			    			}
+			    			if(r.data.blogReviews.length<5){
+								that.allLoaded=true;
+								return;
+							}else{
+								that.allLoaded=false;
+							}
+		    			}
+		    		}else{
+		    			that.$toast({
+		    				message:r.errorMessage,
+		    				position:'bottom',
+		    				duration:1500
+		    			})
+		    		}
+		    	}).then(function(r){
+	    		that.$api('/Execute.do',{action:'blog.getVideoPlayAuth',videoId:that.$route.params.datalist.video,blogseq:that.$route.params.datalist.blogseq,minvalue:0,pageSize:that.$route.params.datalist.praisecount}).then(function(r){
 	    		if(r.errorCode==0){
 	    			that.playauth=r.data.getVideoPlayAuth.playAuth;
 					var player = new Aliplayer({
@@ -306,56 +346,36 @@ export default{
 				            ]
 				        }]
 			        });
-			        if(r.data.blogPraisers.length<=5){
-						that.blogPraisers=r.data.blogPraisers;
-					}else{						
-						for(let i=0;i<5;i++){
-							that.blogPraisers.push(r.data.blogPraisers[i])
-						}
-					}
-					that.blogPraiserssum=r.data.blogPraisers;
 	    		}else{
-	    			that.$toast({
-	    				message:r.errorMessage,
-	    				position:'bottom',
-	    				duration:1500
-	    			})
-	    		}
-	    	}).then(function(r){
-		    	that.$api('/Execute.do',{action:'blog.blogReviews',blogseq:that.data.blogseq,minvalue:0,pageSize:5}).then(function(r){
-		    		if(r.errorCode==0){
-		    			if(r.data.blogReviews.length<1){
-		    				that.$toast({
-			    				message:'没有更评论了',
-			    				position:'bottom',
-			    				duration:1500
-			    			})
-		    			}else{
-		    				if(that.sendflag){
-			    				that.replylist.unshift(r.data.blogReviews[0]);
-			    				that.sendflag=false;
-			    				that.pageNo=that.replylist[that.replylist.length-1].reviewseq;
-			    			}else{
-			    				that.replylist=that.replylist.concat(r.data.blogReviews);
-			    				that.pageNo=r.data.blogReviews[r.data.blogReviews.length-1].reviewseq;
-			    			}
-			    			if(r.data.blogReviews.length<5){
-								that.allLoaded=true;
-								return;
-							}else{
-								that.allLoaded=false;
-							}
-		    			}
-		    		}else{
-		    			that.$toast({
+	    			if(r.errorMessage=="您还没有登录"){
+	    				MessageBox.confirm('', {
+					        message: '您还没有登录，登录后可以观看视频',
+					        showConfirmButton:true,
+					        showCancelButton:true,
+					        confirmButtonText:'确定',
+					        cancelButtonText:'取消'
+				        }).then(action => {
+				          if (action == 'confirm') {	
+						        localStorage.removeItem('loginInfo');
+						        that.$store.commit('setblog_userseq');
+						        that.$router.push('/bootPage')
+				          }
+				        }).catch(err => {
+				          if (err == 'cancel') {
+				            console.log('123');
+				          }
+				        });	
+	    			}else{
+	    				that.$toast({
 		    				message:r.errorMessage,
 		    				position:'bottom',
 		    				duration:1500
 		    			})
-		    		}
-		    	})
+	    			}	    			
+	    		}
 	    	})
-	    },
+	    })
+		    	},
 	    loadBottom(){
 	    	this.getblogReviews(this.pageNo,5);
 	    	this.$refs.loadmore.onBottomLoaded();	    	

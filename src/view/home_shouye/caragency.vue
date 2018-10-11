@@ -9,32 +9,32 @@
 				<li>
 					<img src="../../assets/img/shouye/clgh.png" style="width:0.79rem;height:0.58rem;"/>
 					<p><span>车辆过户</span><span>车辆外迁，车辆迁入，本市过户</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 				<li>
 					<img src="../../assets/img/shouye/jszyw.png" style="width:0.78rem;height:0.8rem;"/>
 					<p><span>驾驶证业务</span><span>驾驶证补换，降低准驾车型</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 				<li>
 					<img src="../../assets/img/shouye/dshl.png" style="width:0.75rem;height:0.62rem;"/>
 					<p><span>丢失换领</span><span>补换领车牌，补换领登记证或行驶证</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 				<li>
 					<img src="../../assets/img/shouye/clnj.png" style="width:0.82rem;height:0.82rem;"/>
 					<p><span>车辆年检</span><span>新车年审，异地委托书，异地验车</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 				<li>
 					<img src="../../assets/img/shouye/wzdb.png" style="width:0.82rem;height:0.82rem;"/>
 					<p><span>违章代办</span><span>疑难违章专业解答</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 				<li>
 					<img src="../../assets/img/shouye/qita.png" style="width:0.64rem;height:0.64rem;"/>
 					<p><span>其他</span><span>其他车务咨询</span></p>
-					<b>咨询办理</b>
+					<b @click="callphone('13632573001')">咨询办理</b>
 				</li>
 			</ul>
 		</div>
@@ -42,6 +42,28 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
+export default{
+	methods:{
+		callphone(phonenum){
+			MessageBox.confirm('', {
+		        message: '确定拨打电话？',
+		        showConfirmButton:true,
+		        showCancelButton:true,
+		        confirmButtonText:'确定',
+		        cancelButtonText:'取消'
+	        }).then(action => {
+	          if (action == 'confirm') {
+	            window.device.callPhone(phonenum);
+	          }
+	        }).catch(err => {
+	          if (err == 'cancel') {
+	            console.log('123');
+	          }
+	        });			
+		}
+	}
+}
 </script>
 
 <style scoped>

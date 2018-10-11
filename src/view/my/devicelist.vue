@@ -6,7 +6,11 @@
 	</div>
 	<div class="chosecar-wrap-contaire">
 		<ul>
-			<li v-for="(item,index) in data"><img src="../../assets/img/shouye/device.png"/><p><span>设备编码：{{item.device}}</span><span><b>{{item.deviceVehicle&&item.deviceVehicle.brandname}}  {{item.deviceVehicle&&item.deviceVehicle.manufacturer}} {{item.deviceVehicle&&item.deviceVehicle.modelname}}</b></span></p></li>
+			<li v-for="(item,index) in data" @click="gocarinfo(item.vin,item.deviceVehicle.updatekind)">
+				<img src="../../assets/img/shouye/device.png"/>
+				<p><span>设备编码：{{item.device}}</span><span><b>{{item.deviceVehicle&&item.deviceVehicle.brandname}}  {{item.deviceVehicle&&item.deviceVehicle.manufacturer}} {{item.deviceVehicle&&item.deviceVehicle.modelname}}</b></span></p>
+				<i class="iconfont icon-arrow-right-copy-copy-copy" v-if="item.deviceVehicle.updatekind==2"></i>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -36,6 +40,11 @@ export default{
 			       });
 				}
 			})
+		},
+		gocarinfo(vin,updatekind){
+			if(updatekind==2){
+				this.$router.push({name:'carInfo',params:{vin:vin}})
+			}			
 		}
 	}
 }
@@ -48,6 +57,8 @@ export default{
 	display: flex;
 	display: -webkit-flex;
 	flex-direction: column;
+	position: relative;
+	overflow: hidden;
 }
 .chosecar-wrap-head{
 	height:1.92rem;
@@ -114,5 +125,9 @@ export default{
 }
 .chosecar-wrap-contaire ul li p b{
 	font-weight: 400;
+}
+.chosecar-wrap-contaire ul li>i{
+	font-size:0.8rem;
+	color:#aaa;
 }
 </style>

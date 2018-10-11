@@ -5,6 +5,7 @@
 			<span>重置密码</span>
 		</div>
 		<div class="SetPassword-wrap-contaire">
+			<img src="../../assets/img/shouye/111.png" style="width:2.4rem;height:2.4rem;display: block;margin:0 auto;margin-bottom:0.8rem;"/>
 			<div class="SetPassword-set">
 				<input  type="password" placeholder="请输入新密码"  clearable v-model="SetPassword">
 			</div>
@@ -171,7 +172,7 @@ export default{
 }
 .SetPassword-wrap-contaire{
 	padding:0 1rem;
-	padding-top:4rem;
+	padding-top:2.1rem;
 }
 .SetPassword-set{
 	border-bottom:1px solid #ddd;

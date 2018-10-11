@@ -6,6 +6,7 @@
 			<router-link tag="span" to="/login">登录</router-link>
 		</div>
 		<div class="register-wrap--contaire">
+			<img src="../../assets/img/shouye/111.png" style="width:2.4rem;height:2.4rem;display: block;margin:0 auto;margin-bottom:0.8rem;"/>
 			<div class="register-wrap--contaire-item">
 				<label>+86</label>
 				<input type="text" placeholder="请输入您的手机号码" v-model="mobileno" @keyup="Phonenum"/>
@@ -269,7 +270,7 @@ export default{
 }
 .register-wrap--contaire{	
 	padding:0 1rem;
-	padding-top:2.4rem;
+	padding-top:2.1rem;
 }
 .register-wrap--contaire-item{
 	height:1.8rem;

@@ -5,7 +5,7 @@
 		</div>
 		<div class="nologin">
 			<p>登陆后发现你感兴趣的动态奥</p>
-			<router-link tag="button" to="/login">去登陆</router-link>
+			<router-link tag="button" to="/login">去登录</router-link>
 		</div>
 	</div>
 </template>

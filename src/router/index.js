@@ -253,6 +253,10 @@ export default new Router({
 		path:'/caragency',
 		name:'caragency',
 		component:resolve => require(['@/view/home_shouye/caragency'],resolve), 
+	},{
+		path:'/carInfo',
+		name:'carInfo',
+		component:resolve => require(['@/view/my/carInfo'],resolve), 
 	}
   ],
 })

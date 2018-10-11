@@ -9,7 +9,7 @@
 				<i class="iconfont icon-arrow-right-copy-copy-copy" :class="devicesflag?'iconrotate':''" @click="devicesshow"></i>
 				<ul class="devices-list" v-show="devicesflag">
 					<router-link tag="li" to="/devicebinding" style="color:#666;font-size:0.44rem;padding-left:0.5rem;" v-show="!selected">您还没有车辆，去添加</router-link>
-					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}} {{item&&item.deviceVehicle&&item.deviceVehicle.modelname}} {{selected&&selected.deviceVehicle&&selected.deviceVehicle.vehiclelevel}}</span></li>
+					<li v-for="(item,index) in devices" @click="select(item,index)"><img :src="item&&item.deviceVehicle&&item.deviceVehicle.logo"/><span>{{item&&item.deviceVehicle&&item.deviceVehicle&&item.deviceVehicle.brandname}} {{item&&item.deviceVehicle&&item.deviceVehicle.modelname}} {{item&&item.deviceVehicle&&item.deviceVehicle.vehiclelevel}}</span></li>
 				</ul>
 			</div>
 			<router-link tag="i" to="/devicebinding" class="iconfont icon-scan"></router-link>
@@ -138,7 +138,6 @@ export default{
 			this.selected=item;
 		},
 		weizhangchaxun(){
-//			MessageBox.alert('暂未开放，敬请期待!')
 			this.$router.push('/chosecar')
 		},
 		getfriends(minvalue,pageSize){//获取车友列表
@@ -271,7 +270,7 @@ export default{
 	overflow:hidden;
 }
 .homeindex-wrap-head-top-left>i{
-	font-size:0.5rem;
+	font-size:0.8rem;
 	vertical-align: middle;
 	position:relative;
 	top:1px;

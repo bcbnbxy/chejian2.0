@@ -222,7 +222,7 @@ export default{
 			    	}
 	    	}else{
 	    		MessageBox.confirm('', {
-			        message: '您还没有登陆，去登陆',
+			        message: '您还没有登录，去登录',
 			        showConfirmButton:true,
 			        showCancelButton:true,
 			        confirmButtonText:'确定',

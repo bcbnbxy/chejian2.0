@@ -128,7 +128,6 @@ export default{
 		deviceTrace(){//获取车辆详细信息
 			var that=this;
 			this.$api('/Execute.do',{action:'device.deviceTrace',device:this.selected.device}).then(function(r){
-				console.log(JSON.stringify(r));
 				if(r.errorCode==0){
 					that.cardetailinfo=r.data.deviceTrace
 				}else{

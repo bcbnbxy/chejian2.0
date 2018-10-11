@@ -41,7 +41,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use((response) => {
 	if(response.status===200&&response.data.errorCode=="you.must.relogin"){
 			MessageBox.confirm('', {
-		        message: '请重新登陆',
+		        message: '请重新登录',
 		        showConfirmButton:true,
 		        showCancelButton:true,
 		        confirmButtonText:'确定',
